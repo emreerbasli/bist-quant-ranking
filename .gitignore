@@ -1,0 +1,78 @@
+# ============================================================
+# BIST Quantitative Decision Support System — .gitignore
+# ============================================================
+
+# --- 1. Environment & Sensitive Credentials (CRITICAL) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.token
+
+# --- 2. Virtual Environments & Dependencies ---
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- 3. Python Cache & Build Artifacts ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyd
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- 4. Market Data & Datasets (Prevent Huge Uploads) ---
+data/raw/
+data/features/
+data/labeled/
+data/processed/
+data/fundamentals/
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/*.csv
+*.parquet
+
+
+# --- 5. Backtest & Scratch Experimental Outputs ---
+scratch/*.joblib
+scratch/*.parquet
+scratch/*.csv
+scratch/__pycache__/
+backtest/*.csv
+
+# --- 6. Execution Logs & Telemetry ---
+logs/
+*.log
+
+# --- 7. Model Weights & Heavy Checkpoints ---
+models/**/*.pkl
+models/**/*.cbm
+models/**/*.pt
+models/**/*.onnx
+models/**/*.joblib
+# Whitelist lightweight production candidate ranker (37 KB) for instant reproducibility
+!models/v3_ranking/winning_lgbm_ranker.joblib
+
+# --- 8. Jupyter Notebook Checkpoints & Coverage ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- 9. Operating System & IDE Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.agents/

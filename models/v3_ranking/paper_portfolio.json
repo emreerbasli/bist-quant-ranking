@@ -1,0 +1,100 @@
+{
+  "last_check_date": "2026-09-10",
+  "equity": 1.0,
+  "peak_equity": 1.0,
+  "drawdown": 0.0,
+  "dd_kesici_aktif": false,
+  "last_xu100_price": 14461.3798828125,
+  "positions": {
+    "LOGO.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 136.60000610351562,
+      "personal_peak_price": 136.60000610351562,
+      "last_price": 136.60000610351562,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "ONCSM.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 181.5,
+      "personal_peak_price": 181.5,
+      "last_price": 181.5,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "BIZIM.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 23.899999618530273,
+      "personal_peak_price": 23.899999618530273,
+      "last_price": 23.899999618530273,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "KCAER.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 14.239999771118164,
+      "personal_peak_price": 14.239999771118164,
+      "last_price": 14.239999771118164,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "MTRKS.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 33.15999984741211,
+      "personal_peak_price": 33.15999984741211,
+      "last_price": 33.15999984741211,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "SELEC.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 358.25,
+      "personal_peak_price": 358.25,
+      "last_price": 358.25,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "PASEU.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 142.60000610351562,
+      "personal_peak_price": 142.60000610351562,
+      "last_price": 142.60000610351562,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "MIATK.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 33.7599983215332,
+      "personal_peak_price": 33.7599983215332,
+      "last_price": 33.7599983215332,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "MAVI.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 36.29999923706055,
+      "personal_peak_price": 36.29999923706055,
+      "last_price": 36.29999923706055,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    },
+    "VAKBN.IS": {
+      "entry_date": "2026-09-07",
+      "entry_price": 33.439998626708984,
+      "personal_peak_price": 33.439998626708984,
+      "last_price": 33.439998626708984,
+      "days_held": 3,
+      "peak_drawdown_pct": 0.0,
+      "weight": 0.1
+    }
+  }
+}

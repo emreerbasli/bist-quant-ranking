@@ -1,0 +1,41 @@
+================================================================================
+KURUMSAL DÜRÜSTLÜK NOTU (HONESTY NOTE) — PRODUCTION-CANDIDATE V3 RANKER
+================================================================================
+Tarih: 2026-09-09
+Model: Aşırı Muhafazakâr Sığ Ağaç LGBMRanker (winning_lgbm_ranker.joblib)
+Seçilen Portföy Mimarisi: K=10, H=60 Günlük Sabit Çeyreklik Rotasyon + %25 Drawdown Kesici Devresi
+
+1. EĞİTİM PENCERESİ GENELİNDE İSTATİSTİKSEL ANLAMLILIK:
+   - 2018-09 -> 2025-05 dönemi (6.75 yıl, 1682 işlem günü) genelinde seçilen mimarinin:
+     * Net CAGR: %44.2
+     * Net Sharpe: 1.26
+     * Sortino: 1.87
+     * Max Drawdown: %-28.0
+     * Yıllık Devir Hızı (Turnover): %164.8
+     * Net Sharpe / Turnover Verimliliği: 0.77
+     * 100 Tohumlu Monte Carlo Placebo p-değeri: p = 0.050
+
+2. REJİM DUYARLILIĞI VE ÇALIŞMA ŞARTLARI:
+   - Bu model HER ZAMAN VE HER PİYASA KOŞULUNDA ÇALIŞMAZ.
+   - Model, DNA'sı gereği yüksek oranda Düşük Borç (%19.4) ve Değer/Ters P-B (%57.3) ağırlıklıdır.
+   - POZİTİF REEL FAİZ ve sıkı para politikası rejimlerinde (sağlam bilanço ve nakit akışının ödüllendirildiği
+     ortodoks dönemlerde) piyasayı güçlü şekilde ezer.
+   - Ancak DERİN NEGATİF REEL FAİZ rejimlerinde (2022-2024 gibi enflasyonist balon dönemlerinde, borçlu
+     ve aşırı değerli spekülatif büyüme hisselerinin ralli yaptığı ortamlarda) rastgele sepetlerin
+     ve agresif beta hisselerinin gerisinde kalır.
+
+3. KİLİT KUTU (LOCKBOX) ÖRNEKLEM ŞERHİ:
+   - Kilit kutu dönemi (2025-06 -> 2026-09) sadece n=5 çeyreklik küçük bir örnektir.
+   - Kilit kutudaki olağanüstü yüksek Sharpe (2.09 / 3.41), pozitif reel faizin uygulandığı bir "süper-döneme"
+     denk gelmiştir ve geniş bir istatistiksel belirsizlik payı taşır.
+   - Uzun vadeli gerçekçi beklenti Kilit Kutu Sharpe'ı değil; 6.75 yıllık eğitim penceresinde ölçülen
+     Sharpe=1.26 tabanıdır.
+
+4. VERİYE DAYALI MAKRO REJİM EŞİKLERİ (Kilit Kutudan Arındırılmış Temiz Veri):
+   Eğitim penceresindeki (2018Q3 -> 2025Q1) 27 çeyreklik veriden türetilen kesin eşikler:
+   * REEL FAİZ TEHLİKE EŞİĞİ: Reel Faiz <= -10.0%
+     (Kötü dönemin tavanı %-11.8 idi. Bu seviyenin altı kontrolsüz parasal genişleme/negatif faiz alarmıdır)
+   * KUR ŞOKU ALARM EŞİĞİ: USD_Mom_60 >= +20.0%
+     (Sakin dönem tavanı %11.6 iken tarihsel kur şokları %44 ve %52 olmuştur. %20 üzeri kur şoku alarmıdır)
+
+================================================================================

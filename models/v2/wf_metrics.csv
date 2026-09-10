@@ -1,0 +1,5 @@
+ornek_sayisi,taban_winrate_%,roc_auc,pr_auc,brier_score,top_decile_precision_%,top_decile_islem,islem_sayisi_50,precision_50_%,islem_sayisi_60,precision_60_%,islem_sayisi_70,precision_70_%,islem_sayisi_75,precision_75_%,islem_sayisi_80,precision_80_%,pr_auc_hizli_tp,hizli_tp_orani_%,yavas_tp_orani_%,kayip_orani_%,pencere
+4536,37.5,0.498,0.373,0.2348,38.1,454,0,0.0,0,0.0,0,0.0,0,0.0,0,0.0,0.27,25.9,11.6,62.5,Test [2022]
+4703,31.3,0.585,0.366,0.2115,38.0,471,0,0.0,0,0.0,0,0.0,0,0.0,0,0.0,0.25,20.5,10.8,68.7,Test [2023]
+4895,31.7,0.511,0.319,0.2182,31.8,490,0,0.0,0,0.0,0,0.0,0,0.0,0,0.0,0.23,21.5,10.2,68.3,Test [2024]
+8242,30.5,0.53,0.329,0.2123,33.2,825,0,0.0,0,0.0,0,0.0,0,0.0,0,0.0,0.249,21.1,9.4,69.5,Holdout [2025-2026]
