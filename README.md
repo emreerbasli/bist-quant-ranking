@@ -78,47 +78,96 @@ V4 Model Faktör Dağılımı (Gain Payı):
 
 ## 🏗️ Sistem Mimarisi ve Uçtan Uca Akış
 
+Sistem; ham piyasa verisinden başlayıp karar destek arayüzlerine ve bildirimlere kadar uzanan **6 katmanlı kurumsal bir veri boru hattı (pipeline)** üzerinde çalışır:
+
 ```mermaid
 flowchart TD
-    A["BIST Günlük Kapanış Fiyatları<br/>yfinance / data/raw/*.parquet"] --> D["Özellik Mühendisliği Engine"]
-    B["Resmi KAP Bilanço Bildirimleri<br/>Point-in-Time PIT Engine"] --> D
-    C["Makroekonomik Göstergeler<br/>TCMB Reel Faiz / USD-TRY Kurları"] --> D
-
-    subgraph Sub1 ["1. Feature Pipeline"]
-        D --> D1["9 Temel ve Teknik Faktör Hesaplama"]
-        D --> D2["Kesitsel Z-Score Normalizasyonu"]
-        D --> D3["Makro Rejim ve Kur Şoku Taraması"]
+    %% 1. Veri Giriş Katmanı
+    subgraph Sub1 ["1. Veri Toplama ve Senkronizasyon (18:15 Seans Sonu)"]
+        A1["📈 BIST Fiyat ve Hacim Verisi<br/>88 Hisse + Endeksler (Parquet)"]
+        A2["📜 KAP Bilanço Bildirimleri<br/>Point-in-Time (PIT) Tarihli"]
+        A3["🏛️ Makroekonomik Veriler<br/>TCMB Reel Faiz / USD-TRY"]
+        A4["⚠️ KAP / VBTS Tedbirleri<br/>Brüt Takas / Kredili İşlem Yasağı"]
     end
 
-    D1 & D2 & D3 --> E["LightGBM LambdaMART Ranker<br/>Sığ Ağaçlar: Depth 2, Leaves 3, lr 0.03"]
-    E --> F["88 Hisse Kesitsel Sıralama Skoru"]
-
-    subgraph Sub2 ["2. Kurumsal Güvenlik ve Filtreler"]
-        F --> G1{"Faz-0 Taban Kalkanı<br/>Son 10 günde 5+ gün taban?"}
-        G1 -- Evet --> G_VETO["VETO / Dışla"]
-        G1 -- Hayır --> G2{"Likidite ve Sektör Kalkanı<br/>Hacim > 20M TL ve Sektör Max 3"}
-        G2 -- Red --> G_VETO
-        G2 -- Kabul --> H["Top-15 Eşit Ağırlıklı Portföy<br/>K=15, Her biri %6.67"]
+    %% 2. Ön Denetim ve Tazelik Kapısı
+    subgraph Sub2 ["2. Ön Denetim ve Veri Tazeliği Kalkanı"]
+        B1{"Katman-4 Tazelik Kapısı<br/>Veri >= 2 gün bayat mı?"}
+        B2["CLI Bütünlük Denetçisi<br/>Mükerrer Bar / Sıçrama Kontrolü"]
     end
 
-    subgraph Sub3 ["3. Portföy Yönetimi ve Koruma"]
-        H --> I1{"60 Gün Disiplini ve Çıkış"}
-        I1 -- Zirveden %20 Kayıp? --> J1["🚨 Acil Kâr Koruma Çıkışı"]
-        I1 -- 2 Ardışık Taban? --> J1
-        I1 -- Gün < 60 ve Normal --> J2["Taşımaya Devam"]
-        I1 -- Gün >= 60 ve Düştü --> J3["14 Günlük Rebalance Rotasyonu"]
-        H --> I2{"Portföy DD <= -25%?"}
-        I2 -- Evet --> J4["🛡️ Devre Kesici: %100 Nakde Geçiş"]
+    A1 & A2 & A3 --> B2 --> B1
+    B1 -- "Evet (Bayat)" --> B_HALT["🛑 Rebalance Kilitlendi (Kill-Switch)"]
+    B1 -- "Hayır (Taze)" --> C1
+
+    %% 3. Özellik Mühendisliği
+    subgraph Sub3 ["3. 9-Faktörlü PIT Özellik Mühendisliği"]
+        C1["9 Bağımsız Faktör Hesaplama<br/>(Reel Kâr Büyümesi, PD/DD, FCF, ROE, Mom, Borç)"]
+        C2["Sektörel Kesitsel Z-Score Normalizasyonu"]
+        C3["Makro Rejim ve Kur Şoku Taraması"]
+        C1 --> C2 --> C3
     end
 
-    subgraph Sub4 ["4. İzleme, İletim ve Arayüz"]
-        J1 & J2 & J3 & J4 --> K["V4 Paper Trader State<br/>paper_portfolio_v4.json"]
-        K --> L1["Streamlit Bloomberg Terminal Arayüzü<br/>app.py"]
-        K --> L2["Otomatik Telegram Bildirim Botu<br/>bot/telegram_bot.py"]
-        K --> L3["Çift Model Kıyaslama Raporu<br/>reports/v3_vs_v4_comparison.json"]
-        K --> L4["Katman-4 Veri Tazeliği Kill-Switch"]
+    %% 4. Model Sıralama ve Faz-0
+    subgraph Sub4 ["4. LightGBM LambdaMART Sıralama ve Faz-0 Kalkanı"]
+        D1["LightGBM LambdaMART Ranker<br/>Sığ Ağaçlar: Depth 2, Leaves 3, 60 Ağaç"]
+        D2["88 Hisse Kesitsel Göreli Skorlama (ml_score)"]
+        D3{"Faz-0 Taban Kalkanı<br/>Son 10 günde 5+ gün taban?"}
+        D4{"VBTS ve Likidite Kapısı<br/>Hacim > 20M TL ve Tedbirsiz"}
+        D5{"Sektör Sınırı<br/>Aynı sektörden max 3 hisse"}
+        D_VETO["❌ Portföyden Dışla (VETO)"]
+
+        C3 --> D1 --> D2 --> D3
+        D3 -- "Evet" --> D_VETO
+        A4 -.-> D4
+        D3 -- "Hayır" --> D4
+        D4 -- "Takıldı" --> D_VETO
+        D4 -- "Geçti" --> D5
+        D5 -- "Aşıldı" --> D_VETO
+    end
+
+    %% 5. Portföy İcrası
+    subgraph Sub5 ["5. Portföy İcrası ve Çıkış Motoru (18:35)"]
+        E1["Top-15 Eşit Ağırlıklı Portföy<br/>K=15, Her biri %6.67"]
+        E2{"60 Gün Disiplini ve Çıkış Kuralları"}
+        E_EXIT["🚨 Acil Çıkış: Hemen Sat"]
+        E_HOLD["Taşımaya Devam"]
+        E_ROT["14 Günlük Rebalance Rotasyonu"]
+        E_CB{"Portföy DD <= -25%?"}
+        E_CASH["🛡️ Devre Kesici: %100 Nakit Modu"]
+
+        D5 -- "Onaylandı" --> E1 --> E2
+        E2 -- "Zirveden %20 Kayıp" --> E_EXIT
+        E2 -- "2 Gün Üst Üste Taban" --> E_EXIT
+        E2 -- "Gün < 60 ve Normal" --> E_HOLD
+        E2 -- "Gün >= 60 ve Top-15 Dışı" --> E_ROT
+        E1 --> E_CB
+        E_CB -- "Evet" --> E_CASH
+    end
+
+    %% 6. Arayüz ve İletim
+    subgraph Sub6 ["6. İletim, Karar Destek ve Çift Model Takibi"]
+        F1[("V4 Canlı Portföy Durumu<br/>paper_portfolio_v4.json")]
+        F2["📱 Telegram Otomatik Bildirim Kartı<br/>Durum / K-Z / Rebalance Özeti"]
+        F3["⚖️ Çift Model Karşılaştırma Motoru<br/>V3-Referans vs V4-Üretim"]
+        F4["🌐 Streamlit Bloomberg Terminali<br/>6 Bağımsız Modül ve Hisse Röntgeni"]
+        F5["👤 Gerçek Portföyüm (Kişisel Cüzdan)<br/>V4'ten %100 İzole Takip Defteri"]
+
+        E_EXIT & E_HOLD & E_ROT & E_CASH --> F1
+        F1 --> F2
+        F1 --> F3
+        F1 --> F4
+        F5 -.->|"Salt Okunur Örtüşme"| F4
     end
 ```
+
+### 🔄 Uçtan Uca 6 Aşamalı Operasyonel İş Akışı:
+1. **Veri Toplama & KAP/VBTS Senkronizasyonu (18:15):** BIST seans kapanışı sonrası 88 hisselik evrenin fiyat/hacim verileri, makro kur/faiz serileri ve son 7 günün KAP bildirimleri taranarak VBTS tedbirleri güncellenir.
+2. **Ön Denetim & Katman-4 Veri Tazeliği Kalkanı:** İşleme başlamadan önce verilerin BIST iş takvimine göre taze olup olmadığı denetlenir; 2 günden eski bayat veri tespit edilirse rebalance **otomatik kilitlenir (Kill-Switch)**.
+3. **Point-in-Time 9-Faktör Hesaplama:** Her hissenin enflasyondan arındırılmış reel kâr büyümesi (`reel_eps_growth`), FCF verimi, borçluluk ve değerleme rasyoları hesaplanarak sektörel Z-skorları çıkarılır.
+4. **LambdaMART Sıralama & Faz-0 Eleme:** 60 adet sığ karar ağacı her hisseye bir göreceli güç skoru (`ml_score`) atar. Ardından Faz-0 filtresi devreye girer; son 10 günde taban çekenler, 20M TL hacim altındaki sığ tahtalar ve sektör limitini (maks. 3) aşanlar veto edilir.
+5. **Portföy İcrası, 60 Gün Disiplini & Devre Kesiciler (18:35):** Seçilen Top-15 hisse eşit ağırlıkla (%6.67) portföye işlenir. 60 gün asgari tutma süresi denetlenir; yerel zirvesinden %20 düşen veya ardışık 2 gün taban çeken hisseler için **acil tasfiye** işletilir. Genel portföy tepe sermayesinden %25 gerilerse portföy %100 nakde geçirilir.
+6. **Raporlama, Çift Model Kıyaslama & Karar Destek:** Güncel durum `paper_portfolio_v4.json` dosyasına işlenir, V3 vs V4 karşılaştırması derlenir, Telegram üzerinden özet bildirim kartı iletilir ve Streamlit Bloomberg Terminali canlıya alınır.
 
 ---
 
