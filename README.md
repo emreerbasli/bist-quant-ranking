@@ -82,83 +82,63 @@ Sistem; ham piyasa verisinden başlayıp karar destek arayüzlerine ve bildiriml
 
 ```mermaid
 flowchart TD
-    %% 1. Veri Giriş Katmanı
-    subgraph Sub1 ["1. Veri Toplama ve Senkronizasyon (18:15 Seans Sonu)"]
-        A1["📈 BIST Fiyat ve Hacim Verisi<br/>88 Hisse + Endeksler (Parquet)"]
-        A2["📜 KAP Bilanço Bildirimleri<br/>Point-in-Time (PIT) Tarihli"]
-        A3["🏛️ Makroekonomik Veriler<br/>TCMB Reel Faiz / USD-TRY"]
-        A4["⚠️ KAP / VBTS Tedbirleri<br/>Brüt Takas / Kredili İşlem Yasağı"]
+    %% 1. Veri Kaynakları
+    subgraph S1 ["1. Veri Kaynakları ve Günlük Senkronizasyon (18:15)"]
+        direction LR
+        A1["📈 BIST Fiyat ve Hacim<br/>(88 Hisse Parquet)"]
+        A2["📜 KAP PIT Bilançolar<br/>(Resmi Açıklama Tarihli)"]
+        A3["🏛️ TCMB Makro Seriler<br/>(Reel Faiz ve USD/TRY)"]
+        A4["⚠️ VBTS İdari Tedbirler<br/>(Brüt Takas ve Kredili Yasak)"]
     end
 
-    %% 2. Ön Denetim ve Tazelik Kapısı
-    subgraph Sub2 ["2. Ön Denetim ve Veri Tazeliği Kalkanı"]
-        B1{"Katman-4 Tazelik Kapısı<br/>Veri >= 2 gün bayat mı?"}
-        B2["CLI Bütünlük Denetçisi<br/>Mükerrer Bar / Sıçrama Kontrolü"]
+    %% 2. Doğrulama ve Tazelik
+    subgraph S2 ["2. Veri Doğrulama ve Tazelik Kapısı"]
+        B1["CLI Bütünlük Denetimi<br/>(Mükerrer bar ve sıçrama kontrolü)"]
+        B2{"Katman-4 Tazelik Kapısı<br/>Veri taze mi? (Gecikme < 2 gün)"}
+        B1 --> B2
     end
-
-    A1 & A2 & A3 --> B2 --> B1
-    B1 -- "Evet (Bayat)" --> B_HALT["🛑 Rebalance Kilitlendi (Kill-Switch)"]
-    B1 -- "Hayır (Taze)" --> C1
 
     %% 3. Özellik Mühendisliği
-    subgraph Sub3 ["3. 9-Faktörlü PIT Özellik Mühendisliği"]
-        C1["9 Bağımsız Faktör Hesaplama<br/>(Reel Kâr Büyümesi, PD/DD, FCF, ROE, Mom, Borç)"]
-        C2["Sektörel Kesitsel Z-Score Normalizasyonu"]
-        C3["Makro Rejim ve Kur Şoku Taraması"]
-        C1 --> C2 --> C3
+    subgraph S3 ["3. 9-Faktörlü Point-in-Time (PIT) Motoru"]
+        C1["9 Temel ve Teknik Faktör<br/>Reel Kâr Büyümesi (%54.5) • Değer (PD/DD) • FCF • ROE • Momentum • Borçsuzluk"]
+        C2["Kesitsel Z-Score Normalizasyonu<br/>(Sektörel medyan ve standart sapma ile arındırma)"]
+        C1 --> C2
     end
 
-    %% 4. Model Sıralama ve Faz-0
-    subgraph Sub4 ["4. LightGBM LambdaMART Sıralama ve Faz-0 Kalkanı"]
-        D1["LightGBM LambdaMART Ranker<br/>Sığ Ağaçlar: Depth 2, Leaves 3, 60 Ağaç"]
-        D2["88 Hisse Kesitsel Göreli Skorlama (ml_score)"]
-        D3{"Faz-0 Taban Kalkanı<br/>Son 10 günde 5+ gün taban?"}
-        D4{"VBTS ve Likidite Kapısı<br/>Hacim > 20M TL ve Tedbirsiz"}
-        D5{"Sektör Sınırı<br/>Aynı sektörden max 3 hisse"}
-        D_VETO["❌ Portföyden Dışla (VETO)"]
-
-        C3 --> D1 --> D2 --> D3
-        D3 -- "Evet" --> D_VETO
-        A4 -.-> D4
-        D3 -- "Hayır" --> D4
-        D4 -- "Takıldı" --> D_VETO
-        D4 -- "Geçti" --> D5
-        D5 -- "Aşıldı" --> D_VETO
+    %% 4. Model ve Filtreler
+    subgraph S4 ["4. LambdaMART Sıralama ve Faz-0 Savunma Kalkanı"]
+        D1["LightGBM LambdaMART Ranker<br/>(Sığ Ağaçlar: Depth 2, Leaves 3, 60 Estimator)"]
+        D2["88 Hisse Kesitsel Güç Sıralaması (ml_score)"]
+        D3["Kurumsal Filtre Kalkanı<br/>🛡️ Faz-0: Son 10 günde 5+ taban veto<br/>💧 Likidite: 20M TL altı hacimsiz tahta vetosu<br/>🏢 Sektör: Aynı sektörden en fazla 3 hisse"]
+        D1 --> D2 --> D3
     end
 
     %% 5. Portföy İcrası
-    subgraph Sub5 ["5. Portföy İcrası ve Çıkış Motoru (18:35)"]
-        E1["Top-15 Eşit Ağırlıklı Portföy<br/>K=15, Her biri %6.67"]
-        E2{"60 Gün Disiplini ve Çıkış Kuralları"}
-        E_EXIT["🚨 Acil Çıkış: Hemen Sat"]
-        E_HOLD["Taşımaya Devam"]
-        E_ROT["14 Günlük Rebalance Rotasyonu"]
-        E_CB{"Portföy DD <= -25%?"}
-        E_CASH["🛡️ Devre Kesici: %100 Nakit Modu"]
-
-        D5 -- "Onaylandı" --> E1 --> E2
-        E2 -- "Zirveden %20 Kayıp" --> E_EXIT
-        E2 -- "2 Gün Üst Üste Taban" --> E_EXIT
-        E2 -- "Gün < 60 ve Normal" --> E_HOLD
-        E2 -- "Gün >= 60 ve Top-15 Dışı" --> E_ROT
-        E1 --> E_CB
-        E_CB -- "Evet" --> E_CASH
+    subgraph S5 ["5. Portföy Yönetimi ve Asimetrik Risk Motoru (18:35)"]
+        E1["Top-15 Eşit Ağırlıklı Portföy (Her Biri %6.67)"]
+        E2["Risk ve Çıkış Mekanizmaları<br/>⏱️ 60 Gün Tutma Disiplini (Çeyreklik olgunlaşma)<br/>🚨 Zirveden %20 Kâr Erimesi Acil Çıkışı<br/>📉 2 Ardışık Taban Acil Çıkışı<br/>🛡️ Portföy Drawdown <= -%25 Devre Kesici (%100 Nakit)"]
+        E1 --> E2
     end
 
     %% 6. Arayüz ve İletim
-    subgraph Sub6 ["6. İletim, Karar Destek ve Çift Model Takibi"]
-        F1[("V4 Canlı Portföy Durumu<br/>paper_portfolio_v4.json")]
-        F2["📱 Telegram Otomatik Bildirim Kartı<br/>Durum / K-Z / Rebalance Özeti"]
-        F3["⚖️ Çift Model Karşılaştırma Motoru<br/>V3-Referans vs V4-Üretim"]
-        F4["🌐 Streamlit Bloomberg Terminali<br/>6 Bağımsız Modül ve Hisse Röntgeni"]
-        F5["👤 Gerçek Portföyüm (Kişisel Cüzdan)<br/>V4'ten %100 İzole Takip Defteri"]
-
-        E_EXIT & E_HOLD & E_ROT & E_CASH --> F1
+    subgraph S6 ["6. İletim, Karar Destek ve Arayüz Katmanı"]
+        direction LR
+        F1[("💾 V4 Canlı Portföy<br/>paper_portfolio_v4.json")]
+        F2["📱 Telegram Botu<br/>(K/Z ve Rebalance Raporu)"]
+        F3["🌐 Streamlit Terminali<br/>(Bloomberg Grid ve Hisse Röntgeni)"]
+        F4["👤 Gerçek Portföyüm<br/>(İzole Kişisel Cüzdan)"]
         F1 --> F2
         F1 --> F3
-        F1 --> F4
-        F5 -.->|"Salt Okunur Örtüşme"| F4
+        F4 -.->|"Salt Okunur"| F3
     end
+
+    %% Düzgün Dikey Akış
+    S1 --> S2
+    B2 -- "✅ Taze Veri" --> S3
+    B2 -- "❌ Bayat Veri (>= 2 Gün)" --> HALT["🛑 Rebalance Kilitlendi (Kill-Switch)"]
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
 ```
 
 ### 🔄 Uçtan Uca 6 Aşamalı Operasyonel İş Akışı:
