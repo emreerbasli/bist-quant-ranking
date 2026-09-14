@@ -1,0 +1,12 @@
+@echo off
+chcp 65001 > nul
+title BIST V4 Quant - Veri Bütünlüğü ve Kalite Güvence Denetçisi
+
+cd /d "%~dp0"
+
+if exist "venv\Scripts\activate.bat" (
+    call venv\Scripts\activate.bat
+)
+
+python scripts\verify_data_integrity.py %*
+pause

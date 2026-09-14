@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-title BIST V3 Quant - Web Yonetim Paneli
+title BIST V4 Quant - Web Yonetim Paneli
 
 cd /d "%~dp0"
 

@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-title BIST V3 Quant - Kontrol Merkezi
+title BIST V4 Quant - Kontrol Merkezi
 
 cd /d "%~dp0"
 

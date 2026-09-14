@@ -22,6 +22,9 @@ import sys
 import os
 import time
 import logging
+from logging.handlers import RotatingFileHandler
+import json
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
@@ -41,11 +44,18 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
-from models.v3_ranking.data_loader import yukle_veriler
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+from models.v3_ranking.data_loader import yukle_veriler, check_market_date_alignment
 from models.v3_ranking.ranking_pipeline import LGBMRankingPipeline
 from models.v3_ranking.paper_trader import PaperTrader
+import config as cfg
 
-# Log Yapılandırması
+# Log Yapılandırması (RotatingFileHandler: 5MB sınır, 5 yedek dosya koruması)
 LOGS_DIR = ROOT_DIR / "logs"
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 SERVICE_LOG_FILE = LOGS_DIR / "paper_trading_service.log"
@@ -54,7 +64,12 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler(SERVICE_LOG_FILE, encoding="utf-8"),
+        RotatingFileHandler(
+            SERVICE_LOG_FILE,
+            maxBytes=5 * 1024 * 1024,
+            backupCount=5,
+            encoding="utf-8"
+        ),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -62,6 +77,18 @@ logger = logging.getLogger("PaperTraderService")
 
 # Süreç Kilitleme Dosyası (Race Condition Önleme)
 LOCK_FILE = ROOT_DIR / "models" / "v3_ranking" / "paper_trader.lock"
+SELECTION_CACHE_FILE = ROOT_DIR / "models" / "v3_ranking" / "latest_selection_cache.parquet"
+DRIFT_REPORT_FILE = ROOT_DIR / "models" / "v3_ranking" / "latest_drift_report.json"
+
+
+def _atomic_write_json(path: Path, payload: dict) -> None:
+    """Persist dashboard-only metadata without partially written JSON."""
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    with temporary.open("w", encoding="utf-8") as output:
+        json.dump(payload, output, ensure_ascii=False, indent=2)
+        output.flush()
+        os.fsync(output.fileno())
+    os.replace(temporary, path)
 
 
 # BIST Resmi ve Dini Tatil Günleri (2024-2027 Kapsamlı Takvim)
@@ -183,10 +210,25 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
             # En son geçerli işlem günü
             t_now = seri_xu100.index[-1]
 
+            alignment = check_market_date_alignment(fiyat_dict, seri_xu100)
+            if not alignment["aligned"]:
+                logger.error(
+                    "VERİ HİZALAMA KAPISI: %s Paper portföy ve sıralama güncellenmedi.",
+                    alignment["reason"],
+                )
+                return False
+
+            # Katman 4: Veri Tazelik Kapısı (Faz -1.3)
+            freshness = trader.drift_monitor.check_data_freshness(pd.Timestamp.now(), fiyat_dict, max_lag_business_days=2)
+            if freshness.should_halt:
+                logger.error("🚨 VERİ TAZELİK KAPISI DEVREDE: %s", freshness.details)
+                return False
+
             # Model sıralamasını üret (V3.1 Sektör Kısıtı + Likidite Filtresi ile select_top_k_v2)
             df_features = pipeline.compute_features(t_now, fiyat_dict, pit_bellek, seri_usdtry, tufe_aylik)
             df_ranked = pipeline.rank_stocks(df_features)
-            top_10 = pipeline.select_top_k_v2(df_features, k=10)["sembol"].tolist()
+            df_selected = pipeline.select_top_k_v2(df_features, k=10, fiyat_dict=fiyat_dict)
+            top_10 = df_selected["sembol"].tolist()
             scores_all = df_ranked["ml_score"].values
 
             # Dashboard için sıralama önbelleğini atomik kaydet
@@ -194,6 +236,9 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
             temp_cache = cache_path.with_suffix(".tmp")
             df_ranked.to_parquet(temp_cache, index=False)
             os.replace(temp_cache, cache_path)
+            temp_selection = SELECTION_CACHE_FILE.with_suffix(".tmp")
+            df_selected.to_parquet(temp_selection, index=False)
+            os.replace(temp_selection, SELECTION_CACHE_FILE)
 
             # Kapanış fiyatları (Hem yeni Top-10 hem de portföyde açık bekleyen hisseler)
             tum_semboller = set(top_10) | set(trader.portfolio_state.get("positions", {}).keys())
@@ -216,7 +261,7 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
 
             # Paper trader icrası (Terminal kartı ve Telegram bildirimi üretir)
             logger.info(f"Paper trading kontrolü icra ediliyor ({t_now.strftime('%Y-%m-%d')})...")
-            trader.execute_check(
+            execution = trader.execute_check(
                 t=t_now,
                 top_k_ranked=top_10,
                 current_prices=current_prices,
@@ -224,8 +269,31 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
                 seri_usdtry=seri_usdtry,
                 tufe_aylik=tufe_aylik,
                 scores_universe=scores_all,
-                days_elapsed=max(0, days_elapsed)
+                days_elapsed=max(0, days_elapsed),
+                fiyat_dict=fiyat_dict
             )
+
+            drift = execution["drift_report"]
+            _atomic_write_json(
+                DRIFT_REPORT_FILE,
+                {
+                    "as_of": t_now.date().isoformat(),
+                    "generated_at": datetime.now().isoformat(),
+                    "overall_status": drift.overall_status,
+                    "summary_message": drift.summary_message,
+                    "macro": asdict(drift.macro_result),
+                    "score": asdict(drift.score_result) if drift.score_result else None,
+                    "performance": asdict(drift.performance_result) if drift.performance_result else None,
+                },
+            )
+
+            # Çift model karşılaştırma raporunu güncelle ve konsola bas
+            try:
+                from models.v4_ranking.v3_v4_comparator import generate_v3_vs_v4_comparison, print_comparison_card
+                comp_data = generate_v3_vs_v4_comparison(tarih=t_now.strftime("%Y-%m-%d"))
+                print_comparison_card(comp_data)
+            except Exception as e:
+                logger.debug(f"Karşılaştırma raporu güncelleme uyarısı: {e}")
 
             # ZORUNLU KAYIT: Operasyonel netlik logu
             logger.info("✅ sistem çalıştı — Paper trading kontrolü ve bildirimi başarıyla tamamlandı.")
@@ -244,6 +312,20 @@ def main():
     print("BIST V3 KANTİTATİF MODEL: PAPER TRADING SERVİSİ (ZAMANLANMIŞ)")
     print("KRİTİK SINIR: Bu servis SADECE bildirim gönderir, otomatik al-sat yapmaz.")
     print("=" * 80)
+
+    # Parametre kontrolleri
+    if len(sys.argv) > 1 and "--v4" in sys.argv:
+        from run_paper_trader_v4 import periyodik_gorev_calistir_v4
+        logger.info("V4 tetikleme bayrağı algılandı, V4 çalıştırılıyor...")
+        periyodik_gorev_calistir_v4(force=True)
+        return
+
+    if len(sys.argv) > 1 and "--all" in sys.argv:
+        from run_paper_trader_v4 import periyodik_gorev_calistir_v4
+        logger.info("Çift model bayrağı algılandı, V3 ve V4 paralel çalıştırılıyor...")
+        periyodik_gorev_calistir(force=True)
+        periyodik_gorev_calistir_v4(force=True)
+        return
 
     # Parametre olarak --run-once veya --now verilirse hemen tek seferlik çalıştır
     if len(sys.argv) > 1 and sys.argv[1] in ["--now", "--run-once", "-f"]:

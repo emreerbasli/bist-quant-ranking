@@ -1,0 +1,58 @@
+[
+  {
+    "factor":"z_pb",
+    "mean_autocorr":0.9169794942,
+    "std_autocorr":0.085260445,
+    "top15_retention":0.8126984127,
+    "implied_turnover_pct":18.7301587302,
+    "turnover_risk":"\ud83d\udfe2 \u00c7OK D\u00dc\u015e\u00dcK (Y\u00fcksek Kararl\u0131l\u0131k)"
+  },
+  {
+    "factor":"z_roe",
+    "mean_autocorr":0.787430134,
+    "std_autocorr":0.2253484564,
+    "top15_retention":0.7365079365,
+    "implied_turnover_pct":26.3492063492,
+    "turnover_risk":"\ud83d\udfe2 \u00c7OK D\u00dc\u015e\u00dcK (Y\u00fcksek Kararl\u0131l\u0131k)"
+  },
+  {
+    "factor":"z_fcf",
+    "mean_autocorr":0.5947406623,
+    "std_autocorr":0.3643755275,
+    "top15_retention":0.6666666667,
+    "implied_turnover_pct":33.3333333333,
+    "turnover_risk":"\ud83d\udfe1 NORMAL \/ DENGEL\u0130"
+  },
+  {
+    "factor":"z_mom",
+    "mean_autocorr":0.769453482,
+    "std_autocorr":0.0840897093,
+    "top15_retention":0.6412698413,
+    "implied_turnover_pct":35.873015873,
+    "turnover_risk":"\ud83d\udfe2 \u00c7OK D\u00dc\u015e\u00dcK (Y\u00fcksek Kararl\u0131l\u0131k)"
+  },
+  {
+    "factor":"z_borc",
+    "mean_autocorr":0.8547376385,
+    "std_autocorr":0.1250820833,
+    "top15_retention":0.7968253968,
+    "implied_turnover_pct":20.3174603175,
+    "turnover_risk":"\ud83d\udfe2 \u00c7OK D\u00dc\u015e\u00dcK (Y\u00fcksek Kararl\u0131l\u0131k)"
+  },
+  {
+    "factor":"reel_eps_growth",
+    "mean_autocorr":0.643006035,
+    "std_autocorr":0.3941382147,
+    "top15_retention":0.6666666667,
+    "implied_turnover_pct":33.3333333333,
+    "turnover_risk":"\ud83d\udfe1 NORMAL \/ DENGEL\u0130"
+  },
+  {
+    "factor":"op_marji_trend",
+    "mean_autocorr":0.6473788354,
+    "std_autocorr":0.3972440441,
+    "top15_retention":0.6666666667,
+    "implied_turnover_pct":33.3333333333,
+    "turnover_risk":"\ud83d\udfe1 NORMAL \/ DENGEL\u0130"
+  }
+]

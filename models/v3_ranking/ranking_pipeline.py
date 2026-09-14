@@ -201,15 +201,19 @@ class LGBMRankingPipeline:
 
     def select_top_k_v2(self,
                         df_features: pd.DataFrame,
-                        k: int = 10) -> pd.DataFrame:
+                        k: int = 10,
+                        fiyat_dict: Optional[Dict[str, pd.Series]] = None,
+                        excluded_semboller: Optional[set] = None) -> pd.DataFrame:
         """
         V3.1 Post-Model Filtre Katmanı — select_top_k'nın geliştirilmiş versiyonu.
 
         Uygulanan filtreler (sırasıyla):
-        1. Likidite: Son 60 günlük ortalama günlük TL hacim >= LIKIDITE_MIN_TL_HACIM_V2
-        2. Sektör kısıtı: HISSE_SEKTOR_V2 + MAX_SEKTOR_POZISYON_V2 ile
+        1. Faz 0 Taban Filtresi (Hard Exclusion): Son 10 günde >=5 kez <=-%9.5 taban
+           kapanış yapan hisseler elenir.
+        2. Likidite: Son 60 günlük ortalama günlük TL hacim >= LIKIDITE_MIN_TL_HACIM_V2
+        3. Sektör kısıtı: HISSE_SEKTOR_V2 + MAX_SEKTOR_POZISYON_V2 ile
            aynı sektörden maksimum N hisse (BANKA/GYO/SİGORTA için 2, diğerleri 3)
-        3. VIP hisseler likidite filtresinden muaf tutulur (config.VIP_HISSELER)
+        4. VIP hisseler likidite filtresinden muaf tutulur (config.VIP_HISSELER)
 
         Dönen DataFrame ek sütunlar içerir:
           - sektor_v2: Granüler sektör etiketi
@@ -220,6 +224,24 @@ class LGBMRankingPipeline:
 
         if df_features.empty:
             return df_features
+
+        # Faz 0 Taban Filtresi (Hard Exclusion)
+        taban_excl = set()
+        if fiyat_dict:
+            try:
+                from bot.kap_filter import ardisik_taban_tespit
+                for s, p_seri in fiyat_dict.items():
+                    tetik, cnt = ardisik_taban_tespit(p_seri, lookback_gun=10, min_taban=5, taban_esik=-0.095)
+                    if tetik:
+                        taban_excl.add(s)
+                        logger.warning(
+                            f"🚨 Faz 0 Taban Filtresi (Hard Exclusion): {s} son 10 işlem gününde "
+                            f"{cnt} kez taban yaptı — Top-{k} adaylığından dışlandı."
+                        )
+            except Exception as e:
+                logger.warning(f"Taban filtresi kontrol hatası: {e}")
+
+        all_excluded = set(excluded_semboller or set()).union(taban_excl)
 
         # Tam sıralamayı al
         df_ranked = self.rank_stocks(df_features)
@@ -254,7 +276,7 @@ class LGBMRankingPipeline:
                 f"(<{likidite_esik_m:.0f}M TL/gün): {elenen}"
             )
 
-        # Sektör kısıtı ile greedy seçim
+        # Sektör kısıtı ve dışlama filtresi ile greedy seçim
         sektor_sayac: dict[str, int] = {}
         secilen: list[str] = []
 
@@ -262,6 +284,12 @@ class LGBMRankingPipeline:
             if len(secilen) >= k:
                 break
             s       = row["sembol"]
+            if s in all_excluded:
+                logger.warning(
+                    f"Dışlama kalkanı — {s} kural kısıtı nedeniyle Top-{k} sepetine alınmadı."
+                )
+                continue
+
             sektor  = row["sektor_v2"]
             max_pos = _cfg.MAX_SEKTOR_POZISYON_V2.get(sektor, _cfg.MAX_SEKTOR_VARSAYILAN_V2)
             mevcut  = sektor_sayac.get(sektor, 0)

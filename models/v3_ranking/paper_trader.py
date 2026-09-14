@@ -130,7 +130,8 @@ class PaperTrader:
                       tufe_aylik: Dict[str, float],
                       scores_universe: Optional[np.ndarray] = None,
                       days_elapsed: int = 14,
-                      send_telegram: bool = True) -> Dict[str, Any]:
+                      send_telegram: bool = True,
+                      fiyat_dict: Optional[Dict[str, pd.Series]] = None) -> Dict[str, Any]:
         """
         2 haftalık rebalance kontrolünü ve portföy güncellemesini icra eder.
         """
@@ -225,6 +226,27 @@ class PaperTrader:
                 }
             entries = list(target_top_10)
         else:
+            # Faz 0: Taban Kuralı Acil Çıkış (Hard Exclusion)
+            if fiyat_dict:
+                try:
+                    from bot.kap_filter import ardisik_taban_tespit
+                    for s, info in list(positions.items()):
+                        if s in fiyat_dict:
+                            p_sub = fiyat_dict[s][fiyat_dict[s].index <= t]
+                            tetik_taban, cnt_taban = ardisik_taban_tespit(
+                                p_sub, lookback_gun=10, min_taban=5, taban_esik=-0.095
+                            )
+                            if tetik_taban:
+                                logger.warning(
+                                    f"🚨 ACİL ÇIKIŞ (TABAN KURALI — HARD EXCLUSION): {s} son 10 işlem gününde "
+                                    f"{cnt_taban} kez taban yaptı! 60 gün tutma kuralı geçersiz kılınarak "
+                                    f"portföyden derhal tasfiye ediliyor."
+                                )
+                                exits.append(s)
+                                del positions[s]
+                except Exception as e:
+                    logger.warning(f"Faz 0 acil çıkış kontrol hatası: {e}")
+
             # Listeden düşen ve >=60 gün tutulmuş olanları belirle
             for s, info in list(positions.items()):
                 days_h = info.get("days_held", 0)
@@ -301,22 +323,29 @@ class PaperTrader:
                     f"{s} (Zirveden %{dd_val:.1f} | Zirve: {inf.get('personal_peak_price', 0):.2f}, Son: {inf.get('last_price', 0):.2f})"
                 )
 
-            if kalan_g == 0:
-                durum_str = f"✅ Çıkışa uygun (≥{self.min_hold_days}g)"
-            else:
-                durum_str = f"⏳ {kalan_g}g daha bekle"
-
-            cikis_satirlari.append(f"  • {s:<9} — {dh:>2}g tutuldu | {durum_str}")
+        # Faz 0: VBTS Tedbir Uyarısı (İzleme Modu — Soft Warning)
+        try:
+            from bot.kap_filter import cek_hisse_haberleri, analiz_et_vbts_riski
+            for s in list(positions.keys()):
+                h_list = cek_hisse_haberleri(s, max_haber=5, max_gun=7)
+                has_v, v_terms, _ = analiz_et_vbts_riski(h_list)
+                if has_v:
+                    v_str = f"⚠️ {s}: [VBTS İZLEME] Tedbir tespiti ({', '.join(v_terms)})"
+                    uyari_hisseler_list.append(v_str)
+                    logger.info(f"[VBTS İZLEME MODU]: {v_str}")
+        except Exception as e:
+            logger.debug(f"VBTS kontrolü atlandı/hata: {e}")
 
         cikis_takvimi_str = "\n".join(cikis_satirlari)
 
-        # 4. Drift Monitor Raporunu Al
+        # 4. Drift Monitor Raporunu Al (Faz -1: 4. Katman Veri Tazeliği ve 5. Katman Sağlık Denetimi)
         drift_report = self.drift_monitor.generate_full_report(
             t=t,
             seri_usdtry=seri_usdtry,
             tufe_aylik=tufe_aylik,
             scores=scores_universe,
-            realized_sharpe=None  # Paper trading başlangıcında rolling Sharpe birikimi beklenir
+            realized_sharpe=None,  # Paper trading başlangıcında rolling Sharpe birikimi beklenir
+            fiyat_dict=fiyat_dict
         )
 
         # 5. Portföy Durumunu Güncelle ve Kaydet
@@ -416,7 +445,8 @@ class PaperTrader:
 
         report = f"""
 ---
-📊 PAPER TRADING ÖZET — [{log_row['tarih']}]
+🏛️ BIST V3-KONTROL (8-FAKTÖR / K=10) REFERANS RAPORU — [{log_row['tarih']}]
+⚠️ NOT: Bu rapor V3-Kontrol referans modeline aittir. Canlı üretim modeli V4-Raw'dır.
 Portföy: [{log_row['portfoy_listesi']}]
 Değişiklik: [{log_row['degisiklik']}]
 Model Getiri (son dönem): [{log_row['model_getiri_yuzde']}]

@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-title BIST V3 Quant - Paper Trading Kontrolu
+title BIST V4 Quant - Paper Trading Kontrolu
 
 cd /d "%~dp0"
 

@@ -53,8 +53,8 @@ assert "data_age_days" in top_10_df.columns, "HATA: data_age_days top_10_df içi
 assert "bilanco_uyari" in top_10_df.columns, "HATA: bilanco_uyari bulunamadı!"
 print("  -> select_top_k_v2 başarıyla çalıştı. Seçilen 10 hisse:")
 for idx, r in top_10_df.iterrows():
-    uyari_str = "⚠️ ESKİ" if r["bilanco_uyari"] else "✅ Taze"
-    print(f"     {r['rank']:>2}. {r['sembol']:<9} | Sektör: {r['sektor_v2']:<18} | Hacim: {r['avg_tl_hacim_m']:>6.1f}M TL | Bilanço: {int(r['data_age_days'])} gün ({uyari_str})")
+    uyari_str = "[ESKI]" if r["bilanco_uyari"] else "[Taze]"
+    print(f"     {r['rank']:>2}. {r['sembol']:<9} | Sektor: {r['sektor_v2']:<18} | Hacim: {r['avg_tl_hacim_m']:>6.1f}M TL | Bilanco: {int(r['data_age_days'])} gun ({uyari_str})")
 
 # 3. Paper Trader Simülasyonu
 print("\n[3/4] PaperTrader V3.2 İcra ve Takip Testi...")
@@ -113,5 +113,5 @@ for col in required_cols:
 print(f"  -> CSV log sütunları eksiksiz: {len(df_log.columns)} sütun doğrulandı.")
 
 print("\n" + "=" * 80)
-print("✅ TÜM V3.2 TESTLERİ BAŞARIYLA GEÇTİ!")
+print("[OK] TUM V3.2 TESTLERI BASARIYLA GECTI!")
 print("=" * 80)

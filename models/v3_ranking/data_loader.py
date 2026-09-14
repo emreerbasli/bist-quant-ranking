@@ -126,6 +126,47 @@ def yukle_veriler():
     return fiyat_dict, seri_xu100, seri_usdtry, pit_bellek, cache_bellek, tufe_aylik
 
 
+def check_market_date_alignment(
+    fiyat_dict: Dict[str, pd.Series],
+    seri_xu100: pd.Series,
+) -> Dict[str, Any]:
+    """Verify that every equity and the benchmark share one PIT market date.
+
+    A ranking must not mix a newer benchmark close with older constituent
+    prices.  This is an operational data-integrity gate, not a model feature
+    and not a trading signal.
+    """
+    if seri_xu100.empty:
+        return {"aligned": False, "market_date": None, "stale_symbols": [], "reason": "XU100 serisi boş."}
+
+    market_date = pd.Timestamp(seri_xu100.index.max()).normalize()
+    stale_symbols: List[str] = []
+    missing_symbols: List[str] = []
+    for symbol, series in fiyat_dict.items():
+        if series.empty:
+            missing_symbols.append(symbol)
+            continue
+        symbol_date = pd.Timestamp(series.index.max()).normalize()
+        if symbol_date != market_date:
+            stale_symbols.append(symbol)
+
+    aligned = not stale_symbols and not missing_symbols
+    if aligned:
+        reason = "Tüm hisse fiyatları ve XU100 aynı işlem gününde."
+    else:
+        reason = (
+            f"XU100={market_date.date()} iken {len(stale_symbols)} hisse farklı tarihte, "
+            f"{len(missing_symbols)} hisse eksik."
+        )
+    return {
+        "aligned": aligned,
+        "market_date": market_date.date().isoformat(),
+        "stale_symbols": stale_symbols,
+        "missing_symbols": missing_symbols,
+        "reason": reason,
+    }
+
+
 def hizli_pit(pit_bellek: Dict[str, List[Dict[str, Any]]], s: str, t: pd.Timestamp) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """t anında kamuya açıklanmış son bilançoyu ve bir öncekini döner (Point-in-Time)."""
     recs = pit_bellek.get(s)

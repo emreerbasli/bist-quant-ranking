@@ -1,0 +1,89 @@
+{
+  "tarih": "2026-09-11",
+  "olusturulma_zamani": "2026-09-14T17:42:28.327367",
+  "v3": {
+    "model": "V3-Orijinal (8 Faktör)",
+    "portfoy_boyutu": 10,
+    "k_hedef": 10,
+    "sermaye": 0.983444,
+    "getiri_pct": -1.66,
+    "drawdown_pct": -1.66,
+    "dd_kesici_aktif": false,
+    "hisseler": [
+      "ALFAS.IS",
+      "CLEBI.IS",
+      "KCAER.IS",
+      "LOGO.IS",
+      "MAVI.IS",
+      "MIATK.IS",
+      "MTRKS.IS",
+      "ONCSM.IS",
+      "SELEC.IS",
+      "VAKBN.IS"
+    ],
+    "toplam_kontrol_sayisi": 2
+  },
+  "v4": {
+    "model": "V4-Raw (9 Faktör)",
+    "portfoy_boyutu": 15,
+    "k_hedef": 15,
+    "sermaye": 1.0,
+    "getiri_pct": 0.0,
+    "drawdown_pct": 0.0,
+    "dd_kesici_aktif": false,
+    "hisseler": [
+      "ALARK.IS",
+      "ANSGR.IS",
+      "DOHOL.IS",
+      "FORTE.IS",
+      "GENTS.IS",
+      "GUBRF.IS",
+      "KRDMD.IS",
+      "PETKM.IS",
+      "REEDR.IS",
+      "SELEC.IS",
+      "SKBNK.IS",
+      "TERA.IS",
+      "TUPRS.IS",
+      "TURSG.IS",
+      "VESTL.IS"
+    ],
+    "toplam_kontrol_sayisi": 8
+  },
+  "karsilastirma": {
+    "sermaye_farki": 0.016556,
+    "getiri_farki_pct": 1.66,
+    "drawdown_farki_pct": 1.66,
+    "ortak_hisseler_sayisi": 1,
+    "ortak_hisseler": [
+      "SELEC.IS"
+    ],
+    "yalnizca_v3_hisseler": [
+      "ALFAS.IS",
+      "CLEBI.IS",
+      "KCAER.IS",
+      "LOGO.IS",
+      "MAVI.IS",
+      "MIATK.IS",
+      "MTRKS.IS",
+      "ONCSM.IS",
+      "VAKBN.IS"
+    ],
+    "yalnizca_v4_hisseler": [
+      "ALARK.IS",
+      "ANSGR.IS",
+      "DOHOL.IS",
+      "FORTE.IS",
+      "GENTS.IS",
+      "GUBRF.IS",
+      "KRDMD.IS",
+      "PETKM.IS",
+      "REEDR.IS",
+      "SKBNK.IS",
+      "TERA.IS",
+      "TUPRS.IS",
+      "TURSG.IS",
+      "VESTL.IS"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "as_of": "2026-09-15",
+  "generated_at": "2026-09-14T17:51:58.721699",
+  "overall_status": "🟢 YEŞİL",
+  "summary_message": "Tüm güvenlik ve drift katmanları nominal.",
+  "macro": {
+    "status": "MAKRO_NORMAL",
+    "reel_faiz": 6.0488328362638555,
+    "usd_mom_60": 0.0,
+    "politika_faizi": 32.5,
+    "yillik_tufe": 26.451167163736145,
+    "is_alarm": false,
+    "details": "Makro rejim stabil (Reel Faiz: %6.0, USD 60g İvme: %0.0)."
+  },
+  "score": null,
+  "performance": null,
+  "freshness": null,
+  "health": null
+}

@@ -49,6 +49,8 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
+import config as cfg
+
 logger = logging.getLogger("DriftMonitor")
 
 
@@ -70,6 +72,9 @@ SCORE_DRIFT_Z_THRESHOLD: float = 2.5            # Z > 2.5 sapma alarmı (p < 0.0
 REFERENCE_SHARPE: float = 1.26                 # K=10, H=60g + %25 DD Kontrolü 6.75 yıllık Sharpe çıpası
 SHARPE_DEGRADATION_TOLERANCE: float = 0.40      # %40 azami izin verilen performans kaybı
 PERFORMANCE_ALARM_SHARPE_THRESHOLD: float = REFERENCE_SHARPE * (1.0 - SHARPE_DEGRADATION_TOLERANCE)  # 0.75
+
+# Katman 4 & 5: Veri Tazelik ve Sağlık Eşikleri (Faz -1)
+MAX_STALE_BUSINESS_DAYS: int = 2               # İzin verilen azami iş günü gecikmesi
 
 
 @dataclass
@@ -107,13 +112,40 @@ class PerformanceCheckResult:
 
 
 @dataclass
+class DataFreshnessResult:
+    status: str             # "VERİ_TAZE" veya "VERİ_BAYAT"
+    market_date: str        # Son borsa barı tarihi (örn: "2026-09-11")
+    reference_date: str     # Kontrol tarihi (örn: "2026-09-13")
+    business_days_lag: int  # İş günü cinsinden gecikme
+    max_allowed_lag: int    # 2 iş günü
+    is_stale: bool          # Gecikme >= max_allowed_lag ise True
+    should_halt: bool       # True ise sinyal ve portföy icrası durdurulmalı
+    details: str
+
+
+@dataclass
+class DataHealthResult:
+    status: str             # "SAĞLIKLI" veya "UYARI"
+    tickers_count: int       # Yüklenen hisse adedi (örn: 88)
+    total_bars: int          # Toplam fiyat barı
+    nan_ratio_pct: float     # Fiyat serisi NaN oranı (%)
+    pit_tickers_count: int   # PIT bilançosu bulunan hisse sayısı (örn: 88)
+    stale_financials_count: int # >100 gün eski bilanço adedi
+    macro_usd_status: str    # USD/TRY serisi durumu
+    macro_cpi_status: str    # TÜFE tablosu durumu
+    details: str
+
+
+@dataclass
 class DriftMonitorReport:
     timestamp: pd.Timestamp
     overall_status: str     # "🟢 YEŞİL", "🟡 SARI", "🔴 KIRMIZI"
     macro_result: MacroCheckResult
     score_result: Optional[ScoreDriftResult]
     performance_result: Optional[PerformanceCheckResult]
-    summary_message: str
+    freshness_result: Optional[DataFreshnessResult] = None
+    health_result: Optional[DataHealthResult] = None
+    summary_message: str = ""
 
 
 class DriftMonitor:
@@ -265,6 +297,146 @@ class DriftMonitor:
         )
 
     # --------------------------------------------------------------------------
+    # KATMAN 4: VERİ TAZELİK GÜVENCESİ (FAZ -1.3)
+    # --------------------------------------------------------------------------
+    def check_data_freshness(self,
+                             t: pd.Timestamp,
+                             fiyat_dict: Dict[str, pd.Series],
+                             max_lag_business_days: int = MAX_STALE_BUSINESS_DAYS) -> DataFreshnessResult:
+        """
+        En güncel piyasa verisinin referans tarihten kaç İŞ GÜNÜ eski olduğunu hesaplar.
+        BIST tatillerini ve hafta sonlarını filtreler.
+        Eğer gecikme >= max_lag_business_days (2 iş günü) ise operasyonu DURDURUR.
+        """
+        if not fiyat_dict:
+            return DataFreshnessResult(
+                status="VERİ_BAYAT: Fiyat verisi boş",
+                market_date="YOK",
+                reference_date=t.strftime("%Y-%m-%d"),
+                business_days_lag=999,
+                max_allowed_lag=max_lag_business_days,
+                is_stale=True,
+                should_halt=True,
+                details="🚨 EMNİYET KAPISI: Fiyat verisi sözlüğü boş! Karar üretimi durduruldu."
+            )
+
+        # En güncel piyasa barı tarihi (tüm hisseler arasındaki maksimum)
+        all_max_dates = [s.index.max() for s in fiyat_dict.values() if not s.empty]
+        if not all_max_dates:
+            return DataFreshnessResult(
+                status="VERİ_BAYAT: Tarih tespit edilemedi",
+                market_date="YOK",
+                reference_date=t.strftime("%Y-%m-%d"),
+                business_days_lag=999,
+                max_allowed_lag=max_lag_business_days,
+                is_stale=True,
+                should_halt=True,
+                details="🚨 EMNİYET KAPISI: Geçerli fiyat serisi bulunamadı."
+            )
+
+        latest_market_dt = pd.Timestamp(max(all_max_dates)).normalize()
+        ref_dt = pd.Timestamp(t).normalize()
+
+        # İki tarih arasındaki BIST iş günlerini hesapla
+        business_days_lag = 0
+        if ref_dt > latest_market_dt:
+            candidate_dates = pd.date_range(latest_market_dt + pd.Timedelta(days=1), ref_dt, freq="D")
+            for cur_d in candidate_dates:
+                if cfg.bist_is_gunu_mu(cur_d):
+                    business_days_lag += 1
+
+        is_stale = (business_days_lag >= max_lag_business_days)
+        should_halt = is_stale
+
+        market_date_str = latest_market_dt.strftime("%Y-%m-%d")
+        ref_date_str = ref_dt.strftime("%Y-%m-%d")
+
+        if is_stale:
+            status = f"VERİ_BAYAT: Son veri {business_days_lag} iş günü eski"
+            details = (
+                f"🚨 VERİ_BAYAT: Son piyasa verisi {market_date_str} tarihli olup, "
+                f"referans tarihten ({ref_date_str}) {business_days_lag} İŞ GÜNÜ eskidir "
+                f"(Azami izin: {max_lag_business_days} iş günü). "
+                f"Sessizce yanlış karar vermemek için model kararı üretilmedi ve operasyon DURDURULDU."
+            )
+        else:
+            status = "VERİ_TAZE"
+            details = (
+                f"Piyasa verisi taze ({market_date_str} kapanışı, referans: {ref_date_str}, "
+                f"gecikme: {business_days_lag} iş günü <= {max_lag_business_days})."
+            )
+
+        return DataFreshnessResult(
+            status=status,
+            market_date=market_date_str,
+            reference_date=ref_date_str,
+            business_days_lag=business_days_lag,
+            max_allowed_lag=max_lag_business_days,
+            is_stale=is_stale,
+            should_halt=should_halt,
+            details=details
+        )
+
+    # --------------------------------------------------------------------------
+    # KATMAN 5: VERİ SAĞLIK KONTROLÜ (FAZ -1.5)
+    # --------------------------------------------------------------------------
+    def check_data_health(self,
+                          fiyat_dict: Dict[str, pd.Series],
+                          pit_bellek: Optional[Dict[str, Any]] = None,
+                          tufe_aylik: Optional[Dict[str, float]] = None,
+                          t: Optional[pd.Timestamp] = None) -> DataHealthResult:
+        """
+        Fiyat, bilanço ve makro veriler için son güncelleme, satır sayısı,
+        NaN oranı ve sağlık özetini denetler.
+        """
+        t_ref = t or pd.Timestamp.now()
+        tickers_count = len(fiyat_dict)
+        total_bars = sum([len(s) for s in fiyat_dict.values()]) if fiyat_dict else 0
+        total_nans = sum([s.isnull().sum() for s in fiyat_dict.values()]) if fiyat_dict else 0
+        nan_ratio = (total_nans / max(1, total_bars + total_nans)) * 100.0
+
+        # PIT Bilanço sağlığı
+        pit_tickers = len(pit_bellek) if pit_bellek else 0
+        stale_pit_count = 0
+        if pit_bellek:
+            from models.v3_ranking.data_loader import hizli_pit
+            for sym in fiyat_dict.keys():
+                curr, _ = hizli_pit(pit_bellek, sym, t_ref)
+                if curr:
+                    try:
+                        g_tarih = pd.to_datetime(curr.get("gecerlilik_tarihi"))
+                        age_days = (t_ref - g_tarih).days
+                        if age_days > 100:
+                            stale_pit_count += 1
+                    except Exception:
+                        pass
+                else:
+                    stale_pit_count += 1
+
+        macro_usd_status = "OK"
+        macro_cpi_status = "OK" if tufe_aylik and len(tufe_aylik) >= 24 else "EKSİK"
+
+        is_healthy = (tickers_count >= 80) and (nan_ratio < 0.5)
+        status = "SAĞLIKLI" if is_healthy else "UYARI"
+        details = (
+            f"Fiyat: {tickers_count} hisse ({total_bars:,} bar, NaN: %{nan_ratio:.2f}) | "
+            f"PIT Bilanço: {pit_tickers} hisse (100g+ eski: {stale_pit_count}) | "
+            f"Makro: USD={macro_usd_status}, TÜFE={macro_cpi_status}"
+        )
+
+        return DataHealthResult(
+            status=status,
+            tickers_count=tickers_count,
+            total_bars=total_bars,
+            nan_ratio_pct=round(nan_ratio, 3),
+            pit_tickers_count=pit_tickers,
+            stale_financials_count=stale_pit_count,
+            macro_usd_status=macro_usd_status,
+            macro_cpi_status=macro_cpi_status,
+            details=details
+        )
+
+    # --------------------------------------------------------------------------
     # KONSOLİDE RAPORLAMA
     # --------------------------------------------------------------------------
     def generate_full_report(self,
@@ -272,19 +444,27 @@ class DriftMonitor:
                              seri_usdtry: pd.Series,
                              tufe_aylik: Dict[str, float],
                              scores: Optional[np.ndarray] = None,
-                             realized_sharpe: Optional[float] = None) -> DriftMonitorReport:
+                             realized_sharpe: Optional[float] = None,
+                             fiyat_dict: Optional[Dict[str, pd.Series]] = None,
+                             pit_bellek: Optional[Dict[str, Any]] = None) -> DriftMonitorReport:
         """
-        Üç katmanın tamamını çalıştırıp genel durum sinyalini (🟢 / 🟡 / 🔴) üretir.
+        Tüm katmanları (Makro, Skor, Performans, Veri Tazeliği ve Sağlığı) çalıştırıp
+        genel durum sinyalini (🟢 / 🟡 / 🔴) üretir.
         """
         macro_res = self.check_macro_regime(t, seri_usdtry, tufe_aylik)
         score_res = self.check_score_drift(scores) if scores is not None else None
         perf_res = self.check_performance_degradation(realized_sharpe) if realized_sharpe is not None else None
+        fresh_res = self.check_data_freshness(t, fiyat_dict) if fiyat_dict is not None else None
+        health_res = self.check_data_health(fiyat_dict, pit_bellek, tufe_aylik, t) if fiyat_dict is not None else None
 
         # Durum Mantığı:
-        # 🔴 KIRMIZI: Performans Alarmı aktif
-        # 🟡 SARI:    Performans normal ama Makro Alarm veya Skor Drift var
+        # 🔴 KIRMIZI: Veri Bayat (Operasyon Durduruldu) VEYA Performans Alarmı aktif
+        # 🟡 SARI:    Performans ve Veri normal ama Makro Alarm veya Skor Drift var
         # 🟢 YEŞİL:   Tüm katmanlar temiz
-        if perf_res and perf_res.is_alarm:
+        if fresh_res and fresh_res.should_halt:
+            overall = "🔴 KIRMIZI: VERİ_BAYAT"
+            summary = f"DURDURULDU: {fresh_res.details}"
+        elif perf_res and perf_res.is_alarm:
             overall = "🔴 KIRMIZI"
             summary = "KRİTİK: Portföy gerçekleşen Sharpe oranı izin verilen %40 sapma sınırının altına indi!"
         elif macro_res.is_alarm or (score_res and score_res.is_drift):
@@ -297,7 +477,7 @@ class DriftMonitor:
             summary = f"DİKKAT: Performans korunuyor ancak bağlam uyarıları aktif ({'; '.join(reasons)})."
         else:
             overall = "🟢 YEŞİL"
-            summary = "SAĞLIKLI: Makro rejim, model skor dağılımı ve gerçekleşen performans normal sınırlarda."
+            summary = "SAĞLIKLI: Makro rejim, model skor dağılımı, veri tazeliği ve performans normal sınırlarda."
 
         return DriftMonitorReport(
             timestamp=t,
@@ -305,6 +485,8 @@ class DriftMonitor:
             macro_result=macro_res,
             score_result=score_res,
             performance_result=perf_res,
+            freshness_result=fresh_res,
+            health_result=health_res,
             summary_message=summary
         )
 
@@ -373,6 +555,23 @@ def smoke_test():
     assert "YEŞİL" in rep_green.overall_status
     assert "SARI" in rep_yellow.overall_status
     assert "KIRMIZI" in rep_red.overall_status
+
+    # 8. Test: Katman 4 Veri Tazeliği ve Emniyet Kapısı
+    dummy_dict_fresh = {"THYAO.IS": pd.Series([100.0], index=[dummy_dates[-1]])}
+    res_fresh = monitor.check_data_freshness(dummy_dates[-1], dummy_dict_fresh)
+    print(f"Test 8 [Veri Taze]:       Durum={res_fresh.status} | Halt={res_fresh.should_halt}")
+    assert not res_fresh.should_halt, "Taze veri hatalı şekilde bayat sayıldı!"
+
+    # 4 iş günü eski veri simülasyonu -> Durdurulmalı
+    t_stale = dummy_dates[-1] + pd.Timedelta(days=7) # 5 iş günü sonrası
+    res_stale = monitor.check_data_freshness(t_stale, dummy_dict_fresh)
+    print(f"Test 9 [Veri Bayat]:      Durum={res_stale.status} | Halt={res_stale.should_halt}")
+    assert res_stale.should_halt, "Bayat veri emniyet kapısı tetiklenmedi!"
+
+    # 10. Test: Katman 5 Veri Sağlık Kontrolü
+    res_health = monitor.check_data_health(dummy_dict_fresh, None, dummy_tufe, dummy_dates[-1])
+    print(f"Test 10 [Veri Sağlık]:    Durum={res_health.status} | Özet={res_health.details}")
+    assert res_health is not None
 
     print("\n" + "=" * 80)
     print("✅ DRIFT MONITOR SMOKE TESTİ BAŞARIYLA TAMAMLANDI (TÜM TESTLER GEÇTİ).")

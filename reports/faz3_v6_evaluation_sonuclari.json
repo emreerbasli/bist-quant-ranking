@@ -1,0 +1,393 @@
+{
+  "v6_metrics": {
+    "kumulatif": 6.941481125494888,
+    "cagr": 0.8918764523886549,
+    "sharpe": 0.9774865316672987,
+    "max_dd": -0.1571322852910725,
+    "mean_active_ann": 0.006098402784185501,
+    "tracking_error_ann": 0.18981076254875473,
+    "information_ratio": 0.03212885497644275,
+    "beta": 1.1901100173168304,
+    "donem_b_kumulatif": -0.016778271571866177,
+    "donem_b_cagr": -0.01344529064342248,
+    "donem_b_sharpe": -0.863361197977949
+  },
+  "v6_feature_importance": [
+    {
+      "feature": "z_roe",
+      "constraint": 1,
+      "split": 28,
+      "gain": 44.58372977375984,
+      "gain_pct": 27.803524433599396
+    },
+    {
+      "feature": "z_reel_peg",
+      "constraint": -1,
+      "split": 30,
+      "gain": 43.220744013786316,
+      "gain_pct": 26.95353256274484
+    },
+    {
+      "feature": "z_net_borc",
+      "constraint": -1,
+      "split": 25,
+      "gain": 31.029729902744293,
+      "gain_pct": 19.350912494241605
+    },
+    {
+      "feature": "z_fcf",
+      "constraint": 1,
+      "split": 22,
+      "gain": 27.355665862560272,
+      "gain_pct": 17.05967464065162
+    },
+    {
+      "feature": "usd_mom_60",
+      "constraint": 0,
+      "split": 8,
+      "gain": 8.892603933811188,
+      "gain_pct": 5.545649321101892
+    },
+    {
+      "feature": "usd_mom_90",
+      "constraint": 0,
+      "split": 4,
+      "gain": 3.4045469760894775,
+      "gain_pct": 2.1231602989562526
+    },
+    {
+      "feature": "z_mom",
+      "constraint": 1,
+      "split": 3,
+      "gain": 1.8657789826393127,
+      "gain_pct": 1.163546248704387
+    },
+    {
+      "feature": "reel_faiz",
+      "constraint": 0,
+      "split": 0,
+      "gain": 0.0,
+      "gain_pct": 0.0
+    }
+  ],
+  "v6_root_splits": {
+    "z_reel_peg": 10,
+    "z_roe": 23,
+    "z_net_borc": 18,
+    "z_fcf": 9
+  },
+  "v6_history": [
+    {
+      "t0": "2022-03-01 00:00:00",
+      "quarter": "2022-Q1",
+      "donem": "Donem_A",
+      "mkt_ret": 0.3898619651996903,
+      "r_model": 0.312132214583255,
+      "top15": [
+        "DOAS.IS",
+        "TOASO.IS",
+        "TTRAK.IS",
+        "FROTO.IS",
+        "MTRKS.IS",
+        "KRDMD.IS",
+        "MAVI.IS",
+        "PETKM.IS",
+        "MIATK.IS",
+        "KONTR.IS",
+        "MGROS.IS",
+        "OTKAR.IS",
+        "TTKOM.IS",
+        "SAHOL.IS",
+        "AGHOL.IS"
+      ]
+    },
+    {
+      "t0": "2022-06-01 00:00:00",
+      "quarter": "2022-Q2",
+      "donem": "Donem_A",
+      "mkt_ret": 0.3932602725092028,
+      "r_model": 0.5106140037638881,
+      "top15": [
+        "TOASO.IS",
+        "FROTO.IS",
+        "TTRAK.IS",
+        "DOAS.IS",
+        "MTRKS.IS",
+        "MAVI.IS",
+        "ALARK.IS",
+        "SAHOL.IS",
+        "SASA.IS",
+        "SKBNK.IS",
+        "SOKM.IS",
+        "CANTE.IS",
+        "TUPRS.IS",
+        "ODAS.IS",
+        "EKGYO.IS"
+      ]
+    },
+    {
+      "t0": "2022-09-01 00:00:00",
+      "quarter": "2022-Q3",
+      "donem": "Donem_A",
+      "mkt_ret": 0.7013407135075004,
+      "r_model": 0.8311478900045016,
+      "top15": [
+        "TOASO.IS",
+        "MTRKS.IS",
+        "TTRAK.IS",
+        "DOAS.IS",
+        "TUPRS.IS",
+        "ALFAS.IS",
+        "LOGO.IS",
+        "MAVI.IS",
+        "ALARK.IS",
+        "MIATK.IS",
+        "SASA.IS",
+        "FROTO.IS",
+        "SOKM.IS",
+        "ODAS.IS",
+        "CANTE.IS"
+      ]
+    },
+    {
+      "t0": "2022-12-01 00:00:00",
+      "quarter": "2022-Q4",
+      "donem": "Donem_A",
+      "mkt_ret": 0.1486338747974784,
+      "r_model": -0.012118840756530056,
+      "top15": [
+        "MTRKS.IS",
+        "MIATK.IS",
+        "DOAS.IS",
+        "TOASO.IS",
+        "ALARK.IS",
+        "TTRAK.IS",
+        "TUPRS.IS",
+        "CIMSA.IS",
+        "ALFAS.IS",
+        "MGROS.IS",
+        "MAVI.IS",
+        "ODAS.IS",
+        "AGHOL.IS",
+        "CLEBI.IS",
+        "AEFES.IS"
+      ]
+    },
+    {
+      "t0": "2023-03-01 00:00:00",
+      "quarter": "2023-Q1",
+      "donem": "Donem_A",
+      "mkt_ret": 0.03147230002541794,
+      "r_model": 0.057755300524601615,
+      "top15": [
+        "DOAS.IS",
+        "CIMSA.IS",
+        "MIATK.IS",
+        "TUPRS.IS",
+        "AGHOL.IS",
+        "ALARK.IS",
+        "MTRKS.IS",
+        "ODAS.IS",
+        "TOASO.IS",
+        "TRGYO.IS",
+        "THYAO.IS",
+        "MAVI.IS",
+        "MGROS.IS",
+        "ALFAS.IS",
+        "TTRAK.IS"
+      ]
+    },
+    {
+      "t0": "2023-06-01 00:00:00",
+      "quarter": "2023-Q2",
+      "donem": "Donem_A",
+      "mkt_ret": 0.8185348630891442,
+      "r_model": 0.9518832543242493,
+      "top15": [
+        "BRSAN.IS",
+        "ULKER.IS",
+        "MTRKS.IS",
+        "DOAS.IS",
+        "TTRAK.IS",
+        "TRGYO.IS",
+        "MGROS.IS",
+        "KRDMD.IS",
+        "KCHOL.IS",
+        "TKFEN.IS",
+        "AGHOL.IS",
+        "MAVI.IS",
+        "TOASO.IS",
+        "EKGYO.IS",
+        "AEFES.IS"
+      ]
+    },
+    {
+      "t0": "2023-09-01 00:00:00",
+      "quarter": "2023-Q3",
+      "donem": "Donem_A",
+      "mkt_ret": 0.04760615638040204,
+      "r_model": -0.06827389963746415,
+      "top15": [
+        "OYAKC.IS",
+        "DOAS.IS",
+        "TOASO.IS",
+        "TTRAK.IS",
+        "AGHOL.IS",
+        "FROTO.IS",
+        "AEFES.IS",
+        "DOHOL.IS",
+        "SAHOL.IS",
+        "KCHOL.IS",
+        "TERA.IS",
+        "MGROS.IS",
+        "ENKAI.IS",
+        "EKGYO.IS",
+        "ALFAS.IS"
+      ]
+    },
+    {
+      "t0": "2023-12-01 00:00:00",
+      "quarter": "2023-Q4",
+      "donem": "Donem_A",
+      "mkt_ret": 0.20391561084730087,
+      "r_model": 0.17101781568178803,
+      "top15": [
+        "ALFAS.IS",
+        "AGHOL.IS",
+        "BRSAN.IS",
+        "OYAKC.IS",
+        "DOAS.IS",
+        "ODAS.IS",
+        "TTRAK.IS",
+        "AEFES.IS",
+        "FROTO.IS",
+        "CCOLA.IS",
+        "MGROS.IS",
+        "TERA.IS",
+        "TOASO.IS",
+        "TUPRS.IS",
+        "KCHOL.IS"
+      ]
+    },
+    {
+      "t0": "2024-03-01 00:00:00",
+      "quarter": "2024-Q1",
+      "donem": "Donem_B",
+      "mkt_ret": 0.07936506830432379,
+      "r_model": 0.16651962255746816,
+      "top15": [
+        "DOAS.IS",
+        "TABGD.IS",
+        "TTRAK.IS",
+        "TOASO.IS",
+        "OYAKC.IS",
+        "ODAS.IS",
+        "FROTO.IS",
+        "ALVES.IS",
+        "AGHOL.IS",
+        "AEFES.IS",
+        "MAVI.IS",
+        "MGROS.IS",
+        "CCOLA.IS",
+        "ALFAS.IS",
+        "SELEC.IS"
+      ]
+    },
+    {
+      "t0": "2024-06-01 00:00:00",
+      "quarter": "2024-Q2",
+      "donem": "Donem_B",
+      "mkt_ret": -0.024456798718654523,
+      "r_model": -0.015178696262653446,
+      "top15": [
+        "AGROT.IS",
+        "MGROS.IS",
+        "FORTE.IS",
+        "BINHO.IS",
+        "SOKM.IS",
+        "SURGY.IS",
+        "MIATK.IS",
+        "MAVI.IS",
+        "FROTO.IS",
+        "GARAN.IS",
+        "SASA.IS",
+        "TURSG.IS",
+        "INVES.IS",
+        "SDTTR.IS",
+        "PASEU.IS"
+      ]
+    },
+    {
+      "t0": "2024-09-01 00:00:00",
+      "quarter": "2024-Q3",
+      "donem": "Donem_B",
+      "mkt_ret": -0.02941174501458158,
+      "r_model": -0.026232515203599982,
+      "top15": [
+        "MAVI.IS",
+        "CLEBI.IS",
+        "INVES.IS",
+        "MIATK.IS",
+        "TTRAK.IS",
+        "ULKER.IS",
+        "GOKNR.IS",
+        "DOAS.IS",
+        "OYAKC.IS",
+        "MTRKS.IS",
+        "CCOLA.IS",
+        "TOASO.IS",
+        "KBORU.IS",
+        "TKFEN.IS",
+        "PASEU.IS"
+      ]
+    },
+    {
+      "t0": "2024-12-01 00:00:00",
+      "quarter": "2024-Q4",
+      "donem": "Donem_B",
+      "mkt_ret": -0.041656427339995146,
+      "r_model": -0.09040748456121603,
+      "top15": [
+        "MIATK.IS",
+        "CCOLA.IS",
+        "ASTOR.IS",
+        "CLEBI.IS",
+        "TTRAK.IS",
+        "MAVI.IS",
+        "INVES.IS",
+        "ULKER.IS",
+        "MTRKS.IS",
+        "GOKNR.IS",
+        "DOAS.IS",
+        "AEFES.IS",
+        "AGHOL.IS",
+        "MGROS.IS",
+        "DOHOL.IS"
+      ]
+    },
+    {
+      "t0": "2025-03-01 00:00:00",
+      "quarter": "2025-Q1",
+      "donem": "Donem_B",
+      "mkt_ret": 0.016845986196401565,
+      "r_model": -0.033727016186054184,
+      "top15": [
+        "DOHOL.IS",
+        "TKFEN.IS",
+        "INVES.IS",
+        "CLEBI.IS",
+        "MAVI.IS",
+        "MTRKS.IS",
+        "ASTOR.IS",
+        "CCOLA.IS",
+        "ULKER.IS",
+        "MIATK.IS",
+        "TTRAK.IS",
+        "GOKNR.IS",
+        "AEFES.IS",
+        "AGHOL.IS",
+        "DOAS.IS"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "as_of": "2026-09-11",
+  "generated_at": "2026-09-14T17:13:16.617515",
+  "overall_status": "🟢 YEŞİL",
+  "summary_message": "SAĞLIKLI: Makro rejim, model skor dağılımı, veri tazeliği ve performans normal sınırlarda.",
+  "macro": {
+    "status": "MAKRO_NORMAL",
+    "reel_faiz": 5.342026886404799,
+    "usd_mom_60": 0.03330723727241083,
+    "politika_faizi": 32.5,
+    "yillik_tufe": 27.1579731135952,
+    "is_alarm": false,
+    "details": "Makro rejim stabil (Reel Faiz: %5.3, USD 60g İvme: %3.3)."
+  },
+  "score": {
+    "status": "SKOR_NORMAL",
+    "current_mean": -0.13518970257888624,
+    "current_std": 0.14489061782580914,
+    "current_min": -0.3555935170567463,
+    "current_max": 0.3130389459808288,
+    "z_score_mean": -0.7134793066158971,
+    "z_score_std": -1.7215591499818172,
+    "is_drift": false,
+    "details": "Skor dağılımı olağan (Ort: -0.1352, Std: 0.1449, Z_mean: -0.71)."
+  },
+  "performance": null
+}

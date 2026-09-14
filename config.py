@@ -6,6 +6,8 @@ Bunlar .env dosyasından yüklenir.
 """
 
 import os
+from datetime import datetime
+from typing import Any
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -667,4 +669,74 @@ BREAKEVEN_TOLERANS       = 0.001  # Giriş stopuna çekilirken ufak komisyon pay
 # SIĞ TAHTA & LİKİDİTE FİLTRESİ (CRO RİSK KURALI)
 # ============================================================
 MIN_GUNLUK_TL_HACIM_ESIK = 25_000_000.0  # Günlük 25M TL altı hacim = Sığ Tahta / Fiktif Hacim Riski
+
+# ============================================================
+# FAZ -1: BIST RESMİ VE DİNİ TATİL TAKVİMİ (2024-2027)
+# ============================================================
+BIST_SABIT_RESMI_TATILLER = {
+    "01-01",  # Yılbaşı
+    "04-23",  # Ulusal Egemenlik ve Çocuk Bayramı
+    "05-01",  # Emek ve Dayanışma Günü
+    "05-19",  # Atatürk'ü Anma, Gençlik ve Spor Bayramı
+    "07-15",  # Demokrasi ve Milli Birlik Günü
+    "08-30",  # Zafer Bayramı
+    "10-29",  # Cumhuriyet Bayramı
+}
+
+BIST_YARIM_GUNLER = {
+    "10-28",  # 28 Ekim Cumhuriyet Bayramı Arifesi (12:40 kapanış)
+    "2024-04-09", "2024-06-15",
+    "2025-03-29", "2025-06-05",
+    "2026-03-19", "2026-05-26",
+    "2027-03-08", "2027-05-15",
+}
+
+BIST_DINI_VE_DEGISKEN_TATILLER = {
+    # 2024
+    "2024-04-09", "2024-04-10", "2024-04-11", "2024-04-12",
+    "2024-06-15", "2024-06-16", "2024-06-17", "2024-06-18", "2024-06-19",
+    # 2025
+    "2025-03-29", "2025-03-30", "2025-03-31", "2025-04-01",
+    "2025-06-05", "2025-06-06", "2025-06-07", "2025-06-08", "2025-06-09",
+    # 2026
+    "2026-03-19", "2026-03-20", "2026-03-21", "2026-03-22",
+    "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30",
+    # 2027
+    "2027-03-08", "2027-03-09", "2027-03-10", "2027-03-11",
+    "2027-05-15", "2027-05-16", "2027-05-17", "2027-05-18", "2027-05-19",
+}
+
+
+def bist_is_gunu_mu(dt: Any) -> bool:
+    """Belirtilen tarihin BIST açık işlem günü olup olmadığını döner."""
+    if hasattr(dt, "date"):
+        d = dt.date()
+    elif isinstance(dt, str):
+        d = datetime.strptime(dt[:10], "%Y-%m-%d").date()
+    else:
+        d = dt
+    if d.weekday() >= 5:  # Cumartesi (5), Pazar (6)
+        return False
+    ay_gun = d.strftime("%m-%d")
+    tam_gun = d.strftime("%Y-%m-%d")
+    if ay_gun in BIST_SABIT_RESMI_TATILLER:
+        return False
+    # Tam tatil kontrolü (yarım gün hariç)
+    if tam_gun in BIST_DINI_VE_DEGISKEN_TATILLER and tam_gun not in BIST_YARIM_GUNLER:
+        return False
+    return True
+
+
+def bist_yarim_gun_mu(dt: Any) -> bool:
+    """Belirtilen tarihin arife yarım günü olup olmadığını döner."""
+    if hasattr(dt, "date"):
+        d = dt.date()
+    elif isinstance(dt, str):
+        d = datetime.strptime(dt[:10], "%Y-%m-%d").date()
+    else:
+        d = dt
+    ay_gun = d.strftime("%m-%d")
+    tam_gun = d.strftime("%Y-%m-%d")
+    return (ay_gun in BIST_YARIM_GUNLER) or (tam_gun in BIST_YARIM_GUNLER)
+
 

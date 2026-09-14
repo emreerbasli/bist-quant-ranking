@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-title BIST Sniper Bot - Telegram Canli Botu
+title BIST V4 Quant - Telegram Canli Botu
 
 cd /d "%~dp0"
 

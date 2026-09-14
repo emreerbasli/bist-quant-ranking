@@ -39,6 +39,7 @@ data/*.db
 data/*.db-shm
 data/*.db-wal
 data/*.csv
+data/user_real_portfolio.json
 *.parquet
 
 
@@ -59,8 +60,9 @@ models/**/*.cbm
 models/**/*.pt
 models/**/*.onnx
 models/**/*.joblib
-# Whitelist lightweight production candidate ranker (37 KB) for instant reproducibility
+# Whitelist lightweight production candidate rankers (~38 KB) for instant reproducibility
 !models/v3_ranking/winning_lgbm_ranker.joblib
+!models/v4_ranking/winning_lgbm_ranker_v4.joblib
 
 # --- 8. Jupyter Notebook Checkpoints & Coverage ---
 .ipynb_checkpoints/
