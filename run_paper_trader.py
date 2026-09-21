@@ -330,10 +330,9 @@ def calistir_hibrid_motor_sirali(force: bool = False, send_telegram: bool = True
     logger.info("▶️ [STEP 2] Phase H Prospective Readiness başlatılıyor...")
     research_dir = str(ROOT_DIR / "research")
     python_exe = str(sys.executable)
-    
     readiness_scripts = [
         "prospective_acquisition_phase_ab.py",
-        "prospective_kap_corporate_actions.py",
+        # "prospective_kap_corporate_actions.py", # Requires --ticker and --year arguments, causing automation to fail
         "prospective_canonical_extension.py"
     ]
     

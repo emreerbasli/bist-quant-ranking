@@ -1,6 +1,6 @@
 {
   "tarih": "2026-09-21",
-  "olusturulma_zamani": "2026-09-22T01:17:07.993465",
+  "olusturulma_zamani": "2026-09-22T01:20:00.353190",
   "v3": {
     "model": "V3.2 (Resmi Canlı Model / K=10)",
     "portfoy_boyutu": 10,
@@ -21,7 +21,7 @@
       "ONCSM.IS",
       "VAKBN.IS"
     ],
-    "toplam_kontrol_sayisi": 11
+    "toplam_kontrol_sayisi": 12
   },
   "v4": {
     "model": "V4.1 LGBMRanker (9 Feature: z_reel_eps win[-1.5, 1.5])",
