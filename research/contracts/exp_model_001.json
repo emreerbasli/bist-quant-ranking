@@ -1,0 +1,27 @@
+{
+  "experiment_id":"EXP-MODEL-001",
+  "title":"CONTROLLED MODEL ARCHITECTURE COMPARISON",
+  "status":"LOCKED_BEFORE_RESULTS",
+  "hypothesis":"Nonlinear tree/regression/ranking architectures may provide repeatable incremental ranking information over regularized linear ridge under the same three-feature price-only information set and nested temporal validation.",
+  "data_scope":{"price":"EXP-DATA-005 research price view","end_date":"2025-05-30","macro":"EXCLUDED","usdtry":"EXCLUDED","fundamental":"EXCLUDED","value":"EXCLUDED","legacy_v3_v4":"DESCRIPTIVE_REFERENCE_ONLY"},
+  "features":["mom_12_1","mom_63","vol_63"],
+  "rejected_exp_feat_001_features_allowed":false,
+  "models":{
+    "FACTOR_COMPOSITE":{"formula":"mean(rank(mom_12_1), rank(mom_63), 1-rank(vol_63)) within signal-date cross-section","weights":[1,1,-1],"optimized":false},
+    "RIDGE":{"alpha":1.0,"preprocessing":"training-only median imputation and z-score scaling"},
+    "LGBM_REGRESSION":{"objective":"regression","n_estimators":60,"learning_rate":0.05,"num_leaves":15,"max_depth":4,"min_child_samples":30,"subsample":0.9,"subsample_freq":1,"colsample_bytree":0.9,"reg_alpha":0.1,"reg_lambda":1.0,"n_jobs":1,"deterministic":true,"force_col_wise":true},
+    "LAMBDAMART":{"objective":"lambdarank","metric":"ndcg","eval_at":[10],"n_estimators":60,"learning_rate":0.05,"num_leaves":15,"max_depth":4,"min_child_samples":20,"subsample":0.9,"subsample_freq":1,"colsample_bytree":0.9,"reg_alpha":0.1,"reg_lambda":1.0,"n_jobs":1,"deterministic":true,"force_col_wise":true,"group":"signal_date cross-section","relevance_bins":5,"relevance_mapping":"min(4,floor(target_percentile_rank*5))"}
+  },
+  "tree_seeds":[11,29,47],
+  "seed_aggregation":"median prediction across all fixed seeds; never select best seed",
+  "early_stopping":"NOT_USED; fixed estimator count",
+  "target_horizon":{"targets":["RAW","SECTOR_RELATIVE","BETA_RESIDUAL","VOL_SCALED"],"horizons":[20,40,60],"selection":"architecture-specific INNER_ONLY","outer_feedback":false},
+  "comparisons":{"architecture_controlled":"all architectures evaluated at each outer fold's ridge inner-selected target/horizon","whole_procedure":"each architecture evaluated at its own inner-selected target/horizon"},
+  "portfolio":{"top_k":10,"weighting":"equal_weight","holding_sessions":60,"rebalance_sessions":60,"costs_bps":[0,30,50,100],"primary_cost_bps":50},
+  "absolute_viability":{"mean_outer_rank_ic_min":0.0,"median_outer_rank_ic_min":0.0,"positive_fold_ratio_min":0.5,"mean_ndcg_at_10_min":0.5,"outer_rank_ic_std_max":0.20},
+  "complex_incremental_viability_vs_ridge_controlled":{"mean_delta_rank_ic_min":0.01,"median_delta_rank_ic_min":0.0,"positive_delta_fold_ratio_min":0.5,"mean_delta_ndcg_min":0.0,"mean_seed_rank_ic_std_max":0.05},
+  "complexity_order":["FACTOR_COMPOSITE","RIDGE","LGBM_REGRESSION","LAMBDAMART"],
+  "phase_gate":{"PASS":"at least one LightGBM architecture is VIABLE","PARTIAL":"no tree is viable but a linear/control architecture meets absolute viability","FAIL":"no architecture meets absolute viability"},
+  "forbidden_inputs":["fundamental","market_cap","capital","policy_rate","cpi","real_rate","usdtry","macro","reel_faiz","usd_mom_60","usd_mom_90"],
+  "production_writes_allowed":false
+}

@@ -1,0 +1,53 @@
+{
+  "experiment_id": "EXP-MODEL-001",
+  "execution": "PASS",
+  "phase_f_gate": "PASS",
+  "decision": "MULTIPLE VIABLE ARCHITECTURES",
+  "classifications": [
+    {
+      "architecture": "FACTOR_COMPOSITE",
+      "absolute_viable": true,
+      "incremental_viable": null,
+      "classification": "CONTROL / BASELINE",
+      "mean_controlled_delta_rank_ic": null,
+      "median_controlled_delta_rank_ic": null,
+      "positive_delta_fold_ratio": null,
+      "mean_controlled_delta_ndcg": null,
+      "mean_seed_rank_ic_std": null
+    },
+    {
+      "architecture": "RIDGE",
+      "absolute_viable": false,
+      "incremental_viable": null,
+      "classification": "CONTROL / BASELINE",
+      "mean_controlled_delta_rank_ic": null,
+      "median_controlled_delta_rank_ic": null,
+      "positive_delta_fold_ratio": null,
+      "mean_controlled_delta_ndcg": null,
+      "mean_seed_rank_ic_std": null
+    },
+    {
+      "architecture": "LGBM_REGRESSION",
+      "absolute_viable": true,
+      "incremental_viable": true,
+      "classification": "VIABLE",
+      "mean_controlled_delta_rank_ic": 0.22316591819074788,
+      "median_controlled_delta_rank_ic": 0.16274389259228603,
+      "positive_delta_fold_ratio": 1.0,
+      "mean_controlled_delta_ndcg": 0.10291799498857171,
+      "mean_seed_rank_ic_std": 0.008725332413323057
+    },
+    {
+      "architecture": "LAMBDAMART",
+      "absolute_viable": true,
+      "incremental_viable": true,
+      "classification": "VIABLE",
+      "mean_controlled_delta_rank_ic": 0.1809044631544531,
+      "median_controlled_delta_rank_ic": 0.10712347252089433,
+      "positive_delta_fold_ratio": 1.0,
+      "mean_controlled_delta_ndcg": 0.09086287091422035,
+      "mean_seed_rank_ic_std": 0.015885870201373435
+    }
+  ],
+  "generated_at_utc": "2026-09-17T22:34:12.720142+00:00"
+}

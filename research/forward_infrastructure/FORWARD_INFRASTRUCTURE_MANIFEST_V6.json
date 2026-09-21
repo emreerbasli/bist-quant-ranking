@@ -1,0 +1,38 @@
+{
+  "candidates": {
+    "RC-LAMBDAMART-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "target": "BETA_RESIDUAL",
+      "version": "1.0.0"
+    },
+    "RC-LGBMR-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "target": "RAW",
+      "version": "1.0.0"
+    }
+  },
+  "clean_forward_start": "NOT_STARTED",
+  "created_at": "2026-09-18T13:39:02.399368+03:00",
+  "experiment_id": "EXP-FREEZE-001R3B",
+  "hashes": {
+    "research\\contracts\\exp_freeze_001r3.json": "00c0fc82a49673117c5385be829baff00ab56912f2955b9847f23dd5a69e6cbf",
+    "research\\contracts\\exp_port_001.json": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+    "research\\contracts\\exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+    "research\\contracts\\exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+    "research\\exp_freeze_001r3b.py": "b63a343c7cdd0acb740dce2bcea3af3f44f251d10c76eac69fe5a6a61e032697",
+    "research\\forward_infrastructure_001r3.py": "7d632abdf1fe4c3cc5f656d0f8d75faf960e17bc6bfdceb3c288604c066634af",
+    "research\\forward_lifecycle_001r3.py": "e578c08cd75dfc14d961415c2cd9656b5977c3fd69754f10102db9e8d9f407b4",
+    "research\\run_frozen_shadow.py": "e934f13dc167febe52f4dd24699b98cd821666161ee8660a262fe586a911ff63",
+    "research\\tests\\test_exp_freeze_001r3.py": "98addc7db9103ff9e9e1e399865e7278ab8164b7dda918db01a4bc8a275be4c1",
+    "research\\tests\\test_exp_freeze_001r3a.py": "0ad4461fbb56b586d38be3338a721a173a8a9d83560c436c5b323672151deb5e",
+    "research\\tests\\test_exp_freeze_001r3b.py": "014e4f5702c55d09b61f0827db1592f7c213f9d75329e6bbda4851c7bacb4032"
+  },
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "production_writes_allowed": false,
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "v5_manifest_sha256": "9d9b0ca02133709262ef8dfbbe1ea4a49fb9259ec40eb74023ec6defb2e474f2"
+}

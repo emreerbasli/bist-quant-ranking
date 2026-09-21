@@ -1,0 +1,13 @@
+{
+  "experiment_id": "EXP-FREEZE-001R3",
+  "gate": "PARTIAL",
+  "candidates": {"RC-LGBMR-001": "UNCHANGED", "RC-LAMBDAMART-001": "UNCHANGED"},
+  "v3": "PRESERVED / HISTORICAL FAILED-AUDIT MANIFEST",
+  "v4_manifest_sha256": "ac2d914dfd705c21603751892b320b82cd017eb682c9bf309f4601d8e3e57096",
+  "v4_status": "PENDING_INDEPENDENT_AUDIT",
+  "clean_forward": "NOT_STARTED",
+  "dedicated_tests": "11/11 PASS",
+  "full_research_tests": "213/213 PASS",
+  "production": "PASS 0 changed",
+  "official_logs": "EMPTY"
+}

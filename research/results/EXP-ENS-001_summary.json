@@ -1,0 +1,19 @@
+{
+  "experiment_id": "EXP-ENS-001",
+  "execution": "PASS",
+  "phase_k_gate": "FAIL",
+  "ensemble_decision": "ENSEMBLE DOES NOT ADD RELIABLE VALUE",
+  "ensemble": "REJECT",
+  "parents": {
+    "LGBM_REGRESSION": "CARRY",
+    "LAMBDAMART": "CARRY"
+  },
+  "carry_forward_set": [
+    "LGBM_REGRESSION",
+    "LAMBDAMART"
+  ],
+  "predictive_comparable": true,
+  "economic_usable": false,
+  "cost_monotonic": false,
+  "generated_at_utc": "2026-09-17T23:14:35.882575+00:00"
+}

@@ -1,0 +1,9 @@
+source,date_coverage,ticker_coverage,event_types,authority,pit_suitability
+data/raw/*.parquet,mostly 2018-01-01..2026-09-15,88 configured equities plus market series,provider dividends/splits fields,PROVIDER,FAIL for action timing; five early adjustments
+research/data/provider_snapshot,2018-01-01..2026-09-15,89/89 requested,"provider raw/adjusted OHLCV, dividends, splits",PROVIDER,PARTIAL; raw label repeats early action errors
+research/contracts/exp_data_004_official_events.json,2024-08-13..2026-08-05,5 regression tickers,bonus and rights issues; separate announcement/effective/ex dates,OFFICIAL_KAP_CURATED,PASS for captured effective/ex dates; announcement 3/5
+data/events.csv,2018..2026,market-wide synthetic,fixed financial-report calendar only,DERIVED,FAIL for corporate actions
+data/kap_vbts_arsiv.csv,none,none,header only,INTENDED_OFFICIAL_CACHE,FAIL; zero rows
+scripts KAP HTML/API experiments,ad hoc,ad hoc,disclosure-page experiments,OFFICIAL_PAGE_EXPERIMENT,FAIL; no normalized retained master
+features/kap_scraper caches,quarterly fundamentals,configured equities,"financial statements, not corporate actions",PROVIDER/DERIVED,NOT_APPLICABLE
+listing/delist/ticker/merger/status master,missing,missing,"first trade, delist, rename, merger, demerger, suspension",MISSING,FAIL

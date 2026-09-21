@@ -1,0 +1,114 @@
+{
+  "experiment_id": "EXP-TGT-002",
+  "execution": "PASS",
+  "target_decision": "NO CLEAR TARGET WINNER",
+  "viable_targets": [],
+  "inner_family_selection_frequency": {
+    "RAW": 0,
+    "SECTOR_RELATIVE": 0,
+    "BETA_RESIDUAL": 1,
+    "VOL_SCALED": 3
+  },
+  "horizon_selection_by_target": [
+    {
+      "target_family": "RAW",
+      "horizon_sessions": 20,
+      "selection_count": 1
+    },
+    {
+      "target_family": "RAW",
+      "horizon_sessions": 40,
+      "selection_count": 2
+    },
+    {
+      "target_family": "RAW",
+      "horizon_sessions": 60,
+      "selection_count": 1
+    },
+    {
+      "target_family": "SECTOR_RELATIVE",
+      "horizon_sessions": 20,
+      "selection_count": 1
+    },
+    {
+      "target_family": "SECTOR_RELATIVE",
+      "horizon_sessions": 40,
+      "selection_count": 2
+    },
+    {
+      "target_family": "SECTOR_RELATIVE",
+      "horizon_sessions": 60,
+      "selection_count": 1
+    },
+    {
+      "target_family": "BETA_RESIDUAL",
+      "horizon_sessions": 20,
+      "selection_count": 1
+    },
+    {
+      "target_family": "BETA_RESIDUAL",
+      "horizon_sessions": 40,
+      "selection_count": 2
+    },
+    {
+      "target_family": "BETA_RESIDUAL",
+      "horizon_sessions": 60,
+      "selection_count": 1
+    },
+    {
+      "target_family": "VOL_SCALED",
+      "horizon_sessions": 20,
+      "selection_count": 1
+    },
+    {
+      "target_family": "VOL_SCALED",
+      "horizon_sessions": 40,
+      "selection_count": 2
+    },
+    {
+      "target_family": "VOL_SCALED",
+      "horizon_sessions": 60,
+      "selection_count": 1
+    }
+  ],
+  "dataset": {
+    "symbols": 88,
+    "target_observations": 19840
+  },
+  "macro_used": false,
+  "fundamental_used": false,
+  "sector_mapping_quality": "PROXY_TAXONOMY; historical classification vintages unavailable",
+  "target_diagnostics": [
+    {
+      "diagnostic": "sector_fallback_observations",
+      "value": 308,
+      "denominator": 4960,
+      "ratio": 0.062096774193548386
+    },
+    {
+      "diagnostic": "beta_missing_feature_observations",
+      "value": 0,
+      "denominator": 1763,
+      "ratio": 0.0
+    },
+    {
+      "diagnostic": "beta_at_floor_or_cap",
+      "value": 0,
+      "denominator": 1763,
+      "ratio": 0.0
+    },
+    {
+      "diagnostic": "volatility_at_floor",
+      "value": 0,
+      "denominator": 4960,
+      "ratio": 0.0
+    },
+    {
+      "diagnostic": "volatility_at_cap",
+      "value": 0,
+      "denominator": 4960,
+      "ratio": 0.0
+    }
+  ],
+  "production_changes": 0
+}

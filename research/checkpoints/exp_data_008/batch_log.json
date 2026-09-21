@@ -1,0 +1,62 @@
+[
+  {
+    "observations": 87,
+    "recovered": 80,
+    "failures": 7,
+    "ambiguous": 0,
+    "duplicate_legacy_ids": 0,
+    "unknown_selected_units": 0,
+    "unknown_selected_unit_pct": 0.0,
+    "basis_qc_mismatch": 0,
+    "basis_qc_mismatch_pct": 0.0,
+    "candidate_rows": 84,
+    "logical_requests": 109,
+    "network_attempts": 101,
+    "cache_hits": 0,
+    "pilot_cache_seed_hits": 8,
+    "http_429": 0,
+    "retries": 0,
+    "source_errors": 0,
+    "parse_errors": 0,
+    "stop_reasons": [],
+    "gate": "CONTINUE",
+    "batch_number": 1,
+    "tickers": [
+      "AEFES",
+      "AGHOL",
+      "AGROT"
+    ],
+    "started_at_utc": "2026-09-17T17:35:05.902778+00:00",
+    "completed_at_utc": "2026-09-17T17:38:03.324069+00:00"
+  },
+  {
+    "batch_number": 2,
+    "tickers": [
+      "AKBNK",
+      "ALARK",
+      "ALFAS",
+      "ALVES",
+      "ANSGR",
+      "ARCLK",
+      "ASELS",
+      "ASTOR",
+      "BIMAS",
+      "BINHO"
+    ],
+    "interrupted_ticker": "ALVES",
+    "started_at_utc": "2026-09-17T18:06:51.736659+00:00",
+    "stopped_at_utc": "2026-09-17T18:14:05.832797+00:00",
+    "logical_requests": 162,
+    "network_attempts": 135,
+    "cache_hits": 29,
+    "pilot_cache_seed_hits": 6,
+    "http_429": 11,
+    "retries": 9,
+    "source_errors": 0,
+    "parse_errors": 2,
+    "gate": "STOP",
+    "stop_reasons": [
+      "HTTP_429_BATCH_LIMIT"
+    ]
+  }
+]

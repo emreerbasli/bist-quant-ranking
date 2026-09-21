@@ -1,0 +1,20 @@
+{
+  "contract_version": "1.0.0",
+  "as_of_date": "2026-09-17",
+  "events": [
+    {
+      "symbol": "KONTR.IS",
+      "provider_adjusted_date": "2025-12-01",
+      "announcement_date": "2025-12-08",
+      "announcement_date_quality": "OFFICIAL_KAP",
+      "effective_date": "2025-12-09",
+      "ex_date": "2025-12-09",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 1.0,
+      "subscription_price": 1.0,
+      "source": "https://www.kap.org.tr/tr/Bildirim/1524497",
+      "secondary_source": "https://kap.org.tr/tr/Bildirim/1525040",
+      "validation_note": "KAP states 100% rights issue at TRY 1.00, rights-use start 2025-12-09, and post-action theoretical price TRY 15.58. Provider raw OHLC changes basis on 2025-12-01 while its event fields remain empty."
+    }
+  ]
+}

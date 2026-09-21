@@ -1,0 +1,14 @@
+{
+  "experiment_id": "EXP-FREEZE-001R",
+  "status": "LOCKED_FORWARD_INFRASTRUCTURE_REMEDIATION",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "clean_forward_start": "PENDING_AUDIT",
+  "candidates": {
+    "RC-LGBMR-001": {"version": "1.0.0", "target_family": "RAW", "horizon_sessions": 60},
+    "RC-LAMBDAMART-001": {"version": "1.0.0", "target_family": "BETA_RESIDUAL", "horizon_sessions": 60}
+  },
+  "timeliness": {"market_close_local": "18:10", "permitted_operational_window_hours": 18, "require_actual_signal_date_equals_requested_asof": true},
+  "portfolio": {"k": 10, "weighting": "equal_weight", "rebalance_sessions": 60, "holding_sessions": 60, "one_way_cost_bps": 50, "capital_try": 1000000, "max_order_adv_pct": 0.10},
+  "change_control": {"material_fields": ["features", "feature_formulae", "target", "horizon", "model", "preprocessing", "execution_semantics", "material_data_semantics"], "action": "REQUIRE_NEW_CANDIDATE_VERSION_AND_SEPARATE_EVIDENCE"},
+  "production_writes_allowed": false
+}

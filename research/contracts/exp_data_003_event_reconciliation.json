@@ -1,0 +1,58 @@
+{
+  "contract_version": "1.0.0",
+  "as_of_date": "2026-09-17",
+  "provider": "Yahoo Finance via the repository's existing yfinance dependency",
+  "method": "Official KAP ex-date and ratio are compared with the provider discontinuity. A reconciled research-only total-return view rescales all OHLC values strictly before the provider discontinuity by the official entitlement factor. It removes the false economic loss but does not claim authoritative raw-price reconstruction or move the observation to the official ex-date.",
+  "events": [
+    {
+      "symbol": "HEKTS.IS",
+      "provider_event_date": "2024-09-09",
+      "official_ex_date": "2024-09-18",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 2.3320158,
+      "subscription_price": 1.0,
+      "official_source": "https://www.kap.org.tr/tr/Bildirim/1334639",
+      "classification": "CONFIRMED_DATA_ERROR"
+    },
+    {
+      "symbol": "BSOKE.IS",
+      "provider_event_date": "2024-12-02",
+      "official_ex_date": "2024-12-10",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 3.0,
+      "subscription_price": 1.0,
+      "official_source": "https://www.kap.org.tr/tr/Bildirim/1363968",
+      "classification": "CONFIRMED_DATA_ERROR"
+    },
+    {
+      "symbol": "CCOLA.IS",
+      "provider_event_date": "2024-08-01",
+      "official_ex_date": "2024-08-13",
+      "action_type": "BONUS_ISSUE",
+      "ratio": 10.0,
+      "subscription_price": 0.0,
+      "official_source": "https://kap.org.tr/tr/api/BildirimPdf/1321329",
+      "classification": "CONFIRMED_DATA_ERROR"
+    },
+    {
+      "symbol": "KBORU.IS",
+      "provider_event_date": "2025-01-02",
+      "official_ex_date": "2025-06-04",
+      "action_type": "BONUS_ISSUE",
+      "ratio": 5.0,
+      "subscription_price": 0.0,
+      "official_source": "https://www.kap.org.tr/tr/Bildirim/1446216",
+      "classification": "CONFIRMED_DATA_ERROR"
+    },
+    {
+      "symbol": "CVKMD.IS",
+      "provider_event_date": "2026-08-03",
+      "official_ex_date": "2026-08-05",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 1.7,
+      "subscription_price": 1.0,
+      "official_source": "https://www.kap.org.tr/tr/Bildirim/1642697",
+      "classification": "CONFIRMED_DATA_ERROR"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "contract_version": "1.0.0",
+  "as_of_date": "2026-09-17",
+  "semantics": {
+    "announcement_date": "Date the action terms became public; never used as the price-adjustment date.",
+    "effective_date": "Date legal/economic entitlement takes effect.",
+    "ex_date": "First trading date on the ex-action basis; canonical price adjustment date."
+  },
+  "events": [
+    {
+      "symbol": "HEKTS.IS",
+      "provider_adjusted_date": "2024-09-09",
+      "announcement_date": "2024-09-16",
+      "announcement_date_quality": "OFFICIAL_KAP",
+      "effective_date": "2024-09-18",
+      "ex_date": "2024-09-18",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 2.3320158,
+      "subscription_price": 1.0,
+      "source": "https://www.kap.org.tr/tr/Bildirim/1334639"
+    },
+    {
+      "symbol": "BSOKE.IS",
+      "provider_adjusted_date": "2024-12-02",
+      "announcement_date": "2024-12-09",
+      "announcement_date_quality": "OFFICIAL_KAP",
+      "effective_date": "2024-12-10",
+      "ex_date": "2024-12-10",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 3.0,
+      "subscription_price": 1.0,
+      "source": "https://www.kap.org.tr/tr/Bildirim/1363968"
+    },
+    {
+      "symbol": "CCOLA.IS",
+      "provider_adjusted_date": "2024-08-01",
+      "announcement_date": null,
+      "announcement_date_quality": "NOT_CAPTURED",
+      "effective_date": "2024-08-13",
+      "ex_date": "2024-08-13",
+      "action_type": "BONUS_ISSUE",
+      "ratio": 10.0,
+      "subscription_price": 0.0,
+      "source": "https://kap.org.tr/tr/api/BildirimPdf/1321329"
+    },
+    {
+      "symbol": "KBORU.IS",
+      "provider_adjusted_date": "2025-01-02",
+      "announcement_date": null,
+      "announcement_date_quality": "NOT_CAPTURED",
+      "effective_date": "2025-06-04",
+      "ex_date": "2025-06-04",
+      "action_type": "BONUS_ISSUE",
+      "ratio": 5.0,
+      "subscription_price": 0.0,
+      "source": "https://www.kap.org.tr/tr/Bildirim/1446216"
+    },
+    {
+      "symbol": "CVKMD.IS",
+      "provider_adjusted_date": "2026-08-03",
+      "announcement_date": "2026-08-04",
+      "announcement_date_quality": "OFFICIAL_KAP",
+      "effective_date": "2026-08-05",
+      "ex_date": "2026-08-05",
+      "action_type": "RIGHTS_ISSUE",
+      "ratio": 1.7,
+      "subscription_price": 1.0,
+      "source": "https://www.kap.org.tr/tr/Bildirim/1642697"
+    }
+  ]
+}

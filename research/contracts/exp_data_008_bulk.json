@@ -1,0 +1,109 @@
+{
+  "experiment": "EXP-DATA-008",
+  "contract_version": "1.0.0",
+  "locked_before_bulk_utc": "2026-09-17T18:00:00Z",
+  "source": "OFFICIAL_KAP_PUBLIC_WEB",
+  "purpose": "Research-only staged reconstruction of disclosure timing, first-publication vintage, consolidation basis, presentation unit and period semantics for the exact legacy universe; not a model-ready dataset.",
+  "input_universe": {
+    "source_glob": "data/fundamentals/*.parquet",
+    "required_observations": 2646,
+    "required_unique_legacy_ids": 2646,
+    "canonical_jsonl_sha256": "8b78533e3ee6f25f22686da9d77549fa2ddefdfd5168a77c2601c07bb9732a66",
+    "legacy_id_rule": "verbatim ticker + ':' + financial_period; whitespace is retained in the legacy id and stripped only for the KAP query key",
+    "mutation_forbidden": true
+  },
+  "mapping": {
+    "candidate_key": "normalized ticker + statement year + KAP period + exact case-insensitive subject 'Finansal Rapor'",
+    "industrial_and_holding_basis": "CONSOLIDATED",
+    "bank_basis": "NON_CONSOLIDATED",
+    "insurance_basis": "NON_CONSOLIDATED",
+    "first_result_forbidden": true,
+    "ambiguous_rule": "No proven preferred-basis candidate => AMBIGUOUS; never choose by local-value similarity",
+    "first_publication_rule": "Earliest exact-key preferred-basis notification by official timestamp",
+    "correction_rule": "Retain every preferred-basis notification in timestamp order; later versions never replace the first-publication value",
+    "published_comparative_is_restated": false
+  },
+  "availability": {
+    "timezone": "Europe/Istanbul",
+    "trading_calendar": "data/raw/XU100_IS.parquet",
+    "exact_timestamp_rule": "first observed trading-session close strictly after the official publication timestamp",
+    "exact_date_only_rule": "first observed trading-session close after the official publication date",
+    "signal_close_time": "18:10:00",
+    "legacy_fixed_lag_preserved_separately": true
+  },
+  "presentation_unit": {
+    "supported": ["TL", "1.000 TL", "1.000.000 TL", "Bin TL", "Milyon TL"],
+    "normalization_unit": "TRY",
+    "mixed_or_unknown_rule": "FAIL_CLOSED_AND_KEEP_NORMALIZED_VALUE_NULL"
+  },
+  "period_semantics": {
+    "balance_sheet": "BALANCE_SHEET_POINT_IN_TIME",
+    "q1_flow": "FLOW_YTD",
+    "q2_flow": "FLOW_YTD",
+    "q3_flow": "FLOW_YTD",
+    "q4_flow": "FLOW_ANNUAL",
+    "single_quarter_derivation": {
+      "enabled_only_for": ["revenue", "net_income"],
+      "q2": "H1_MINUS_Q1",
+      "q3": "9M_MINUS_H1",
+      "q4": "FY_MINUS_9M",
+      "requirements": ["same_company", "same_consolidation_basis", "same_resolved_accounting_basis", "required_first_vintages_available", "unit_resolved", "usable_lineage"]
+    }
+  },
+  "tfrs29": {
+    "pre_boundary": "before 2023Q4 => PRE_TFRS29",
+    "bank_policy": "BANK_BDDK_NOT_APPLIED",
+    "post_confirmed_rule": "official detail page explicitly mentions TFRS 29, TMS 29 or inflation accounting",
+    "post_unknown_rule": "POST_TFRS29_UNKNOWN_COMPARATIVE",
+    "manual_second_cpi_adjustment_forbidden": true,
+    "restated_comparative_requires_explicit_evidence": true
+  },
+  "fields": {
+    "direct_pilot_taxonomy_only": ["revenue", "operating_profit", "net_income", "equity", "cfo", "investing_cash_flow"],
+    "derived": ["fcf = cfo + investing_cash_flow"],
+    "ebitda_rule": "MISSING unless the exact pilot-approved taxonomy code exists; no approximate matching",
+    "raw_and_normalized_required": true,
+    "missing_policy": "NULL_NEVER_ZERO",
+    "unknown_policy": "EXPLICIT_UNKNOWN_NO_IMPUTATION"
+  },
+  "local_comparison": {
+    "exact_absolute_tolerance_try": 0.5,
+    "small_absolute_relative_difference_pct_max": 1.0,
+    "material_difference_pct_min_exclusive": 1.0,
+    "conditionally_comparable_fields": ["cfo", "fcf", "operating_profit"],
+    "conditional_fields_rule": "Record numeric differences but classify audit result as SEMANTIC_MISMATCH until definitions are proven"
+  },
+  "execution": {
+    "ticker_order": "normalized ticker ascending",
+    "batch_ticker_counts": [3, 10, 15],
+    "batch_rule": "canary=first 3; medium=next 10; remaining tickers in deterministic chunks of 15",
+    "parallel_requests": 1,
+    "minimum_uncached_request_interval_seconds": 0.35,
+    "retry_pauses_seconds": [0, 5, 15, 30],
+    "retry_budget_after_initial": 3,
+    "list_windows": "one calendar-year window for each required publication year, deduplicated by ticker-year",
+    "cache_first": true,
+    "cache_hash": "SHA256 sidecar and final manifest",
+    "checkpoint_granularity": "completed ticker",
+    "resume_rule": "completed ticker checkpoint is never fetched again; incomplete ticker reuses validated request caches",
+    "failure_log_required": true
+  },
+  "stop_conditions": {
+    "false_match_pct_max": 2.0,
+    "unknown_or_mixed_selected_unit_pct_max": 10.0,
+    "http_429_count_per_batch_max": 10,
+    "http_429_network_attempt_pct_max": 10.0,
+    "systemic_detail_parse_error_pct_max": 10.0,
+    "cache_hash_mismatch_max": 0,
+    "duplicate_legacy_id_max": 0,
+    "official_key_or_basis_qc_mismatch_pct_max": 2.0,
+    "action": "STOP_AFTER_CURRENT_RESPONSE_AND_CHECKPOINT; do not relax contract"
+  },
+  "allowed_recovery_statuses": ["RECOVERED_EXACT", "RECOVERED_DATE_ONLY", "PARTIAL_METADATA", "AMBIGUOUS", "UNRECOVERABLE", "SOURCE_ERROR"],
+  "scope_guards": {
+    "production_writes_forbidden": true,
+    "macro_audit_forbidden": true,
+    "target_feature_model_k_portfolio_work_forbidden": true,
+    "value_family_remains_separately_gated": true
+  }
+}

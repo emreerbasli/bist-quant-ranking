@@ -1,0 +1,20 @@
+{
+  "experiment_id":"EXP-FINAL-001","title":"PARETO FINALIST DECISION","status":"LOCKED_BEFORE_SYNTHESIS",
+  "evidence_only":["EXP-MODEL-001","EXP-PORT-001","EXP-ROBUST-001"],
+  "architectures":["LGBM_REGRESSION","LAMBDAMART"],
+  "no_new_computation":["model_fit","feature_generation","target_or_horizon_selection","k_selection","portfolio_simulation","stress_test","ensemble_backtest"],
+  "dimensions":{
+    "RETURN":{"evidence":["50bps mean net return","100bps mean net return","delay returns","leave-one-period returns"],"STRONG":"50bps and 100bps positive, +2 delay positive, every leave-one-period mean net return positive","ACCEPTABLE":"all primary channels positive with one concentration caveat","WEAK":"one primary channel non-positive"},
+    "RISK":{"evidence":["daily MaxDD","worst day","top-1 stock share","largest sector share","cash/fill behavior"],"STRONG":"MaxDD >= -30%, top1 stock share <=25%, largest sector share <=50%, primary fill >=95%","ACCEPTABLE":"MaxDD >= -40%, top1 <=25%, primary fill >=95%, but a concentration caveat exists","WEAK":"otherwise"},
+    "ALPHA":{"evidence":["outer mean/median Rank IC","positive-fold ratio","NDCG@10","controlled incremental IC","bootstrap P(IC>0)"],"STRONG":"mean and median IC positive, positive folds >=75%, NDCG >=0.55, controlled incremental positive in all folds, bootstrap P(IC>0)>=75%","ACCEPTABLE":"mean and median IC positive, NDCG >=0.55, controlled incremental positive in all folds, bootstrap P(IC>0)>=50%","WEAK":"otherwise"},
+    "STABILITY":{"evidence":["seed dispersion","ablation","period/sector/stock concentration","bootstrap tails","noise/rank/parameter stress"],"STRONG":"ROBUST and no failed locked dimension","ACCEPTABLE":"ROBUST WITH CAVEATS with >=8/9 dimensions","WEAK":"ROBUST WITH CAVEATS with 6-7/9 dimensions or material concentration caveat"},
+    "COST":{"evidence":["turnover","0/30/50/100bps","delay","50m/10% ADV fill"],"STRONG":"100bps and +2 delay positive, turnover <=1.5, 50m/10% fill >=85%","ACCEPTABLE":"economic survival but one threshold missed","WEAK":"100bps or +2 delay non-positive"},
+    "COMPLEXITY":{"evidence":["objective","group construction","relevance mapping","operational maintenance"],"LGBM_REGRESSION":"STRONG","LAMBDAMART":"ACCEPTABLE"},
+    "DATA_QUALITY":{"evidence":["PRICE PASS FOR RESEARCH","survivor universe","provider dependence","three price features","macro/fundamental excluded"],"shared_classification":"ACCEPTABLE","architecture_cannot_cure_data_limit":true}
+  },
+  "hard_rejection":["alpha WEAK with bootstrap P(IC>0)<50%","100bps cost or +2 delay non-positive","primary fill <95%","seed instability >5% within-fold IC dispersion","material unresolved methodology/data issue"],
+  "pareto":{"dominates":"no worse on every material dimension and clearly better on at least one; any material within-dimension tradeoff prevents dominance","no_numeric_score":true},
+  "ensemble":{"YES":"both carried forward, mean rank correlation between 0.20 and 0.80, Top-10 overlap <0.60, and documented failure/regime differences","MAYBE":"both carried but differentiation evidence incomplete","NO":"fewer than two carried or rankings effectively identical"},
+  "freeze_readiness":{"READY":"all freeze fields present and no material caveat","READY_WITH_CAVEATS":"all freeze fields present with documented research/data caveats","NOT_READY":"missing reproducibility field or hard rejection"},
+  "production_writes_allowed":false
+}

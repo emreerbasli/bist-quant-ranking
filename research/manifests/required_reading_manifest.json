@@ -1,0 +1,137 @@
+{
+  "generated_at_utc": "2026-09-16T23:50:27.309074+00:00",
+  "files": [
+    {
+      "path": "PROJECT_MEMORY.md",
+      "exists": true,
+      "bytes": 52252,
+      "lines": 596,
+      "sha256": "b9ac2c691d53646d85a499856e87c5ed9d3ca6f5ec9dbc30ca640293593456d7"
+    },
+    {
+      "path": "IMPLEMENTATION_LOG.md",
+      "exists": true,
+      "bytes": 81686,
+      "lines": 1078,
+      "sha256": "ff461aec393471740a976ed11585abe20c70ebf27df8172df98443fd234c9092"
+    },
+    {
+      "path": "reports/v3_v4_kapsamli_karsilastirma.md",
+      "exists": true,
+      "bytes": 10888,
+      "lines": 160,
+      "sha256": "d328db3188abe60ce6d7f6fd2ac66521b4b69756448739e448b7fd83ba44a8ee"
+    },
+    {
+      "path": "models/v3_ranking/ranking_pipeline.py",
+      "exists": true,
+      "bytes": 13273,
+      "lines": 317,
+      "sha256": "a72852089896e1cc323898b58d603ba5ab6baa00444d0a45ef4526b901bc87ef"
+    },
+    {
+      "path": "models/v4_ranking/ranking_pipeline_v4.py",
+      "exists": true,
+      "bytes": 15287,
+      "lines": 375,
+      "sha256": "7cfbea9293e0193d81f589dad08e6411c73060d45bf455e528a48a7c65724a27"
+    },
+    {
+      "path": "scratch/train_v4_1_model.py",
+      "exists": true,
+      "bytes": 10461,
+      "lines": 263,
+      "sha256": "658028eef063153f24da8c17dd08b778e845dec1f12be8ed9c688cf8cb706d61"
+    },
+    {
+      "path": "scratch/faz3_v4_walk_forward_egitimi.py",
+      "exists": true,
+      "bytes": 17312,
+      "lines": 413,
+      "sha256": "f632556b5ccb1af823342e6817f12fd97c8004d8ed63cb8f1ca316fb37496028"
+    },
+    {
+      "path": "scratch/run_faz_d_candidate_race.py",
+      "exists": true,
+      "bytes": 13710,
+      "lines": 323,
+      "sha256": "26f3c77db859a2bfe7a18a9d06f322ed87a2945fd626b38eb5e1a71efc766a62"
+    },
+    {
+      "path": "backtest/backtest_runner.py",
+      "exists": true,
+      "bytes": 9458,
+      "lines": 221,
+      "sha256": "21cc78953a0c8c58356fe8fcc2279ec815853102102781056057d7d3a897ee6b"
+    },
+    {
+      "path": "backtest/trading_engine.py",
+      "exists": true,
+      "bytes": 17881,
+      "lines": 406,
+      "sha256": "e467addbcbd1ed3ac31c1490856f26b21e168592ad5128c0e731e3904fda9005"
+    },
+    {
+      "path": "features/feature_engine.py",
+      "exists": true,
+      "bytes": 24614,
+      "lines": 601,
+      "sha256": "b8ed04ae0403f764ebe9927c4a386fafd35e99b883c53162789c5214c5b8d245"
+    },
+    {
+      "path": "features/fundamental_pit.py",
+      "exists": true,
+      "bytes": 10552,
+      "lines": 275,
+      "sha256": "a141d04f85a2e6cd7d9438668ab305a05ebc7c42d62e89377a3e295305d78771"
+    },
+    {
+      "path": "features/kap_scraper/isyatirim_pit_builder.py",
+      "exists": true,
+      "bytes": 20824,
+      "lines": 516,
+      "sha256": "fc859cc3379302378127096c21e2686c4cbeb2744de4e597b71558ae016a9e30"
+    },
+    {
+      "path": "models/v3_ranking/data_loader.py",
+      "exists": true,
+      "bytes": 10037,
+      "lines": 226,
+      "sha256": "6f38c1c50371ac75aa28237f56b1178543e95794d04da53e47b9dc70abf16349"
+    },
+    {
+      "path": "models/v4_ranking/data_loader_v4.py",
+      "exists": true,
+      "bytes": 9634,
+      "lines": 219,
+      "sha256": "04f446fa104e2a0884472fa3dd3371e45bdbda091ef4d5173e09b7f4e19bf58a"
+    },
+    {
+      "path": "models/v3_ranking/paper_trader.py",
+      "exists": true,
+      "bytes": 25310,
+      "lines": 570,
+      "sha256": "028558e6cbf94e871a9cce276ac94e2db9d89fa5ab786b60cb1ef49e3d16ee41"
+    },
+    {
+      "path": "models/v4_ranking/paper_trader_v4.py",
+      "exists": true,
+      "bytes": 21845,
+      "lines": 467,
+      "sha256": "6affeb44eb7683fe3b848c9254d5e57ef99fd2f830913ae321c86338cbcbe451"
+    }
+  ],
+  "independent_phase_1_audit": {
+    "status": "NOT_FOUND_BY_EXACT_TITLE",
+    "searched_terms": [
+      "phase 1 independent audit",
+      "faz 1 bağımsız audit",
+      "bağımsız kantitatif audit"
+    ],
+    "nearest_artifacts": [
+      "scratch/qa_red_team_audit.py",
+      "scratch/audit_v4_robustness.py",
+      "reports/faz1_ic_tarama_raporu.md"
+    ]
+  }
+}

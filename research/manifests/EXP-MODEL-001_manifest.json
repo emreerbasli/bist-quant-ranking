@@ -1,0 +1,27 @@
+{
+  "experiment_id": "EXP-MODEL-001",
+  "contract_sha256": "4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d",
+  "code_sha256": "c7bbd3dd71ff3edb65417f89051d3668c12539310b437f34f11fb18ec9e75ee8",
+  "test_sha256": "0f29099648614259a098637d783178802e92ae84e4b6cd37556513ff17f342bf",
+  "tree_seeds": [
+    11,
+    29,
+    47
+  ],
+  "files": {
+    "EXP-MODEL-001_architecture_summary.csv": "b393c3c81b37f21a57a5d82c7a3c424146f01d66cca9c28b0871dd2946f22995",
+    "EXP-MODEL-001_classification.csv": "7c2507919c9b19511edf90e9afa69acbdd694220f810d34d3536a178b275410e",
+    "EXP-MODEL-001_controlled_outer.csv": "50acd52133d789ee04ecfb20b2c53d8c3e887dbd1b1ea7c2022d5a380453f9eb",
+    "EXP-MODEL-001_controlled_summary.csv": "fa9bc1a4fa28d479701cde1a92b7408aa110545607a72c12f8c03646d6763448",
+    "EXP-MODEL-001_daily_nav.csv": "f2e6dae7d031f67088c3c1c6e94c00cbc4965a979aab97fce06aee2f2cc37843",
+    "EXP-MODEL-001_inner_metrics.csv": "551f9b089abdef6ef96b0b75828256c44bcad29c8b4f8d106751b422d536abd7",
+    "EXP-MODEL-001_portfolio_summary.csv": "cb30a5bff4f357138b24e58e7a471e1f4c224a006488a8ec13414819a44f71e5",
+    "EXP-MODEL-001_procedure_selections.csv": "e8605122afd31d14a88b637a66b7cd06afa7473f0abfa9b59c0d661f689326ba",
+    "EXP-MODEL-001_report.md": "1fcf5ccd45de2fc8f9b227b22b845c5fc1bb2a624dbf9f50f4af6fe43a09eb02",
+    "EXP-MODEL-001_seed_metrics.csv": "ac5fdceb20a9282556e74471489af90352621ee92c5f5740c3349882a63412b3",
+    "EXP-MODEL-001_smoke.json": "891d3bcc6472f4518886ed76b490751cc1124e50e969043405b10b18f6be4088",
+    "EXP-MODEL-001_summary.json": "e1471f8846f7b02b44bd7abe9cc0da5a8549e5544a39d19f71adb975ab8771fa",
+    "EXP-MODEL-001_trades.csv": "c6ee4e63378c458764ac24399822c56a1848af668f245ead0a0eb3c33797f19d",
+    "EXP-MODEL-001_whole_outer.csv": "82048ab07322ecddd34b7e911cb712dc6be7abc50412cf402716224ee336d7a6"
+  }
+}

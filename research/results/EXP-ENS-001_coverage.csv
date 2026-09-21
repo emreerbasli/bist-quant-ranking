@@ -1,0 +1,5 @@
+outer_fold,signal_dates,parent_candidate_observations,common_observations,observations_lost,common_securities
+O1,4,254,254,0,65
+O2,4,266,266,0,67
+O3,4,301,301,0,77
+O4,2,165,165,0,86

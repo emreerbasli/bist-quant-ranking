@@ -1,0 +1,46 @@
+{
+  "candidates": {
+    "RC-LAMBDAMART-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "target": "BETA_RESIDUAL",
+      "version": "1.0.0"
+    },
+    "RC-LGBMR-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "target": "RAW",
+      "version": "1.0.0"
+    }
+  },
+  "clean_forward_start": "NOT_STARTED",
+  "created_at": "2026-09-19T03:53:03.677442+03:00",
+  "experiment_id": "EXP-FREEZE-001R5",
+  "hashes": {
+    "research/contracts/exp_freeze_001r3.json": "00c0fc82a49673117c5385be829baff00ab56912f2955b9847f23dd5a69e6cbf",
+    "research/contracts/exp_port_001.json": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+    "research/contracts/exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+    "research/contracts/exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+    "research/exp_freeze_001r5.py": "334024e37243890fc2ba80fde61120666389545cfa4939ce104c38dd54db36a4",
+    "research/exp_port_001.py": "e90ec898511a61a833b58707185eaa005f61cad2bdda76b770e7d87af24a5637",
+    "research/forward_infrastructure_001r3.py": "0fe4657a1eaa534535240e5544aedf3fcd4baee0aa909dbc0c4d7f9664484489",
+    "research/forward_lifecycle_001r3.py": "83a3a39703656c1c69798e4048616c29369604c92df9806c2b0b9ea4cc6e7218",
+    "research/run_frozen_shadow.py": "4e8170bb2043cdbbbb126603df5a6a64f6d28ea3f55a3c0f1e3c154b226cca4e",
+    "research/runner_data_sources.py": "e61307d3554bd85859aab7af3ba5ebb59161a27942c4efb928d1a83380f4b7c4",
+    "research/tests/test_adv20_execution_parity.py": "a3d5cbd792c0e7821821bf6d013eee78baf150b5256193e06a39640f6db17dde",
+    "research/tests/test_exp_freeze_001r3.py": "98addc7db9103ff9e9e1e399865e7278ab8164b7dda918db01a4bc8a275be4c1",
+    "research/tests/test_forward_manifest_v10.py": "e4e398743d964b67d5c1c45ee1a4cb6878e745656d31e9d0678592d6f81a7db7",
+    "research/tests/test_forward_manifest_v11.py": "57e72a926a4aee556cc3a315e77c563c60fe0e9706504f44e3a642646ac37efc",
+    "research/tests/test_forward_manifest_v12.py": "96ed4993f8db97af046aa6ea2499f6aafc71b7ff81580f1f30a0a4df6086a57a",
+    "research/tests/test_manifest_authority_resolver.py": "5b1ba4250921ac9345602446fd6b5d7e4e4bf99927628bec3dc4d85aad87cd9f",
+    "research/tests/test_operational_failure_classification.py": "4688e0b624cc78b97c6ebe358540110679ae975c1aa6df6d8c68072bb678b62d",
+    "research/tests/test_runner_data_sources.py": "1dd10ed34089bf347bde2e1c62b482dc7c014f011c27120445cfad689e45b608"
+  },
+  "manifest_schema_version": "V12",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "production_writes_allowed": false,
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "v11_manifest_sha256": "62345c3fd9ea0ddd4e908ab12717345397a08e37eff10367558470f1c1906eb1"
+}

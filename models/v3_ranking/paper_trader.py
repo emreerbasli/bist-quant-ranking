@@ -445,8 +445,8 @@ class PaperTrader:
 
         report = f"""
 ---
-🏛️ BIST V3-KONTROL (8-FAKTÖR / K=10) REFERANS RAPORU — [{log_row['tarih']}]
-⚠️ NOT: Bu rapor V3-Kontrol referans modeline aittir. Canlı üretim modeli V4-Raw'dır.
+🏛️ BIST V3.2 QUANT (8-FAKTÖR / K=10) RESMİ CANLI PORTFÖY RAPORU — [{log_row['tarih']}]
+🛡️ MODEL: V3.2 LGBMRanker (Kilit Kutu Onaylı — Sharpe: 3.44, p=0.000)
 Portföy: [{log_row['portfoy_listesi']}]
 Değişiklik: [{log_row['degisiklik']}]
 Model Getiri (son dönem): [{log_row['model_getiri_yuzde']}]

@@ -1,0 +1,16 @@
+{
+  "experiment_id": "EXP-FREEZE-001R3",
+  "status": "LOCKED_FINAL_FORWARD_INTEGRITY_REMEDIATION",
+  "parent_contract": "exp_freeze_001r.json",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "clean_forward_start": "PENDING_INDEPENDENT_AUDIT",
+  "candidates": {
+    "RC-LGBMR-001": {"version": "1.0.0", "target_family": "RAW", "horizon_sessions": 60},
+    "RC-LAMBDAMART-001": {"version": "1.0.0", "target_family": "BETA_RESIDUAL", "horizon_sessions": 60}
+  },
+  "timeliness": {"market_close_local": "18:10", "permitted_operational_window_hours": 18, "require_actual_signal_date_equals_requested_asof": true},
+  "portfolio": {"k": 10, "weighting": "equal_weight", "rebalance_sessions": 60, "holding_sessions": 60, "one_way_cost_bps": 50, "capital_try": 1000000, "max_order_adv_pct": 0.10},
+  "activation_required_fields": ["activation_artifact_version", "approved_forward_manifest_hash", "approved_candidate_ids", "approved_candidate_versions", "audit_status", "audit_timestamp", "audit_artifact_path", "audit_artifact_hash", "approval_hash", "activation_baseline_source_max", "activation_baseline_snapshot_hash", "activation_created_at", "clean_forward_start"],
+  "change_control": {"material_fields": ["features", "feature_formulae", "target", "horizon", "model", "preprocessing", "execution_semantics", "material_data_semantics"], "action": "REQUIRE_NEW_CANDIDATE_VERSION_AND_SEPARATE_EVIDENCE"},
+  "production_writes_allowed": false
+}

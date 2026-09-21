@@ -1,0 +1,32 @@
+{
+  "experiment_id": "EXP-FEAT-001",
+  "generated_at_utc": "2026-09-17T22:15:41.346916+00:00",
+  "contract_sha256": "45ea7b239356612b7d3a5a4f94b7dcd0b873fbbbf805707c012dec982b5f4a4f",
+  "candidate_definition_sha256": "f5dfa850c30286e2aceec4f2d01c786d3059ec5a635ef176154b5a45b3666b16",
+  "code_sha256": "507248a98f78cbf22fdd2f14b8640d18c280138563dcf85045ba3fdc985ccd7e",
+  "candidate_count": 25,
+  "seed": 0,
+  "tests": "31/31 PASS",
+  "production_hash_status": "PASS (0 changed)",
+  "outputs": [
+    "EXP-FEAT-001_baseline_correlation.csv",
+    "EXP-FEAT-001_classification.csv",
+    "EXP-FEAT-001_combined_outer.csv",
+    "EXP-FEAT-001_daily_nav.csv",
+    "EXP-FEAT-001_family_ablation.csv",
+    "EXP-FEAT-001_family_summary.csv",
+    "EXP-FEAT-001_feature_definitions.csv",
+    "EXP-FEAT-001_high_correlation_clusters.csv",
+    "EXP-FEAT-001_inner_incremental.csv",
+    "EXP-FEAT-001_inner_selection.csv",
+    "EXP-FEAT-001_median_cross_sectional_correlation.csv",
+    "EXP-FEAT-001_outer_incremental.csv",
+    "EXP-FEAT-001_quality.csv",
+    "EXP-FEAT-001_rank_correlation.csv",
+    "EXP-FEAT-001_report.md",
+    "EXP-FEAT-001_summary.json",
+    "EXP-FEAT-001_test_results.json",
+    "EXP-FEAT-001_trades.csv",
+    "EXP-FEAT-001_univariate_ic.csv"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "experiment": "EXP-DATA-007",
+  "total_pilot_observations": 30,
+  "request_count": 83,
+  "request_stats": {
+    "logical_requests": 83,
+    "network_attempts": 0,
+    "cache_hits": 83
+  },
+  "request_failures": 0,
+  "metrics": {
+    "exact_timestamp": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "exact_date": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "first_publication_recovered": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "restatement_lineage_resolved": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "accounting_semantics_resolved": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "tfrs29_status_resolved": {
+      "count": 20,
+      "pct": 66.67
+    },
+    "completely_unrecoverable": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "exact_mapping": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "consolidation_basis_resolved": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "presentation_unit_resolved": {
+      "count": 30,
+      "pct": 100.0
+    },
+    "false_match": {
+      "count": 0,
+      "pct": 0.0
+    }
+  },
+  "threshold_results": {
+    "mapping_accuracy": true,
+    "first_publication": true,
+    "date_or_timestamp": true,
+    "accounting_semantics": true,
+    "false_match": true,
+    "unrecoverable": true,
+    "existing_infrastructure": true
+  },
+  "bulk_gate": "GO",
+  "production_data_written": false
+}

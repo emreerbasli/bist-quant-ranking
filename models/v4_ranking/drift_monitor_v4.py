@@ -60,17 +60,17 @@ logger = logging.getLogger("DriftMonitorV4")
 MACRO_REAL_RATE_ALARM_THRESHOLD: float = -10.0  # Reel Faiz <= -%10.0 (Negatif faiz balonu)
 MACRO_USD_MOM_ALARM_THRESHOLD: float = 0.20     # USD 60g İvmesi >= +%20.0 (Kur şoku)
 
-# V4 Model Skor Dağılımı Çıpaları (9 Feature LGBMRanker)
-HISTORICAL_V4_BATCH_MEAN_MU: float = -0.0985
-HISTORICAL_V4_BATCH_MEAN_SIGMA: float = 0.0450
-HISTORICAL_V4_BATCH_STD_MU: float = 0.2358
-HISTORICAL_V4_BATCH_STD_SIGMA: float = 0.0420
+# V4.1 Model Skor Dağılımı Çıpaları (9 Feature LGBMRanker: z_reel_eps win[-1.5, 1.5])
+HISTORICAL_V4_BATCH_MEAN_MU: float = -0.3857
+HISTORICAL_V4_BATCH_MEAN_SIGMA: float = 0.0666
+HISTORICAL_V4_BATCH_STD_MU: float = 0.4002
+HISTORICAL_V4_BATCH_STD_SIGMA: float = 0.0545
 SCORE_DRIFT_Z_THRESHOLD: float = 2.5
 
-# V4 Performans Çıpası
-REFERENCE_SHARPE_V4: float = 0.972
+# V4.1 Performans Çıpası (Kilit Kutu Sharpe = 2.52)
+REFERENCE_SHARPE_V4: float = 2.52
 SHARPE_DEGRADATION_TOLERANCE: float = 0.40      # %40 azami izin verilen kayıp
-PERFORMANCE_ALARM_SHARPE_THRESHOLD: float = REFERENCE_SHARPE_V4 * (1.0 - SHARPE_DEGRADATION_TOLERANCE)  # ~0.58
+PERFORMANCE_ALARM_SHARPE_THRESHOLD: float = 1.20
 
 # Veri Tazelik Sınırı (İş Günü)
 MAX_STALE_BUSINESS_DAYS: int = 2

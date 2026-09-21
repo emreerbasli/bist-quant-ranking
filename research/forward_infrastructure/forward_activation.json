@@ -1,0 +1,48 @@
+{
+  "activation_artifact_version": "1.0.0",
+  "activation_mode": "CLEAN_FORWARD_SHADOW",
+  "approved_forward_manifest_hash": "95074644bc4879cea898dedde2905c96599955994a7863f9601fd9992fed1da3",
+  "approved_forward_manifest_reference": "FORWARD_INFRASTRUCTURE_MANIFEST_V12.json",
+  "approved_candidate_ids": [
+    "RC-LGBMR-001",
+    "RC-LAMBDAMART-001"
+  ],
+  "approved_candidate_versions": {
+    "RC-LGBMR-001": "1.0.0",
+    "RC-LAMBDAMART-001": "1.0.0"
+  },
+  "approved_candidate_model_hashes": {
+    "RC-LGBMR-001": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+    "RC-LAMBDAMART-001": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849"
+  },
+  "frozen_target_horizon_contracts": {
+    "RC-LGBMR-001": {
+      "target_family": "RAW",
+      "horizon_sessions": 60
+    },
+    "RC-LAMBDAMART-001": {
+      "target_family": "BETA_RESIDUAL",
+      "horizon_sessions": 60
+    },
+    "target_contract_hashes": {
+      "research/contracts/exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+      "research/contracts/exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b"
+    }
+  },
+  "audit_status": "AUDIT_PASSED",
+  "audit_timestamp": "2026-09-19T04:15:21.6170630+03:00",
+  "audit_artifact_path": "audits/V12_INDEPENDENT_AUDIT_PASS.json",
+  "audit_artifact_hash": "b035babedaad7eaa4294bdfe1d8aa369a4e03f673e3e666543363b66e7990831",
+  "activation_baseline_provider_id": "LOCAL_RESEARCH_PRICE_VIEW",
+  "activation_baseline_source_max": "2026-09-15",
+  "activation_baseline_source_max_timestamp": "2026-09-15T00:00:00",
+  "activation_baseline_snapshot_hash": "c7ea3304a5eb8aa47a69e45c9b7a90939b25ace4fd91300c1aa401db066b9fd5",
+  "activation_baseline_input_count": 89,
+  "activation_created_at": "2026-09-19T04:16:05.7473552+03:00",
+  "clean_forward_start": "2026-09-19T04:16:05.7473552+03:00",
+  "no_pre_activation_clean_evidence": true,
+  "official_logs_empty_at_activation": true,
+  "production_isolation_required": true,
+  "production_writes_allowed": false,
+  "approval_hash": "ada6ed64eaca6194c6869a54d0b70dbdb8ceed0705a3d4e9aba3d1998cce9c9d"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "source_contract": "OFFICIAL_KAP_PUBLIC_WEB",
+  "acquisition_id": "kap_ca_20260919T103829Z",
+  "events": [
+    {
+      "event_type": "CASH_DIVIDEND",
+      "ex_date": "2026-09-16",
+      "gross_amount": 2.5,
+      "net_amount": 2.125,
+      "currency": "TRY",
+      "ticker": "BIMAS.IS",
+      "announcement_timestamp": "2026-09-15T17:12:47+03:00",
+      "source": "OFFICIAL_KAP_BIST_DISCLOSURE",
+      "source_reference": "1663015",
+      "source_url": "https://www.kap.org.tr/tr/Bildirim/1663015",
+      "acquired_at": "2026-09-19T10:38:29.727956+00:00",
+      "list_sha256": "78fb4ae47cd0c4bf904f3d5c073604f9492c2eefab6351cb52110fee996ad9c1",
+      "detail_sha256": "7755c2104a3e2bd7426da3cc3cd8bd440fb87788c18cb4f9b2b2553d9aee0eae",
+      "pit_status": "RETROSPECTIVE_ONLY"
+    },
+    {
+      "event_type": "CASH_DIVIDEND",
+      "ex_date": "2026-06-17",
+      "gross_amount": 2.0,
+      "net_amount": 1.7,
+      "currency": "TRY",
+      "ticker": "BIMAS.IS",
+      "announcement_timestamp": "2026-06-16T16:51:18+03:00",
+      "source": "OFFICIAL_KAP_BIST_DISCLOSURE",
+      "source_reference": "1617773",
+      "source_url": "https://www.kap.org.tr/tr/Bildirim/1617773",
+      "acquired_at": "2026-09-19T10:38:29.727956+00:00",
+      "list_sha256": "78fb4ae47cd0c4bf904f3d5c073604f9492c2eefab6351cb52110fee996ad9c1",
+      "detail_sha256": "530cfe1a80fbe3a03d7d1f746821196aaf00c0a83201ac95740a71fd95941d81",
+      "pit_status": "RETROSPECTIVE_ONLY"
+    }
+  ]
+}

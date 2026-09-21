@@ -1,0 +1,4 @@
+horizon_sessions,candidate_observations,usable_observations,coverage_pct
+20,1763,1756,0.9960294951786727
+40,1677,1666,0.9934406678592725
+60,1677,1538,0.91711389385808

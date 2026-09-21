@@ -1,0 +1,1104 @@
+{
+  "experiment_id": "EXP-DEPLOY-001-PHASE-F",
+  "dry_run_id": "3b93020c-4ccc-4c98-a0de-704625bf548c",
+  "created_at": "2026-09-19T11:41:27.521357+00:00",
+  "DRY_RUN_ONLY": true,
+  "official_commit": false,
+  "source": {
+    "acquisition_id": "acq_20260919T102219Z",
+    "manifest_sha256": "c2cc8df24b63ce10315bca4d798324a4b06089a059c226dee18f104a160ef33a",
+    "source_max": "2026-09-18",
+    "raw_record_count": 89,
+    "action_acquisition_id": "kap_ca_20260919T104003Z",
+    "action_manifest_sha256": "b0dee08bb5931b0829fbf81d0d6941d1b9876152237738a2f56e2e041efffbf0"
+  },
+  "canonical": {
+    "partition_id": "pc_20260919T105500Z",
+    "manifest_sha256": "1294e7d2c8471c4ad83ce600bceea704ff07e20eae05a5ca7be7d9ed8ecad29c",
+    "row_count": 180
+  },
+  "activation": {
+    "path": "forward_infrastructure\\forward_activation.json",
+    "sha256": "15736826da9a43c88103bba7ae1451b5ad9594fb291389f8cb601f23cb1b30a6",
+    "clean_forward_start": "2026-09-19T04:16:05.7473552+03:00",
+    "baseline_source_max": "2026-09-15"
+  },
+  "session": {
+    "source_max": "2026-09-18",
+    "session_date": "2026-09-16",
+    "calendar_session": true
+  },
+  "eligible_universe_count": 86,
+  "excluded_fail_closed": [
+    {
+      "ticker": "BIMAS.IS",
+      "reason": "RETROSPECTIVE_ACTION_EXCLUDED"
+    },
+    {
+      "ticker": "SASA.IS",
+      "reason": "UNRESOLVED_MISSING_VOLUME"
+    }
+  ],
+  "feature_readiness": {
+    "features": [
+      "mom_12_1",
+      "mom_63",
+      "vol_63"
+    ],
+    "ready": true,
+    "nan_policy": "frozen_native"
+  },
+  "candidates": {
+    "RC-LGBMR-001": {
+      "role": "PRIMARY_SHADOW_MODEL",
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "scores": [
+        {
+          "ticker": "ONCSM.IS",
+          "raw_score": 0.6636797806521162,
+          "rank": 1,
+          "selected_top10": true
+        },
+        {
+          "ticker": "CWENE.IS",
+          "raw_score": 0.6618187606705599,
+          "rank": 2,
+          "selected_top10": true
+        },
+        {
+          "ticker": "GESAN.IS",
+          "raw_score": 0.6578291597608293,
+          "rank": 3,
+          "selected_top10": true
+        },
+        {
+          "ticker": "EUPWR.IS",
+          "raw_score": 0.6271730042723076,
+          "rank": 4,
+          "selected_top10": true
+        },
+        {
+          "ticker": "PASEU.IS",
+          "raw_score": 0.5680845476253411,
+          "rank": 5,
+          "selected_top10": true
+        },
+        {
+          "ticker": "KONTR.IS",
+          "raw_score": 0.5520643679320714,
+          "rank": 6,
+          "selected_top10": true
+        },
+        {
+          "ticker": "SKBNK.IS",
+          "raw_score": 0.5473886632546044,
+          "rank": 7,
+          "selected_top10": true
+        },
+        {
+          "ticker": "BSOKE.IS",
+          "raw_score": 0.5354747791399846,
+          "rank": 8,
+          "selected_top10": true
+        },
+        {
+          "ticker": "MIATK.IS",
+          "raw_score": 0.5297904289888622,
+          "rank": 9,
+          "selected_top10": true
+        },
+        {
+          "ticker": "ALVES.IS",
+          "raw_score": 0.5136538278345779,
+          "rank": 10,
+          "selected_top10": true
+        },
+        {
+          "ticker": "KBORU.IS",
+          "raw_score": 0.4631237748806392,
+          "rank": 11,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KORDS.IS",
+          "raw_score": 0.42097515517133594,
+          "rank": 12,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MOGAN.IS",
+          "raw_score": 0.4084524485351161,
+          "rank": 13,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AGROT.IS",
+          "raw_score": 0.3842891826451024,
+          "rank": 14,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SURGY.IS",
+          "raw_score": 0.37672020512186916,
+          "rank": 15,
+          "selected_top10": false
+        },
+        {
+          "ticker": "HALKB.IS",
+          "raw_score": 0.37308677286205577,
+          "rank": 16,
+          "selected_top10": false
+        },
+        {
+          "ticker": "HEKTS.IS",
+          "raw_score": 0.36679520420544004,
+          "rank": 17,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GOKNR.IS",
+          "raw_score": 0.36570686889635196,
+          "rank": 18,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ASTOR.IS",
+          "raw_score": 0.33134818019860596,
+          "rank": 19,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GUBRF.IS",
+          "raw_score": 0.2721079972433991,
+          "rank": 20,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TKFEN.IS",
+          "raw_score": 0.2645856090231319,
+          "rank": 21,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ODAS.IS",
+          "raw_score": 0.2621258962119071,
+          "rank": 22,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CVKMD.IS",
+          "raw_score": 0.25286785028078557,
+          "rank": 23,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TUPRS.IS",
+          "raw_score": 0.22693183065581066,
+          "rank": 24,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ALFAS.IS",
+          "raw_score": 0.22621264059940052,
+          "rank": 25,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TUREX.IS",
+          "raw_score": 0.2179427743860682,
+          "rank": 26,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GENTS.IS",
+          "raw_score": 0.21615389297077237,
+          "rank": 27,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BRSAN.IS",
+          "raw_score": 0.21512418864918956,
+          "rank": 28,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ASELS.IS",
+          "raw_score": 0.2044684197164619,
+          "rank": 29,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SELEC.IS",
+          "raw_score": 0.2015194076737421,
+          "rank": 30,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ECILC.IS",
+          "raw_score": 0.19551760144166144,
+          "rank": 31,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TERA.IS",
+          "raw_score": 0.17897531052622115,
+          "rank": 32,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ISGYO.IS",
+          "raw_score": 0.17193243938383074,
+          "rank": 33,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SDTTR.IS",
+          "raw_score": 0.16976393111115412,
+          "rank": 34,
+          "selected_top10": false
+        },
+        {
+          "ticker": "EREGL.IS",
+          "raw_score": 0.16844682147871132,
+          "rank": 35,
+          "selected_top10": false
+        },
+        {
+          "ticker": "FORTE.IS",
+          "raw_score": 0.16654262969247646,
+          "rank": 36,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CCOLA.IS",
+          "raw_score": 0.15709280314035157,
+          "rank": 37,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ANSGR.IS",
+          "raw_score": 0.15474434603840262,
+          "rank": 38,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PGSUS.IS",
+          "raw_score": 0.15172235834935607,
+          "rank": 39,
+          "selected_top10": false
+        },
+        {
+          "ticker": "REEDR.IS",
+          "raw_score": 0.14778309478506632,
+          "rank": 40,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TURSG.IS",
+          "raw_score": 0.1447201395494768,
+          "rank": 41,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SOKM.IS",
+          "raw_score": 0.1423674110919325,
+          "rank": 42,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KRDMD.IS",
+          "raw_score": 0.14198580113155132,
+          "rank": 43,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TTKOM.IS",
+          "raw_score": 0.13968790842981482,
+          "rank": 44,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CANTE.IS",
+          "raw_score": 0.13707677525994025,
+          "rank": 45,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TTRAK.IS",
+          "raw_score": 0.13593360858357537,
+          "rank": 46,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KCAER.IS",
+          "raw_score": 0.13558233797355035,
+          "rank": 47,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SAHOL.IS",
+          "raw_score": 0.13230382773980895,
+          "rank": 48,
+          "selected_top10": false
+        },
+        {
+          "ticker": "EKGYO.IS",
+          "raw_score": 0.13154375918760075,
+          "rank": 49,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TABGD.IS",
+          "raw_score": 0.13086003286054654,
+          "rank": 50,
+          "selected_top10": false
+        },
+        {
+          "ticker": "OTKAR.IS",
+          "raw_score": 0.12891208910898677,
+          "rank": 51,
+          "selected_top10": false
+        },
+        {
+          "ticker": "DOHOL.IS",
+          "raw_score": 0.12832063784451786,
+          "rank": 52,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TRGYO.IS",
+          "raw_score": 0.12759335711005226,
+          "rank": 53,
+          "selected_top10": false
+        },
+        {
+          "ticker": "DOAS.IS",
+          "raw_score": 0.12698770280873642,
+          "rank": 54,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CLEBI.IS",
+          "raw_score": 0.12510694551994042,
+          "rank": 55,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MAVI.IS",
+          "raw_score": 0.12359740749465198,
+          "rank": 56,
+          "selected_top10": false
+        },
+        {
+          "ticker": "YKBNK.IS",
+          "raw_score": 0.12145895887885332,
+          "rank": 57,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PLTUR.IS",
+          "raw_score": 0.12001760497166472,
+          "rank": 58,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BIZIM.IS",
+          "raw_score": 0.118788906921278,
+          "rank": 59,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MTRKS.IS",
+          "raw_score": 0.11855451856015117,
+          "rank": 60,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ENKAI.IS",
+          "raw_score": 0.11528299254825146,
+          "rank": 61,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CIMSA.IS",
+          "raw_score": 0.115227379984895,
+          "rank": 62,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SISE.IS",
+          "raw_score": 0.11382282321626885,
+          "rank": 63,
+          "selected_top10": false
+        },
+        {
+          "ticker": "VAKBN.IS",
+          "raw_score": 0.11178048144705152,
+          "rank": 64,
+          "selected_top10": false
+        },
+        {
+          "ticker": "LOGO.IS",
+          "raw_score": 0.11176689402457833,
+          "rank": 65,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ARCLK.IS",
+          "raw_score": 0.11148668872273054,
+          "rank": 66,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TOASO.IS",
+          "raw_score": 0.11145207512970896,
+          "rank": 67,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GARAN.IS",
+          "raw_score": 0.11018917135891339,
+          "rank": 68,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TAVHL.IS",
+          "raw_score": 0.10849989246069006,
+          "rank": 69,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TCELL.IS",
+          "raw_score": 0.10849989246069006,
+          "rank": 70,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KCHOL.IS",
+          "raw_score": 0.10816650394388963,
+          "rank": 71,
+          "selected_top10": false
+        },
+        {
+          "ticker": "THYAO.IS",
+          "raw_score": 0.10776194157934232,
+          "rank": 72,
+          "selected_top10": false
+        },
+        {
+          "ticker": "FROTO.IS",
+          "raw_score": 0.10652188419002712,
+          "rank": 73,
+          "selected_top10": false
+        },
+        {
+          "ticker": "OYAKC.IS",
+          "raw_score": 0.10506262535547854,
+          "rank": 74,
+          "selected_top10": false
+        },
+        {
+          "ticker": "VESTL.IS",
+          "raw_score": 0.10481402578453036,
+          "rank": 75,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AEFES.IS",
+          "raw_score": 0.10447659471519088,
+          "rank": 76,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ISCTR.IS",
+          "raw_score": 0.10252263049480141,
+          "rank": 77,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TSKB.IS",
+          "raw_score": 0.09932839854124303,
+          "rank": 78,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ALARK.IS",
+          "raw_score": 0.09887253408934744,
+          "rank": 79,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BINHO.IS",
+          "raw_score": 0.09658112099368757,
+          "rank": 80,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AGHOL.IS",
+          "raw_score": 0.09639192367691832,
+          "rank": 81,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AKBNK.IS",
+          "raw_score": 0.09626859988200888,
+          "rank": 82,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PETKM.IS",
+          "raw_score": 0.09553378768013118,
+          "rank": 83,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MGROS.IS",
+          "raw_score": 0.09418066341847312,
+          "rank": 84,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ULKER.IS",
+          "raw_score": 0.08782077864998124,
+          "rank": 85,
+          "selected_top10": false
+        },
+        {
+          "ticker": "INVES.IS",
+          "raw_score": 0.08356753167626646,
+          "rank": 86,
+          "selected_top10": false
+        }
+      ]
+    },
+    "RC-LAMBDAMART-001": {
+      "role": "SECONDARY_SHADOW_MODEL",
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "scores": [
+        {
+          "ticker": "TUPRS.IS",
+          "raw_score": 0.1519128102610851,
+          "rank": 1,
+          "selected_top10": true
+        },
+        {
+          "ticker": "PGSUS.IS",
+          "raw_score": 0.14699288650707026,
+          "rank": 2,
+          "selected_top10": true
+        },
+        {
+          "ticker": "KONTR.IS",
+          "raw_score": 0.1389938642067291,
+          "rank": 3,
+          "selected_top10": true
+        },
+        {
+          "ticker": "GENTS.IS",
+          "raw_score": 0.10716677633373808,
+          "rank": 4,
+          "selected_top10": true
+        },
+        {
+          "ticker": "EUPWR.IS",
+          "raw_score": 0.0805793279993789,
+          "rank": 5,
+          "selected_top10": true
+        },
+        {
+          "ticker": "GESAN.IS",
+          "raw_score": 0.04655098924633946,
+          "rank": 6,
+          "selected_top10": true
+        },
+        {
+          "ticker": "CANTE.IS",
+          "raw_score": 0.030446881713499484,
+          "rank": 7,
+          "selected_top10": true
+        },
+        {
+          "ticker": "CVKMD.IS",
+          "raw_score": 0.0009587546144553191,
+          "rank": 8,
+          "selected_top10": true
+        },
+        {
+          "ticker": "KORDS.IS",
+          "raw_score": -0.0519195838207386,
+          "rank": 9,
+          "selected_top10": true
+        },
+        {
+          "ticker": "TKFEN.IS",
+          "raw_score": -0.0892564182090004,
+          "rank": 10,
+          "selected_top10": true
+        },
+        {
+          "ticker": "MOGAN.IS",
+          "raw_score": -0.14577738048927108,
+          "rank": 11,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CWENE.IS",
+          "raw_score": -0.17178663434254987,
+          "rank": 12,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ASTOR.IS",
+          "raw_score": -0.17263882987890997,
+          "rank": 13,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TURSG.IS",
+          "raw_score": -0.1892018926262412,
+          "rank": 14,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SOKM.IS",
+          "raw_score": -0.19896853585712504,
+          "rank": 15,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ONCSM.IS",
+          "raw_score": -0.21792597844032485,
+          "rank": 16,
+          "selected_top10": false
+        },
+        {
+          "ticker": "OTKAR.IS",
+          "raw_score": -0.2430711317675294,
+          "rank": 17,
+          "selected_top10": false
+        },
+        {
+          "ticker": "REEDR.IS",
+          "raw_score": -0.24694887627041237,
+          "rank": 18,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CCOLA.IS",
+          "raw_score": -0.29613590343105217,
+          "rank": 19,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MIATK.IS",
+          "raw_score": -0.3050040560676917,
+          "rank": 20,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AGROT.IS",
+          "raw_score": -0.31880428503591657,
+          "rank": 21,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TERA.IS",
+          "raw_score": -0.3217588114653531,
+          "rank": 22,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SELEC.IS",
+          "raw_score": -0.3379350559835718,
+          "rank": 23,
+          "selected_top10": false
+        },
+        {
+          "ticker": "LOGO.IS",
+          "raw_score": -0.3390665179628614,
+          "rank": 24,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ALVES.IS",
+          "raw_score": -0.35572007427782476,
+          "rank": 25,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ASELS.IS",
+          "raw_score": -0.3606336281100696,
+          "rank": 26,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SKBNK.IS",
+          "raw_score": -0.3771979393029093,
+          "rank": 27,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BSOKE.IS",
+          "raw_score": -0.38985827724363564,
+          "rank": 28,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PASEU.IS",
+          "raw_score": -0.4145383912906879,
+          "rank": 29,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KRDMD.IS",
+          "raw_score": -0.4290621268562938,
+          "rank": 30,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ANSGR.IS",
+          "raw_score": -0.43587310624673165,
+          "rank": 31,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GARAN.IS",
+          "raw_score": -0.44442417572778214,
+          "rank": 32,
+          "selected_top10": false
+        },
+        {
+          "ticker": "THYAO.IS",
+          "raw_score": -0.44442417572778214,
+          "rank": 33,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SAHOL.IS",
+          "raw_score": -0.4498719341532659,
+          "rank": 34,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GUBRF.IS",
+          "raw_score": -0.4546135457692002,
+          "rank": 35,
+          "selected_top10": false
+        },
+        {
+          "ticker": "DOHOL.IS",
+          "raw_score": -0.45870042009946044,
+          "rank": 36,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MAVI.IS",
+          "raw_score": -0.5099514592280213,
+          "rank": 37,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KBORU.IS",
+          "raw_score": -0.5210951607404507,
+          "rank": 38,
+          "selected_top10": false
+        },
+        {
+          "ticker": "EREGL.IS",
+          "raw_score": -0.5253954481865579,
+          "rank": 39,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ODAS.IS",
+          "raw_score": -0.5380000253132251,
+          "rank": 40,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BRSAN.IS",
+          "raw_score": -0.5649831438455134,
+          "rank": 41,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ENKAI.IS",
+          "raw_score": -0.5740148206874788,
+          "rank": 42,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TTRAK.IS",
+          "raw_score": -0.5750961594787948,
+          "rank": 43,
+          "selected_top10": false
+        },
+        {
+          "ticker": "OYAKC.IS",
+          "raw_score": -0.5776428146370289,
+          "rank": 44,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MGROS.IS",
+          "raw_score": -0.5793668413994433,
+          "rank": 45,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TRGYO.IS",
+          "raw_score": -0.5937181764507604,
+          "rank": 46,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AKBNK.IS",
+          "raw_score": -0.602470074443677,
+          "rank": 47,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CIMSA.IS",
+          "raw_score": -0.6067030723229571,
+          "rank": 48,
+          "selected_top10": false
+        },
+        {
+          "ticker": "FROTO.IS",
+          "raw_score": -0.6067030723229571,
+          "rank": 49,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TSKB.IS",
+          "raw_score": -0.6186210771454457,
+          "rank": 50,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ULKER.IS",
+          "raw_score": -0.6186210771454457,
+          "rank": 51,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BIZIM.IS",
+          "raw_score": -0.6244585525979723,
+          "rank": 52,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TOASO.IS",
+          "raw_score": -0.6250622819186059,
+          "rank": 53,
+          "selected_top10": false
+        },
+        {
+          "ticker": "FORTE.IS",
+          "raw_score": -0.630191544336235,
+          "rank": 54,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AEFES.IS",
+          "raw_score": -0.6306353890630837,
+          "rank": 55,
+          "selected_top10": false
+        },
+        {
+          "ticker": "VESTL.IS",
+          "raw_score": -0.6307393996419804,
+          "rank": 56,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TAVHL.IS",
+          "raw_score": -0.6342633830126339,
+          "rank": 57,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TCELL.IS",
+          "raw_score": -0.6342633830126339,
+          "rank": 58,
+          "selected_top10": false
+        },
+        {
+          "ticker": "AGHOL.IS",
+          "raw_score": -0.6385475709713448,
+          "rank": 59,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TABGD.IS",
+          "raw_score": -0.6528963639640507,
+          "rank": 60,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KCHOL.IS",
+          "raw_score": -0.6671842482805497,
+          "rank": 61,
+          "selected_top10": false
+        },
+        {
+          "ticker": "YKBNK.IS",
+          "raw_score": -0.6911570287551172,
+          "rank": 62,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ISCTR.IS",
+          "raw_score": -0.7031720696450244,
+          "rank": 63,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ARCLK.IS",
+          "raw_score": -0.7086458925307452,
+          "rank": 64,
+          "selected_top10": false
+        },
+        {
+          "ticker": "CLEBI.IS",
+          "raw_score": -0.7128877996654639,
+          "rank": 65,
+          "selected_top10": false
+        },
+        {
+          "ticker": "DOAS.IS",
+          "raw_score": -0.7128877996654639,
+          "rank": 66,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ALARK.IS",
+          "raw_score": -0.7169550841556065,
+          "rank": 67,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ALFAS.IS",
+          "raw_score": -0.7602279625557424,
+          "rank": 68,
+          "selected_top10": false
+        },
+        {
+          "ticker": "HALKB.IS",
+          "raw_score": -0.7966481554277812,
+          "rank": 69,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PLTUR.IS",
+          "raw_score": -0.8052363195957234,
+          "rank": 70,
+          "selected_top10": false
+        },
+        {
+          "ticker": "KCAER.IS",
+          "raw_score": -0.8204703642954306,
+          "rank": 71,
+          "selected_top10": false
+        },
+        {
+          "ticker": "VAKBN.IS",
+          "raw_score": -0.8497465751155621,
+          "rank": 72,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ECILC.IS",
+          "raw_score": -0.850910059530774,
+          "rank": 73,
+          "selected_top10": false
+        },
+        {
+          "ticker": "EKGYO.IS",
+          "raw_score": -0.8666204551238884,
+          "rank": 74,
+          "selected_top10": false
+        },
+        {
+          "ticker": "GOKNR.IS",
+          "raw_score": -0.8770688284777154,
+          "rank": 75,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TTKOM.IS",
+          "raw_score": -0.8886203566693147,
+          "rank": 76,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SDTTR.IS",
+          "raw_score": -0.8886458684333044,
+          "rank": 77,
+          "selected_top10": false
+        },
+        {
+          "ticker": "HEKTS.IS",
+          "raw_score": -0.8983536227652377,
+          "rank": 78,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SURGY.IS",
+          "raw_score": -0.8983536227652377,
+          "rank": 79,
+          "selected_top10": false
+        },
+        {
+          "ticker": "MTRKS.IS",
+          "raw_score": -0.9055057803847428,
+          "rank": 80,
+          "selected_top10": false
+        },
+        {
+          "ticker": "TUREX.IS",
+          "raw_score": -0.9064992151118354,
+          "rank": 81,
+          "selected_top10": false
+        },
+        {
+          "ticker": "SISE.IS",
+          "raw_score": -0.9073648904858489,
+          "rank": 82,
+          "selected_top10": false
+        },
+        {
+          "ticker": "BINHO.IS",
+          "raw_score": -0.9368926461750641,
+          "rank": 83,
+          "selected_top10": false
+        },
+        {
+          "ticker": "ISGYO.IS",
+          "raw_score": -0.9974597596174825,
+          "rank": 84,
+          "selected_top10": false
+        },
+        {
+          "ticker": "INVES.IS",
+          "raw_score": -1.0103634801703814,
+          "rank": 85,
+          "selected_top10": false
+        },
+        {
+          "ticker": "PETKM.IS",
+          "raw_score": -1.135902039578715,
+          "rank": 86,
+          "selected_top10": false
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "raw_manifest_sha256": "c2cc8df24b63ce10315bca4d798324a4b06089a059c226dee18f104a160ef33a",
+    "action_manifest_sha256": "b0dee08bb5931b0829fbf81d0d6941d1b9876152237738a2f56e2e041efffbf0",
+    "canonical_manifest_sha256": "1294e7d2c8471c4ad83ce600bceea704ff07e20eae05a5ca7be7d9ed8ecad29c",
+    "activation_sha256": "15736826da9a43c88103bba7ae1451b5ad9594fb291389f8cb601f23cb1b30a6"
+  },
+  "substantive_sha256": "fa9122e1f87ef3899b39797ad623e7c946a30d47f10fb19e8d59ac57cbd3aa6b"
+}

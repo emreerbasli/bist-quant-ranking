@@ -1,0 +1,6 @@
+diagnostic,value,denominator,ratio
+sector_fallback_observations,308,4960,0.062096774193548386
+beta_missing_feature_observations,0,1763,0.0
+beta_at_floor_or_cap,0,1763,0.0
+volatility_at_floor,0,4960,0.0
+volatility_at_cap,0,4960,0.0

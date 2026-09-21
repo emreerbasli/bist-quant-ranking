@@ -1,0 +1,27 @@
+{
+  "experiment": "EXP-DATA-009",
+  "macro_gate": "EXCLUDE",
+  "series_readiness": {
+    "policy_rate": "NO",
+    "monthly_cpi": "NO",
+    "usdtry": "PARTIAL",
+    "real_rate": "NO",
+    "inflation_adjusted_real_eps": "NO"
+  },
+  "policy_rate_last_stored_date": "2026-01-01",
+  "cpi_last_stored_month": "2026-08",
+  "future_dated_cpi_months": [],
+  "fx": {
+    "first": "2018-01-01",
+    "last": "2026-09-15",
+    "rows": 2266,
+    "bist_missing_fx_dates": [
+      "2019-05-22",
+      "2025-04-18",
+      "2025-04-21"
+    ]
+  },
+  "fallback_expression_occurrences": 2,
+  "production_changes": 0,
+  "decision": "Exclude all macro-derived inputs from research; price-only and recovered-fundamental work remains unblocked."
+}

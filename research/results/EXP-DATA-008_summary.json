@@ -1,0 +1,153 @@
+{
+  "experiment": "EXP-DATA-008",
+  "total_legacy_observations": 2646,
+  "unique_legacy_observations": 2646,
+  "status_counts": {
+    "SOURCE_ERROR": 2468,
+    "RECOVERED_EXACT": 160,
+    "UNRECOVERABLE": 14,
+    "AMBIGUOUS": 4
+  },
+  "status_pct": {
+    "SOURCE_ERROR": 93.2729,
+    "RECOVERED_EXACT": 6.0469,
+    "UNRECOVERABLE": 0.5291,
+    "AMBIGUOUS": 0.1512
+  },
+  "fully_recovered": 160,
+  "partial_metadata": 0,
+  "ambiguous": 4,
+  "unrecoverable": 14,
+  "source_failure_or_not_processed_after_stop": 2468,
+  "exact_timestamp": 160,
+  "exact_first_publication": 160,
+  "vintage_lineage_recovered": 160,
+  "accounting_semantics_resolved": 160,
+  "tfrs29_confirmed_or_pre": 112,
+  "year_breakdown": {
+    "2018": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 16,
+      "SOURCE_ERROR": 230,
+      "UNRECOVERABLE": 0
+    },
+    "2019": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 16,
+      "SOURCE_ERROR": 239,
+      "UNRECOVERABLE": 1
+    },
+    "2020": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 16,
+      "SOURCE_ERROR": 264,
+      "UNRECOVERABLE": 2
+    },
+    "2021": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 16,
+      "SOURCE_ERROR": 278,
+      "UNRECOVERABLE": 4
+    },
+    "2022": {
+      "AMBIGUOUS": 2,
+      "RECOVERED_EXACT": 16,
+      "SOURCE_ERROR": 319,
+      "UNRECOVERABLE": 5
+    },
+    "2023": {
+      "AMBIGUOUS": 2,
+      "RECOVERED_EXACT": 20,
+      "SOURCE_ERROR": 328,
+      "UNRECOVERABLE": 2
+    },
+    "2024": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 24,
+      "SOURCE_ERROR": 327,
+      "UNRECOVERABLE": 0
+    },
+    "2025": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 24,
+      "SOURCE_ERROR": 326,
+      "UNRECOVERABLE": 0
+    },
+    "2026": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 12,
+      "SOURCE_ERROR": 157,
+      "UNRECOVERABLE": 0
+    }
+  },
+  "accounting_type_breakdown": {
+    "BANK": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 34,
+      "SOURCE_ERROR": 238,
+      "UNRECOVERABLE": 0
+    },
+    "INDUSTRIAL_OR_HOLDING": {
+      "AMBIGUOUS": 4,
+      "RECOVERED_EXACT": 126,
+      "SOURCE_ERROR": 2163,
+      "UNRECOVERABLE": 14
+    },
+    "INSURANCE": {
+      "AMBIGUOUS": 0,
+      "RECOVERED_EXACT": 0,
+      "SOURCE_ERROR": 67,
+      "UNRECOVERABLE": 0
+    }
+  },
+  "completed_ticker_checkpoints": 6,
+  "completed_source_observations": 178,
+  "stop_events": [
+    {
+      "batch_number": 2,
+      "tickers": [
+        "AKBNK",
+        "ALARK",
+        "ALFAS",
+        "ALVES",
+        "ANSGR",
+        "ARCLK",
+        "ASELS",
+        "ASTOR",
+        "BIMAS",
+        "BINHO"
+      ],
+      "interrupted_ticker": "ALVES",
+      "started_at_utc": "2026-09-17T18:06:51.736659+00:00",
+      "stopped_at_utc": "2026-09-17T18:14:05.832797+00:00",
+      "logical_requests": 162,
+      "network_attempts": 135,
+      "cache_hits": 29,
+      "pilot_cache_seed_hits": 6,
+      "http_429": 11,
+      "retries": 9,
+      "source_errors": 0,
+      "parse_errors": 2,
+      "gate": "STOP",
+      "stop_reasons": [
+        "HTTP_429_BATCH_LIMIT"
+      ]
+    }
+  ],
+  "kap_bulk_pit_vintage_gate": "PARTIAL",
+  "fundamental_pit_vintage_gate": "PARTIAL",
+  "public_kap_bulk_source": "BLOCKED_BY_RATE_LIMIT",
+  "data_readiness": {
+    "QUALITY": "PARTIAL",
+    "BALANCE_SHEET": "PARTIAL",
+    "CASH_FLOW": "NO",
+    "EARNINGS": "PARTIAL",
+    "VALUE": "NO"
+  },
+  "safe_subset": {
+    "rule": "RECOVERED_EXACT + resolved unit + HIGH semantic-confidence field; PRE_TFRS29 or POST_TFRS29_CONFIRMED/BANK_BDDK_NOT_APPLIED when inflation-basis safety is required",
+    "observation_count": 160,
+    "warning": "Alphabetical canary execution subset only; not representative and not authorized for alpha/model selection."
+  },
+  "production_data_written": false
+}

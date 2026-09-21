@@ -1,0 +1,75 @@
+{
+  "experiment_id": "EXP-DEPLOY-001-PHASE-B-KAP",
+  "acquisition_id": "kap_ca_20260919T104003Z",
+  "ticker": "BIMAS.IS",
+  "member_oid": "4028e4a140e95be70140ee1b7b030119",
+  "year": 2026,
+  "acquired_at": "2026-09-19T10:40:03.715115+00:00",
+  "request": {
+    "url": "https://www.kap.org.tr/tr/api/disclosure/members/byCriteria",
+    "payload": {
+      "fromDate": "2026-01-01",
+      "toDate": "2026-12-31",
+      "memberType": "IGS",
+      "mkkMemberOidList": [
+        "4028e4a140e95be70140ee1b7b030119"
+      ],
+      "inactiveMkkMemberOidList": [],
+      "disclosureClass": "",
+      "subjectList": [],
+      "isLate": "",
+      "mainSector": "",
+      "sector": "",
+      "subSector": "",
+      "marketOid": "",
+      "index": "",
+      "bdkReview": "",
+      "bdkMemberOidList": [],
+      "year": "",
+      "term": "",
+      "ruleType": "",
+      "period": "",
+      "fromSrc": false,
+      "srcCategory": "",
+      "disclosureIndexList": []
+    }
+  },
+  "list_path": "BIMAS_2026_list.json",
+  "list_sha256": "78fb4ae47cd0c4bf904f3d5c073604f9492c2eefab6351cb52110fee996ad9c1",
+  "events": [
+    {
+      "event_type": "CASH_DIVIDEND",
+      "ex_date": "2026-09-16",
+      "gross_amount": 2.5,
+      "net_amount": 2.125,
+      "currency": "TRY",
+      "ticker": "BIMAS.IS",
+      "announcement_timestamp": "2026-09-15T17:12:47+03:00",
+      "source": "OFFICIAL_KAP_BIST_DISCLOSURE",
+      "source_reference": "1663015",
+      "source_url": "https://www.kap.org.tr/tr/Bildirim/1663015",
+      "acquired_at": "2026-09-19T10:40:03.715115+00:00",
+      "list_sha256": "78fb4ae47cd0c4bf904f3d5c073604f9492c2eefab6351cb52110fee996ad9c1",
+      "detail_sha256": "7755c2104a3e2bd7426da3cc3cd8bd440fb87788c18cb4f9b2b2553d9aee0eae",
+      "pit_status": "RETROSPECTIVE_ONLY"
+    },
+    {
+      "event_type": "CASH_DIVIDEND",
+      "ex_date": "2026-06-17",
+      "gross_amount": 2.0,
+      "net_amount": 1.7,
+      "currency": "TRY",
+      "ticker": "BIMAS.IS",
+      "announcement_timestamp": "2026-06-16T16:51:18+03:00",
+      "source": "OFFICIAL_KAP_BIST_DISCLOSURE",
+      "source_reference": "1617773",
+      "source_url": "https://www.kap.org.tr/tr/Bildirim/1617773",
+      "acquired_at": "2026-09-19T10:40:03.715115+00:00",
+      "list_sha256": "78fb4ae47cd0c4bf904f3d5c073604f9492c2eefab6351cb52110fee996ad9c1",
+      "detail_sha256": "530cfe1a80fbe3a03d7d1f746821196aaf00c0a83201ac95740a71fd95941d81",
+      "pit_status": "RETROSPECTIVE_ONLY"
+    }
+  ],
+  "event_count": 2,
+  "write_once": true
+}

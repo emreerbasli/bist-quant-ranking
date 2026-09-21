@@ -1,0 +1,21 @@
+{
+  "contract_sha256": "6e1b3b245c56e1451d23cf26381fc5322f8d5c4533f63d1ef89da2d16c7a8ae5",
+  "model_contract_sha256": "4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d",
+  "portfolio_contract_sha256": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+  "code_sha256": "287601a9f772587e327a91ba0bbd652d3d53dfbb142c6d47e7e1d4368fda7812",
+  "files": {
+    "EXP-ROBUST-001_bootstrap.csv": "c3796bdaf04d2485801b48fa5631fa721d1abeb7174b401d8ca8772f854fb58a",
+    "EXP-ROBUST-001_classification.csv": "e36358ccd9e3c502c0d72031033998691cbe886daac428100ed6de10cd8a485d",
+    "EXP-ROBUST-001_cohorts.csv": "c19eadadafe862c52d95eb79c4fa330e203a5bcf3c9daf28154ed5435e8884f8",
+    "EXP-ROBUST-001_concentration.csv": "88854308792a5c09d2e25fa42310827f320afb782ca82c2ef6b9858919b3808a",
+    "EXP-ROBUST-001_leave_one_period_out.csv": "be24c182445fc2a42e25fac849c2355304e98154f36a2cd353ccd291d06a7bd7",
+    "EXP-ROBUST-001_leave_one_sector_out.csv": "e0eca9e2bb506c7c49dfc63997767f37985a2ba846658ea3d9da724802b2d43f",
+    "EXP-ROBUST-001_pnl_contributions.csv": "1396cd0399521edb84772d6544c41dde6a91de05bedffb15627cbf14a824614e",
+    "EXP-ROBUST-001_price_regimes.csv": "76bb88e535183b62bd2fbc7c18119af3ae2a8540e472637c1e1dfd1ffd63914c",
+    "EXP-ROBUST-001_ranking_similarity.csv": "9b02eb58b3f9dc3f06791dbcb5394ee0daf4064d661a882c662d7bc7c3e75058",
+    "EXP-ROBUST-001_report.md": "986568b2dc5aa757466d4f9997d9379f9c79c58e1fa5043bac14ee9c391394b3",
+    "EXP-ROBUST-001_stress_metrics.csv": "6e962f609a0599b79c1a17d9f98715ae766ec167e5445c2bc5ad58f77da9bb51",
+    "EXP-ROBUST-001_stress_summary.csv": "4492cf71c439d6d810ff7ac379859e4436e8d9b82e425cfc90aa5ede34c176fe",
+    "EXP-ROBUST-001_summary.json": "d08cc764fbf93a7e632fbe9a7f04193ff6cb28ef6218b8882c8a7a29251d34ba"
+  }
+}

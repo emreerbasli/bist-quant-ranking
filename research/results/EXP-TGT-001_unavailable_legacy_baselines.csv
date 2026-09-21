@@ -1,0 +1,4 @@
+baseline,status,reason
+V3_FROZEN_BEHAVIOR,N/A_DESCRIPTIVE_REFERENCE_ONLY,unsafe legacy fundamental and macro dependencies cannot enter common contract
+V4_1_FROZEN_BEHAVIOR,N/A_DESCRIPTIVE_REFERENCE_ONLY,unsafe legacy fundamental/macro plus inflation-adjusted real EPS double-adjustment risk
+VALUE_QUALITY,N/A,signal-date market-cap/capital gate is not open

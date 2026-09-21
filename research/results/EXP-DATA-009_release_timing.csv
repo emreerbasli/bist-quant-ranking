@@ -1,0 +1,6 @@
+available_from,observation_period,pit_quality,publication_date,revision_status,series,source,value
+,2018-01-01..2026-01-01,INVALID,,unknown,policy_rate,TCMB (unverifiable local claim),stored/derived
+,2018-09..2026-08,INVALID,,unknown,monthly_cpi,TÜİK (unverifiable local claim),stored/derived
+,2018-01-01..2026-09-15,PROXY_DATE_ONLY,,unknown,usdtry,yfinance (loader),stored/derived
+,same as inputs,INVALID,,unknown,real_rate,derived,stored/derived
+,PIT financial records,DOUBLE_ADJUSTMENT_RISK,,unknown,inflation_adjusted_real_eps,derived,stored/derived

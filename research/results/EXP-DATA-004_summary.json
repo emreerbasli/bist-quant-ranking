@@ -1,0 +1,29 @@
+{
+  "snapshot_symbols_ok": 89,
+  "quality_rows": {
+    "VERIFIED": 0,
+    "RECONSTRUCTED": 5,
+    "PROVIDER_ONLY": 157305,
+    "UNRESOLVED": 1919
+  },
+  "regression_tests": {
+    "PASS": 5
+  },
+  "trading_status_rows": {
+    "TRADED_PROVIDER": 157437,
+    "UNRESOLVED_BAD_OHLC": 2,
+    "UNRESOLVED_MISSING_VOLUME": 144,
+    "UNRESOLVED_NO_TRADE_OR_STALE": 1646
+  },
+  "sasa": {
+    "zero_volume_rows": 140,
+    "moving_price_rows": 134,
+    "flat_price_rows": 6,
+    "nonzero_range_rows": 137,
+    "adjustment_ratio_unique_rounded": 1,
+    "dividend_rows": 0,
+    "split_rows": 0,
+    "classification": "UNRESOLVED_PROVIDER_VOLUME_FIELD_DEFECT"
+  },
+  "price_gate": "PARTIAL"
+}

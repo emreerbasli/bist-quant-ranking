@@ -1,0 +1,908 @@
+{
+  "experiment_id": "EXP-DEPLOY-001-PHASE-A-B",
+  "acquisition_id": "acq_20260921T135034Z",
+  "acquisition_timestamp_utc": "2026-09-21T13:50:40.414227+00:00",
+  "provider": "Yahoo Finance via installed yfinance",
+  "request": {
+    "start": "2026-09-16",
+    "end_exclusive": "2026-09-22",
+    "auto_adjust": false,
+    "actions": true,
+    "repair": false
+  },
+  "universe_count": 89,
+  "universe_includes_benchmark": true,
+  "source_max": "2026-09-21",
+  "records": [
+    {
+      "ticker": "AEFES.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/AEFES_IS.parquet",
+      "sha256": "ea114ba4185967394d46e3182e06f61823b419f6c7298896773582ac4e07167c",
+      "file_size": 6103
+    },
+    {
+      "ticker": "AGHOL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/AGHOL_IS.parquet",
+      "sha256": "238065c7650dfba29f85969b0c1eeba21c92f1768092a38c0d440c261a92b8ce",
+      "file_size": 6102
+    },
+    {
+      "ticker": "AGROT.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/AGROT_IS.parquet",
+      "sha256": "deb681be442146e2339e12f935e3a6058f7890a459d1b2d52a9cfafec10aeb83",
+      "file_size": 6106
+    },
+    {
+      "ticker": "AKBNK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/AKBNK_IS.parquet",
+      "sha256": "dba317402226fc6510ab32199b8fe405a127cb01218e2419091f4d8542d2f646",
+      "file_size": 6101
+    },
+    {
+      "ticker": "ALARK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ALARK_IS.parquet",
+      "sha256": "3565022923e9e18778d05cdc364a3e04d75d7549a67216975f39b2139427a094",
+      "file_size": 6099
+    },
+    {
+      "ticker": "ALFAS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ALFAS_IS.parquet",
+      "sha256": "a2fd5d51e4a4986588dd4fe54f09b069d6dcb9d0b053a0c018a9a70d557f7199",
+      "file_size": 6103
+    },
+    {
+      "ticker": "ALVES.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ALVES_IS.parquet",
+      "sha256": "72409e3100adbafd4c98ba4654450d5dc68fef8d1441f032686e687190d0aece",
+      "file_size": 6107
+    },
+    {
+      "ticker": "ANSGR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ANSGR_IS.parquet",
+      "sha256": "b8a1cdeba6267e01c725889698849d8ef7ce974927f1427f6c97ae1028789b21",
+      "file_size": 6103
+    },
+    {
+      "ticker": "ARCLK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ARCLK_IS.parquet",
+      "sha256": "62c020d0a0eab498d84f725e335166af78c512ab74a595fc25e46ec13efa20d9",
+      "file_size": 6098
+    },
+    {
+      "ticker": "ASELS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ASELS_IS.parquet",
+      "sha256": "0287a74979d9da9cd94caa30770c6e2531f2e8d67c7a97e28582a6e75b76e8b8",
+      "file_size": 6085
+    },
+    {
+      "ticker": "ASTOR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ASTOR_IS.parquet",
+      "sha256": "8bd7b0c2d3af660a05a5504dfd1f5d1afc39c652a78d1db67ccb6fc1f94c9a5d",
+      "file_size": 6094
+    },
+    {
+      "ticker": "BIMAS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/BIMAS_IS.parquet",
+      "sha256": "69c5da300d07af1b15dd8ee181fad2cd88f31bc614386aa2286f12005aed8506",
+      "file_size": 6093
+    },
+    {
+      "ticker": "BINHO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/BINHO_IS.parquet",
+      "sha256": "6e9d29655e1a9fa3a275faeb09ae040e1e3468829e8b4456f7ba8fd3cb0d0ed5",
+      "file_size": 6107
+    },
+    {
+      "ticker": "BIZIM.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/BIZIM_IS.parquet",
+      "sha256": "417b6780ac4dd289c5a4f5ea6c21d80982392fd84a107b188e138eb73234d41c",
+      "file_size": 6102
+    },
+    {
+      "ticker": "BRSAN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/BRSAN_IS.parquet",
+      "sha256": "886f1700a2fdf607541cf6362c9b4e26a3e8c259bcc12f0ec81606766654f6cf",
+      "file_size": 6084
+    },
+    {
+      "ticker": "BSOKE.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/BSOKE_IS.parquet",
+      "sha256": "abd4eca5bada3759e1aee0ec5d236cd55cb90e210e5b597af2d5a7079e74c3f9",
+      "file_size": 6102
+    },
+    {
+      "ticker": "CANTE.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CANTE_IS.parquet",
+      "sha256": "33b4795bae4359a8d25340699cc17aa5ce74b10bf5471aaed2106fb8cd619c04",
+      "file_size": 6105
+    },
+    {
+      "ticker": "CCOLA.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CCOLA_IS.parquet",
+      "sha256": "2a315186037e6aaa983aca08c2c3cf51992bf697bcce42c8469e35818618c8d5",
+      "file_size": 6097
+    },
+    {
+      "ticker": "CIMSA.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CIMSA_IS.parquet",
+      "sha256": "73fd984a24af7d6f14d6b95080e3584eb9b045e1511192a96d091a359b9c34fd",
+      "file_size": 6101
+    },
+    {
+      "ticker": "CLEBI.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CLEBI_IS.parquet",
+      "sha256": "6bfaf4de93d7d83fcbdee89498e59dd6f2680844c6bfc67d4ca8ab3b122cf93c",
+      "file_size": 6081
+    },
+    {
+      "ticker": "CVKMD.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CVKMD_IS.parquet",
+      "sha256": "0d2d12b1cfa355eb5387a66122a93c51973ee3c7dc5bf1705536c3fe860726c8",
+      "file_size": 6098
+    },
+    {
+      "ticker": "CWENE.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/CWENE_IS.parquet",
+      "sha256": "d5ec9a921cfb7ac0160936e6d34e6146d4cb883807f498ec0859157b2285ce5c",
+      "file_size": 6107
+    },
+    {
+      "ticker": "DOAS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/DOAS_IS.parquet",
+      "sha256": "8678f3828cb62b1ad0c1b949202bba6a96ad0416a7e631c48170cad12bb84822",
+      "file_size": 6094
+    },
+    {
+      "ticker": "DOHOL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/DOHOL_IS.parquet",
+      "sha256": "2a720d4f9dd06032cb6b7a6fc86b29322cb52a6ab0bbac55e526e944da3f43c7",
+      "file_size": 6102
+    },
+    {
+      "ticker": "ECILC.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ECILC_IS.parquet",
+      "sha256": "78ed33fa93568e991a16ca7b53988625f40cd2c94a82c68c7d10170a3c65c75b",
+      "file_size": 6104
+    },
+    {
+      "ticker": "EKGYO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/EKGYO_IS.parquet",
+      "sha256": "135628125137e380ba5ea0287c1282f4042ee52b4a0d6aa6658603d27a42876f",
+      "file_size": 6099
+    },
+    {
+      "ticker": "ENKAI.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ENKAI_IS.parquet",
+      "sha256": "8fa0cbc2631487dbbef9e7fc13739ce99a63cfd2e2e2ef403d3a4178cd4c2bc7",
+      "file_size": 6092
+    },
+    {
+      "ticker": "EREGL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/EREGL_IS.parquet",
+      "sha256": "fac40344b0ec500cc0e51d82e12112bb93a012d19f236c08522027920f72f50e",
+      "file_size": 6103
+    },
+    {
+      "ticker": "EUPWR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/EUPWR_IS.parquet",
+      "sha256": "f4a824c9f3e48ef086ce28670dd837b5af7aee5040238cb21a49090553a525a3",
+      "file_size": 6099
+    },
+    {
+      "ticker": "FORTE.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/FORTE_IS.parquet",
+      "sha256": "5c2e73ec87b29f1dfadbf21d217260ba5040345f7bebdcb8e23b0904e0321887",
+      "file_size": 6096
+    },
+    {
+      "ticker": "FROTO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/FROTO_IS.parquet",
+      "sha256": "ee32635a3228715ac56cb1636a320861f87a125d4ab9d0ffb8b2e213101e64e2",
+      "file_size": 6099
+    },
+    {
+      "ticker": "GARAN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/GARAN_IS.parquet",
+      "sha256": "0adef230b3cb3d95f1ad433a0af66093f32149a7191ff018964cb5b16041787f",
+      "file_size": 6103
+    },
+    {
+      "ticker": "GENTS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/GENTS_IS.parquet",
+      "sha256": "9196c6b74bf351c553d0f7ec9b52e91005fdbade3c41c6cccbf642b6b590c594",
+      "file_size": 6099
+    },
+    {
+      "ticker": "GESAN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/GESAN_IS.parquet",
+      "sha256": "c8859915c556a76c84cd482c756dcb44a2813df6e656a4a783c0f0af550fd3ba",
+      "file_size": 6102
+    },
+    {
+      "ticker": "GOKNR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/GOKNR_IS.parquet",
+      "sha256": "a9c0655612aa55cf207d30befcf760d103a2da5b2e527746552e90e12d6e9173",
+      "file_size": 6101
+    },
+    {
+      "ticker": "GUBRF.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/GUBRF_IS.parquet",
+      "sha256": "c67f4e1e9df696995abfd62479531c68264fca23d0eae01b5add08a88515ef4a",
+      "file_size": 6086
+    },
+    {
+      "ticker": "HALKB.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/HALKB_IS.parquet",
+      "sha256": "e926d5f31de5f646f33326f6e2bde2b1b66690c29b6d254a753aa9b56459f90f",
+      "file_size": 6100
+    },
+    {
+      "ticker": "HEKTS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/HEKTS_IS.parquet",
+      "sha256": "c91cf300559dabaa53081be42ed74f13314e9aa42ff1b3767561d814ff282407",
+      "file_size": 6101
+    },
+    {
+      "ticker": "INVES.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/INVES_IS.parquet",
+      "sha256": "c5a749c78e6d84f1b5e2d0412dcfaf40ad99f7509c5b8ed016f5b3cbae538779",
+      "file_size": 6079
+    },
+    {
+      "ticker": "ISCTR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ISCTR_IS.parquet",
+      "sha256": "df7d99073165d739330845205e2f5d1d8322b37748e7ffcf8a1706d5ccfb10a4",
+      "file_size": 6106
+    },
+    {
+      "ticker": "ISGYO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ISGYO_IS.parquet",
+      "sha256": "3e236157d679b925dcf800356c0a254511f969a0b19f331586d1532ff49fbbf2",
+      "file_size": 6101
+    },
+    {
+      "ticker": "KBORU.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KBORU_IS.parquet",
+      "sha256": "e0ff1ae968c3f9fe7c0086cd884cfce7e611c05216bc34887a308da69f03a7f0",
+      "file_size": 6107
+    },
+    {
+      "ticker": "KCAER.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KCAER_IS.parquet",
+      "sha256": "d657e78b88cf902083d4eb3215c72ccef984494cf79a6f549db74373659f08ae",
+      "file_size": 6093
+    },
+    {
+      "ticker": "KCHOL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KCHOL_IS.parquet",
+      "sha256": "a9961fbe39d034ccc959fbcf5948c4e73c540872d2cf34dc526b11eb6e5d5303",
+      "file_size": 6096
+    },
+    {
+      "ticker": "KONTR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KONTR_IS.parquet",
+      "sha256": "a8cfe47755fd56fdd203b051bc51294d73b286701ae4cb0941364df042323ef3",
+      "file_size": 6091
+    },
+    {
+      "ticker": "KORDS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KORDS_IS.parquet",
+      "sha256": "9e532e8dd8fe99b6367714e4a39c86ed50f37f9ae601dbb4c79614a4646f2103",
+      "file_size": 6105
+    },
+    {
+      "ticker": "KRDMD.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/KRDMD_IS.parquet",
+      "sha256": "08f75ee6899d952ec0a653a90df9c562a724ab627989584848e42fc46a356640",
+      "file_size": 6103
+    },
+    {
+      "ticker": "LOGO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/LOGO_IS.parquet",
+      "sha256": "37d773d93a7024446347cec1c47f7fa32e2472ba97cca000903afa40babd4d98",
+      "file_size": 6106
+    },
+    {
+      "ticker": "MAVI.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/MAVI_IS.parquet",
+      "sha256": "fe9ef415c23a71b7370cdea3940814ea87396cf77d7557d77229f4866abed35c",
+      "file_size": 6101
+    },
+    {
+      "ticker": "MGROS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/MGROS_IS.parquet",
+      "sha256": "35c3ec6a9915ba9bbf87129a94abeb014b2a695a493add93fbba28443566c747",
+      "file_size": 6084
+    },
+    {
+      "ticker": "MIATK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/MIATK_IS.parquet",
+      "sha256": "4695f91e6d2b86ab599ffe06b144646ddc68e38b17bf45cc4568fe64d57c34d8",
+      "file_size": 6103
+    },
+    {
+      "ticker": "MOGAN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/MOGAN_IS.parquet",
+      "sha256": "688dc7ca9e4cbb8b7ab17a9f0bcae2dfd5dbf57528bb1f6e91d8cec2a5d983d5",
+      "file_size": 6097
+    },
+    {
+      "ticker": "MTRKS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/MTRKS_IS.parquet",
+      "sha256": "19ab1a47ebd9feb585ed6c278349c892210e3f2710fa8db8988c6a2c1950ca90",
+      "file_size": 6098
+    },
+    {
+      "ticker": "ODAS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ODAS_IS.parquet",
+      "sha256": "19fbd2ca27883fc457a1d5513cd4b07f99d5bc8c4a0e42e0987852e0521eb9af",
+      "file_size": 6105
+    },
+    {
+      "ticker": "ONCSM.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ONCSM_IS.parquet",
+      "sha256": "bf7ea1c9ad06adcabf5b80d3a8d8176c0d700a9a296063c5cb2cfcbc7961c17b",
+      "file_size": 6105
+    },
+    {
+      "ticker": "OTKAR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/OTKAR_IS.parquet",
+      "sha256": "eb33173e7137d6d31302baf12b197305c2791a41d3cc08b82e9ba0d2a845e236",
+      "file_size": 6076
+    },
+    {
+      "ticker": "OYAKC.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/OYAKC_IS.parquet",
+      "sha256": "b0f90b8fc9863eb6ad563b74ca9727d427fc1ece3a66dba1deddd64207f87753",
+      "file_size": 6107
+    },
+    {
+      "ticker": "PASEU.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/PASEU_IS.parquet",
+      "sha256": "1a8dc13c6ea01d592fad667288d435a55a461fd1d6ff9b546f38849440e1c812",
+      "file_size": 6104
+    },
+    {
+      "ticker": "PETKM.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/PETKM_IS.parquet",
+      "sha256": "f4da67cb09ff1ba6173273de25c37b09a32bd24ea6f1d86029bc277b062342c1",
+      "file_size": 6094
+    },
+    {
+      "ticker": "PGSUS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/PGSUS_IS.parquet",
+      "sha256": "2187a19381a32f93da7c9f38fc53d35b8ef504d4e4a8662fc274f8cf6c6fac0c",
+      "file_size": 6096
+    },
+    {
+      "ticker": "PLTUR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/PLTUR_IS.parquet",
+      "sha256": "39501a235f172a224c279bf1ac734de8c93c862062d478691750a8ae93e71688",
+      "file_size": 6099
+    },
+    {
+      "ticker": "REEDR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/REEDR_IS.parquet",
+      "sha256": "18d17164510390fdf638009a73baeb4b68ee49accd55e86e3feb91d0d32f1532",
+      "file_size": 6100
+    },
+    {
+      "ticker": "SAHOL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SAHOL_IS.parquet",
+      "sha256": "a93c34accb6cac7e3add3c63c96191748c5af9b1224f6d206a0779ff850d456f",
+      "file_size": 6099
+    },
+    {
+      "ticker": "SASA.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SASA_IS.parquet",
+      "sha256": "7e20237837f027c0c3684c698a2b1989e4f145300349249459769356b9e90a4d",
+      "file_size": 6086
+    },
+    {
+      "ticker": "SDTTR.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SDTTR_IS.parquet",
+      "sha256": "9d2c2154fc68f29681ac45802296e13847b1d44d1b7aeffc96f9f6f2a87413dc",
+      "file_size": 6101
+    },
+    {
+      "ticker": "SELEC.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SELEC_IS.parquet",
+      "sha256": "faf3b95832f305deae1017ea8a460bc45111013cbff4447894c3c7b107d586f2",
+      "file_size": 6094
+    },
+    {
+      "ticker": "SISE.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SISE_IS.parquet",
+      "sha256": "af13d9a1df5899f8a59f01dbe3004187ba90e1e01f70fe01b5c7cacfd268ddb6",
+      "file_size": 6105
+    },
+    {
+      "ticker": "SKBNK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SKBNK_IS.parquet",
+      "sha256": "315134180a5107b00deebf3371e26857767de690b7f2ebab6cc46382b728747d",
+      "file_size": 6092
+    },
+    {
+      "ticker": "SOKM.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SOKM_IS.parquet",
+      "sha256": "26d4dc4aded986b8ea0fb18998c63bac93ca323dcfb41b7207c440595297ff1f",
+      "file_size": 6092
+    },
+    {
+      "ticker": "SURGY.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/SURGY_IS.parquet",
+      "sha256": "4de563b56b97bcba5418ab25b189b123f2dc81f6f97969f021d6d29daa8f0ee1",
+      "file_size": 6099
+    },
+    {
+      "ticker": "TABGD.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TABGD_IS.parquet",
+      "sha256": "b64d1455613cf1125e8e218432d12539c4eabaa855b110dea3794ca5654e2a13",
+      "file_size": 6085
+    },
+    {
+      "ticker": "TAVHL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TAVHL_IS.parquet",
+      "sha256": "9747c11649d01ee8f35446ecbbf9f707e041a2fc086beec0ccfcdc1efabd5988",
+      "file_size": 6087
+    },
+    {
+      "ticker": "TCELL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TCELL_IS.parquet",
+      "sha256": "56c9ead081939d4d07a4b0714a7c06c0dfecf6179cfc353db764b239104848c4",
+      "file_size": 6099
+    },
+    {
+      "ticker": "TERA.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TERA_IS.parquet",
+      "sha256": "f6905a4556fcd2ee6ffaf5f91c0b2a3543a7940c37e5fc736f176be56c402fa6",
+      "file_size": 6101
+    },
+    {
+      "ticker": "THYAO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/THYAO_IS.parquet",
+      "sha256": "460a341e702f20397a965e69c9f0b2c7ead9219d2a37a4f212df1d6ec8ebe4bb",
+      "file_size": 6082
+    },
+    {
+      "ticker": "TKFEN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TKFEN_IS.parquet",
+      "sha256": "58a6591c6f7a9a3c2060b3478136bd6c973c2113f9910d9b1916f6a11c7b2396",
+      "file_size": 6100
+    },
+    {
+      "ticker": "TOASO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TOASO_IS.parquet",
+      "sha256": "ae45522c048580ee6181ae2f07d650ca2d458747d9db41f9f2bd4fbe411b3ea8",
+      "file_size": 6083
+    },
+    {
+      "ticker": "TRGYO.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TRGYO_IS.parquet",
+      "sha256": "117c848477712603e62671c11122504cae138d3426eb65ff9480af2396b37abc",
+      "file_size": 6098
+    },
+    {
+      "ticker": "TSKB.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TSKB_IS.parquet",
+      "sha256": "eb95c0184d46d10779bea0b2ca363f624a7509eee46096c56df8d6d4ce20da6b",
+      "file_size": 6106
+    },
+    {
+      "ticker": "TTKOM.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TTKOM_IS.parquet",
+      "sha256": "582d18066122c2b614b20875139a4af9c5bb926fc0b985c210fc192f6cd78d44",
+      "file_size": 6106
+    },
+    {
+      "ticker": "TTRAK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TTRAK_IS.parquet",
+      "sha256": "1c90e6b3b39b351fc4e2fa567559e08882dd2ff7c52280d477e920f4b8b23fcc",
+      "file_size": 6081
+    },
+    {
+      "ticker": "TUPRS.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TUPRS_IS.parquet",
+      "sha256": "8d32dd465ae8aa4634b06c48904b0c9d7186b64a206e3b5b00772beda7d8872c",
+      "file_size": 6082
+    },
+    {
+      "ticker": "TUREX.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TUREX_IS.parquet",
+      "sha256": "68fab0c909cd181dc6223dd1fbedc09401067f529050a9e4669ebbed766d02d0",
+      "file_size": 6101
+    },
+    {
+      "ticker": "TURSG.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/TURSG_IS.parquet",
+      "sha256": "02ee7e00c04e478d261558fdc77a344bfe8b509984cd2dda459ae00eb0e009e0",
+      "file_size": 6101
+    },
+    {
+      "ticker": "ULKER.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/ULKER_IS.parquet",
+      "sha256": "03e6adef7cfa707c14de6c3492e82809de71cd8bfd05b2b7dfda23e2649882d7",
+      "file_size": 6101
+    },
+    {
+      "ticker": "VAKBN.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/VAKBN_IS.parquet",
+      "sha256": "86eab4fc46c6670b84893792191c5284de1c37db1d8ed93600d1d1c05007cff4",
+      "file_size": 6102
+    },
+    {
+      "ticker": "VESTL.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/VESTL_IS.parquet",
+      "sha256": "e79dea7dc88d7ee5ee92f58dc4e1d8dc6bd0ca2247673629d7c20b8848426a9e",
+      "file_size": 6105
+    },
+    {
+      "ticker": "XU100.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/XU100_IS.parquet",
+      "sha256": "820b3509a9eccd6d264d1a5f6c436a6c802cf35a1df87d3cfc402d5943ebf63a",
+      "file_size": 6106
+    },
+    {
+      "ticker": "YKBNK.IS",
+      "status": "OK",
+      "rows": 4,
+      "source_max": "2026-09-21",
+      "first_date": "2026-09-16",
+      "path": "data/prospective_raw/acq_20260921T135034Z/YKBNK_IS.parquet",
+      "sha256": "2aac3b583e7904c0ecc47a662e034961bd801e652d18e5d44f73b9ecb8870f1a",
+      "file_size": 6107
+    }
+  ]
+}

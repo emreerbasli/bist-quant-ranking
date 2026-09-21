@@ -1,0 +1,15 @@
+{
+  "experiment_id":"EXP-ENS-001","title":"SIMPLE RANK-AVERAGE ENSEMBLE","status":"LOCKED_BEFORE_RESULTS",
+  "hypothesis":"The two non-dominated finalists contain sufficiently different ranking information that a simple fixed 50/50 rank-average can improve robustness or predictive consistency without introducing material complexity or cost.",
+  "parents":{"LGBM_REGRESSION":"EXP-MODEL-001 frozen procedure","LAMBDAMART":"EXP-MODEL-001 frozen procedure"},
+  "parent_contract_hashes":{"model":"4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d","portfolio":"6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1","robust":"6e1b3b245c56e1451d23cf26381fc5322f8d5c4533f63d1ef89da2d16c7a8ae5","final":"523f628c7b7e91b6e7f033dde8eec76991b88713e537292c6ef0de0555d5c37b"},
+  "formula":"for each signal_date: ensemble_score = 0.5 * percentile_rank(LGBM_REGRESSION_score) + 0.5 * percentile_rank(LAMBDAMART_score); deterministic average ties; no missing imputation",
+  "weights":{"LGBM_REGRESSION":0.5,"LAMBDAMART":0.5},"alternate_weights":[],"weight_tuning":false,
+  "alignment":{"join":"inner on signal_date and symbol","missing":"drop and report; never impute"},
+  "predictive_evaluation":{"label":"existing RAW 60-session forward-return rank used only as a common evaluation yardstick","selection_role":"NONE","reason":"same economic realized horizon for both parents and ensemble; no ensemble-specific target/horizon optimization"},
+  "portfolio":{"k":10,"weighting":"equal_weight","holding_sessions":60,"rebalance_sessions":60,"costs_bps":[0,30,50,100],"primary_bps":50,"delay_sessions":[0,1,2],"capital_try":1000000,"adv_limit_pct":0.10,"source":"EXP-PORT-001 unchanged"},
+  "success":{"predictive_comparable":"mean IC, median IC and NDCG each no worse than weaker parent minus 0.01","economic_usable":"50bps mean net return >= 90% of weaker parent; turnover <=110% of higher parent; fill >=95%; 100bps and +2 delay mean return positive","adds_value":"predictive comparable and either mean IC exceeds both by >=0.01 or 50bps mean net exceeds both by >=5%, without worse daily MaxDD","adds_robustness_only":"predictive comparable and economic usable and ensemble IC std is below both parents or top1/sector concentration is below both parents","otherwise":"DOES NOT ADD RELIABLE VALUE if comparable/economic conditions fail; INCONCLUSIVE otherwise"},
+  "minimal_robustness":["leave-one-outer-period-out","0/30/50/100bps","delay 0/1/2","stock/sector concentration","three fixed parent seeds"],
+  "forbidden":["weight_search","stacking","meta_learning","new_feature","new_target_selection","new_horizon_selection","k_optimization","new_stress_family"],
+  "production_writes_allowed":false
+}

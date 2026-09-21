@@ -1,0 +1,17 @@
+{
+  "experiment_id":"EXP-ROBUST-001","title":"FINALIST STRESS, ABLATION & CONCENTRATION","status":"LOCKED_BEFORE_RESULTS",
+  "hypothesis":"The two frozen viable tree finalists retain economically meaningful predictive and portfolio behavior under controlled perturbations, concentration removal, execution stress and dependence-aware uncertainty analysis.",
+  "frozen":{"architectures":["LGBM_REGRESSION","LAMBDAMART"],"features":["mom_12_1","mom_63","vol_63"],"model_contract_sha256":"4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d","portfolio_contract_sha256":"6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1","k":10,"weighting":"equal_weight","cost_bps":50,"capital_try":1000000,"adv_limit_pct":0.10},
+  "feature_ablation":["mom_12_1","mom_63","vol_63"],
+  "feature_noise":{"application":"prediction-time only; deterministic Gaussian perturbation per feature scaled by training standard deviation","levels":{"MILD":0.01,"MODERATE":0.03},"seed":1701},
+  "rank_perturbation":{"application":"prediction score plus deterministic Gaussian noise within signal-date scaled by cross-sectional score standard deviation","levels":{"MILD":0.05,"MODERATE":0.10},"seeds":[11,29,47]},
+  "delay_sessions":[0,1,2],"cost_bps":[0,30,50,100],
+  "liquidity_capacity":{"reuse":"EXP-PORT-001 frozen decisions","capital_try":[1000000,10000000,50000000],"adv_limits_pct":[0.05,0.10,0.20]},
+  "parameter_perturbation":{"LOW_COMPLEXITY":{"n_estimators":48,"num_leaves":11},"HIGH_COMPLEXITY":{"n_estimators":72,"num_leaves":19},"purpose":"fragility only; never choose best"},
+  "seeds":[11,29,47],
+  "bootstrap":{"replications":2000,"block_length_signal_cohorts":2,"seed":3107,"interpretation":"stability/uncertainty; not independent market histories"},
+  "regimes":{"TREND_UP":"BIST100 trailing 63-session return > 0","TREND_DOWN":"<= 0","VOL_HIGH":"BIST100 trailing 63-session realized vol above full pre-locked signal-date median","VOL_LOW":"otherwise","macro_labels_forbidden":true},
+  "concentration":{"sector_taxonomy":"PROXY_TAXONOMY config.HISSE_SEKTOR","pnl_method":"prior-day portfolio weight times close-to-close research return","top_counts":[1,3,5,10]},
+  "classification":{"ROBUST":"all nine locked dimensions pass","ROBUST_WITH_CAVEATS":"at least six dimensions pass, cost/delay survive, and bootstrap P(IC>0) and P(net>0) are each >=0.50","FRAGILE":"at least one primary economic channel survives but fewer than six dimensions pass","REJECTED":"100bps cost or +2 delay mean net return <=0, or both bootstrap probabilities <0.50","dimension_rules":{"alpha":"worst mean IC across ablation/noise/parameter >=0","feature":"at least two of three ablations mean IC >=0","time":"all leave-one-fold-out mean net return >0","sector":"largest absolute sector PnL share <=0.50","stock":"top-1 absolute stock PnL share <=0.25","cost":"100bps mean net return >0","delay":"+2 mean net return >0","liquidity":"50m TL/10% ADV mean fill rate >=0.80","seed_parameter":"seed IC std <=0.05 and both parameter variants mean IC >=0"}},
+  "production_writes_allowed":false
+}

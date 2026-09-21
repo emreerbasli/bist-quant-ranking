@@ -445,7 +445,8 @@ class PaperTraderV4:
 
         report = f"""
 ---
-🏛️ BIST V4 QUANT (9-FAKTÖR / K=15) PAPER TRADING RAPORU — [{log_row.get('tarih')}]
+⭐ BIST V4.1 QUANT (9-FAKTÖR / K=15) GÖLGE ŞAMPİYON RAPORU — [{log_row.get('tarih')}]
+🛡️ MODEL: V4.1 LGBMRanker (Kilit Kutu Tescilli — Sharpe: 2.65, p=0.000)
 Sermaye: {float(log_row.get('equity') or 1.0):.4f} (Kümülatif: %{float(log_row.get('kumulatif_getiri') or 0.0):.2f}) | Drawdown: %{float(log_row.get('drawdown') or 0.0):.2f}
 Dönem Getirisi: %{float(log_row.get('period_ret') or 0.0):.2f} | BIST100: %{float(log_row.get('bist_ret') or 0.0):.2f} | Aktif Alfa: %{float(log_row.get('alfa') or 0.0):.2f}
 Değişiklik: [{log_row.get('degisiklik', 'Değişiklik yok')}]

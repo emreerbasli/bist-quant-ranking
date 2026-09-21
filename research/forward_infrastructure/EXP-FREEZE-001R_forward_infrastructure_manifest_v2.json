@@ -1,0 +1,33 @@
+{
+  "experiment_id": "EXP-FREEZE-001R",
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "clean_forward_start": "PENDING_AUDIT",
+  "candidates": {
+    "RC-LGBMR-001": {
+      "candidate_version": "1.0.0",
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "target_procedure": "RAW",
+      "horizon_procedure": 60
+    },
+    "RC-LAMBDAMART-001": {
+      "candidate_version": "1.0.0",
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "target_procedure": "BETA_RESIDUAL",
+      "horizon_procedure": 60
+    }
+  },
+  "code_hashes": {
+    "research\\exp_freeze_001.py": "b5619350d83df720ef123233e8e8d46651b116f1723e1de961cee3f42b4c15c5",
+    "research\\run_frozen_shadow.py": "50bd8b29aad4494caa34c76373715626dafbc0aee0977464fb873cb528f4f175",
+    "research\\forward_infrastructure_001.py": "f47ef099fbee7d963051ca9dd48ca434d44b44029a489f50886eb2d61325dec3",
+    "research\\exp_freeze_001r.py": "17f268d1207245938da96c5d080c1b304becdc7ce410f5746b6363333a7ad5d0",
+    "research\\contracts\\exp_freeze_001r.json": "f865b89ddcbc66f7275bf8e8cdf1aeb3ff8fe6132691d76be68e510bc1ed5f31",
+    "research\\tests\\test_exp_freeze_001r.py": "635baaf27b7ee2c675e48fc5e579702264fedcbc736fbabb74135b4a803f6a01"
+  },
+  "original_freeze_manifest_sha256": "32638a86ab0d79e623727bb621265479216fcd211bb3b86a96291faee971bd77",
+  "remediation_timestamp": "2026-09-18T12:43:54.089940+03:00",
+  "production_writes_allowed": false
+}

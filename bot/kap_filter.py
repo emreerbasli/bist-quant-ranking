@@ -434,26 +434,46 @@ def tara_ve_arsivle_vbts(hisseler: Optional[List[str]] = None,
                          csv_path: Optional[Path] = None) -> List[Dict[str, Any]]:
     """
     Hisseler için KAP haberlerini tarar, VBTS/tedbirleri tespit eder ve arşivler.
+
+    BUG FIX (2026-09-17): Önceki sürümde arsivle_vbts_bildirimleri() çağrılmıyor
+    ve return ifadesi yoktu. Bu nedenle caller her zaman None alıyor,
+    'object of type NoneType has no len()' hatası üretiyordu.
+    Şimdi: bulunan_bildirimler arşivleniyor ve liste olarak return ediliyor.
     """
     import config as _cfg
     target_symbols = hisseler or _cfg.HISSELER
-    bulunan_bildirimler = []
+    bulunan_bildirimler: List[Dict[str, Any]] = []
 
     for s in target_symbols:
-        haberler = cek_hisse_haberleri(s, max_haber=5, max_gun=7)
-        has_v, terms, basliklar = analiz_et_vbts_riski(haberler)
-        if has_v:
-            for h in haberler:
-                b_text = h.get("baslik", "")
-                if VBTS_REGEX.search(b_text):
-                    bulunan_bildirimler.append({
-                        "sembol": s,
-                        "tarih": h.get("tarih", ""),
-                        "tedbir_terimleri": terms,
-                        "baslik": b_text,
-                        "kaynak": h.get("kaynak", ""),
-                        "link": h.get("link", ""),
-                    })
+        try:
+            haberler = cek_hisse_haberleri(s, max_haber=5, max_gun=7)
+            has_v, terms, basliklar = analiz_et_vbts_riski(haberler)
+            if has_v:
+                for h in haberler:
+                    b_text = h.get("baslik", "")
+                    if VBTS_REGEX.search(b_text):
+                        bulunan_bildirimler.append({
+                            "sembol": s,
+                            "tarih": h.get("tarih", ""),
+                            "tedbir_terimleri": terms,
+                            "baslik": b_text,
+                            "kaynak": h.get("kaynak", ""),
+                            "link": h.get("link", ""),
+                        })
+        except Exception as e:
+            logger.warning(f"[VBTS] {s} tarama hatası: {e}")
+
+    # DÜZELTME: Bulunan bildirimleri CSV arşivine kaydet
+    if bulunan_bildirimler:
+        try:
+            arsivle_vbts_bildirimleri(bulunan_bildirimler, csv_path)
+        except Exception as e:
+            logger.error(f"[VBTS] Arşivleme hatası: {e}")
+    else:
+        logger.info("[VBTS] Bu taramada VBTS/tedbir bildirimi tespit edilmedi.")
+
+    # DÜZELTME: Listeyi return et (önceden return yoktu, None dönüyordu)
+    return bulunan_bildirimler
 
 def cek_vbts_tedbir_durumu(csv_path: Optional[Path] = None, max_gun: int = 15) -> Dict[str, Dict[str, Any]]:
     """

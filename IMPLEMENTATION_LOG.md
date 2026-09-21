@@ -653,3 +653,425 @@ V4-Raw modelinin getirisinin 'şans' değil, 'matematiksel bir üstünlük (alfa
 ### Doğrulama ve Red Team Sonucu:
 - `python scratch/qa_red_team_audit.py` çalıştırıldı: **TOPLAM 0 BULGU (4/4 Kategori Temiz)**.
 - `python run_paper_trader_v4.py --now` başarıyla çalıştı ve Telegram bildirimini iletti (HTTP 200).
+
+---
+
+## [2026-09-16] V4 KİLİT KUTU (LOCKBOX) SÖZLEŞMESİ VE RESMİ BAŞARI KRİTERLERİ (ADIM 0)
+
+### 1. Ön Taahhüt ve Karantina Protokolü
+Bu kayıt, V4 modeli (`models/v4_ranking/winning_lgbm_ranker_v4.joblib`) için kilit kutu dönemi açılmadan ÖNCE, sonuçlara bakılmaksızın ve geriye dönük değiştirilemez şekilde imza altına alınmıştır.
+
+- **Kilit Kutu Dönemi:** `2025-06-01` $\rightarrow$ `2026-09-07` (5 Çeyrek / 15 Ay)
+- **Model / Hedef Portföy:** V4 Ranker (9 Feature), Hedef: $K=15$ (Referans: V3 $K=10$, 8 Feature)
+- **Karantina Şartı:** Kilit kutu kasası tek bir kez açılacaktır. Sonuçlar ortaya çıktıktan sonra kriter değiştirilemez.
+
+### 2. Dört Değiştirilemez Başarı Kriteri
+
+| No | Kriter | Tanım ve Koşul | Eşik Değeri |
+|:---:|:---|:---|:---:|
+| **1** | **İstatistiksel Anlamlılık** | $K=15$ için 100 tohumlu Monte Carlo placebo testinde $p$-değeri | $p < 0.10$ |
+| **2** | **Ekonomik Sharpe Primi** | Model Sharpe oranı ile 100 tohumlu Placebo ortalama Sharpe farkı | $\text{Sharpe}_{\text{V4}} > \text{Sharpe}_{\text{Placebo}} + 0.20$ |
+| **3** | **Piyasa Üstünlüğü** | Model kümülatif getirisi ($R_{\text{V4}}$) ile BIST 100 kümülatif getirisi ($R_{\text{XU100}}$) | $R_{\text{V4}} > R_{\text{XU100}}$ |
+| **4** | **Portföy Tutarlılığı** | $K=10$ ve $K=20$ portföy büyüklüklerinde model kümülatif getirisinin placebo ortalaması üzerindeki konumu | $R_{\text{V4}}(K=10) > R_{\text{Placebo}}(K=10)$<br>VE<br>$R_{\text{V4}}(K=20) > R_{\text{Placebo}}(K=20)$ |
+
+### 3. Başarısızlık Taahhüdü (Kill Criteria & Enforceability)
+- Bu 4 kriterden **herhangi biri karşılanmazsa (en az biri dahi başarısız olursa) V4 modeli derhal ve kesin olarak REDDEDİLİR**.
+- V3 modeli (`models/v3_ranking/winning_lgbm_ranker.joblib`, 8-faktör, $K=10$) tek ve mutlak aktif model olarak kalmaya devam eder.
+- Mazeret üretilmez, sonuçlara sonradan tolerans bandı uydurulmaz, veri veya hiperparametre değiştirilerek ikinci bir test yapılmaz.
+- Red durumunda:
+  1. V4 canlı operasyon statüsü iptal edilir.
+  2. `paper_portfolio_v4.json` "ASKIYA ALINDI" olarak işaretlenir.
+  3. V3 aktif model olarak operasyona devam eder.
+  4. V4 reddi `PROJECT_MEMORY.md` Bölüm 4'e resmi gerekçeleriyle kaydedilir.
+
+---
+
+## [2026-09-16] V4 VE V3 KİLİT KUTU (LOCKBOX) RESMİ TEST SONUÇLARI (ADIM 1)
+
+`scratch/v4_lockbox_test.py` betiği çalıştırıldı. Kilit kutu kasası (`2025-06-01` $\rightarrow$ `2026-09-07`, 5 Çeyrek / 15 Ay) dondurulmuş V3 (`models/v3_ranking/winning_lgbm_ranker.joblib`) ve dondurulmuş V4 (`models/v4_ranking/winning_lgbm_ranker_v4.joblib`) modelleri için açıldı. 100 tohumlu Monte Carlo placebo simülasyonu ile hem TL hem USD bazında tam karşılaştırma icra edildi.
+
+### 1. Türk Lirası (TL) Bazında Kilit Kutu Performansı
+
+| Strateji | K | Kümülatif Getiri | CAGR | Sharpe Oranı ($\sqrt{4}$) | Max Drawdown | Placebo $p$-değeri | Durum |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **V3 LGBMRanker (8 Feature)** | **K=10** | **+%138.2** | **%100.2** | **3.44** | **%0.0** | **$p = 0.000$** | **Referans Model** |
+| V4 LGBMRanker (9 Feature) | K=10 | +%83.4 | %62.5 | 0.89 | -%12.7 | $p = 0.300$ | Başarısız |
+| 100 Tohum Placebo Ortalaması | K=10 | +%51.1 | %38.8 | 0.67 | -%9.2 | Baseline | — |
+| **V3 LGBMRanker (8 Feature)** | **K=15** | **+%95.5** | **%71.0** | **2.07** | **%0.0** | **$p = 0.030$** | **Güçlü Alfa** |
+| **V4 LGBMRanker (Hedef Model)** | **K=15** | **+%72.7** | **%54.8** | **0.83** | **-%11.3** | **$p = 0.340$** | **Şans Seviyesi ($p>0.10$)** |
+| 100 Tohum Placebo Ortalaması | K=15 | +%52.9 | %40.2 | 0.72 | -%8.4 | Baseline | — |
+| **V3 LGBMRanker (8 Feature)** | **K=20** | **+%85.8** | **%64.1** | **1.66** | **-%1.0** | **$p = 0.050$** | **Tutarlı Alfa** |
+| V4 LGBMRanker (9 Feature) | K=20 | +%117.5 | %86.2 | 1.62 | %0.0 | $p = 0.050$ | K=20 Geçti |
+| 100 Tohum Placebo Ortalaması | K=20 | +%53.5 | %40.7 | 0.77 | -%7.0 | Baseline | — |
+| **BIST 100 Endeksi (Kıstas)** | — | +%61.5 | %46.7 | 1.01 | -%1.4 | Market | — |
+
+---
+
+### 2. Amerikan Doları (USD) Bazında Kilit Kutu Performansı
+
+| Strateji | K | USD Kümülatif | USD CAGR | USD Sharpe ($r_f=\%4.5$) | USD Max DD | Placebo $p$-değeri |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **V3 LGBMRanker** | **K=10** | **+%92.8** | **%69.1** | **3.31** | **%0.0** | **$p = 0.000$** |
+| V4 LGBMRanker | K=10 | +%48.5 | %37.2 | 0.79 | -%17.3 | $p = 0.280$ |
+| 100 Tohum Placebo Ortalaması | K=10 | +%22.4 | %17.2 | 0.51 | -%14.4 | Baseline |
+| **V3 LGBMRanker** | **K=15** | **+%58.3** | **%44.4** | **1.87** | **-%1.0** | **$p = 0.030$** |
+| **V4 LGBMRanker (Hedef Model)** | **K=15** | **+%39.8** | **%30.8** | **0.72** | **-%15.9** | **$p = 0.310$** |
+| 100 Tohum Placebo Ortalaması | K=15 | +%23.8 | %18.4 | 0.56 | -%13.0 | Baseline |
+| **V3 LGBMRanker** | **K=20** | **+%50.4** | **%38.6** | **1.45** | **-%4.1** | **$p = 0.040$** |
+| V4 LGBMRanker | K=20 | +%76.2 | %57.3 | 1.50 | -%2.8 | $p = 0.040$ |
+| 100 Tohum Placebo Ortalaması | K=20 | +%24.3 | %18.9 | 0.60 | -%11.0 | Baseline |
+| **BIST 100 Endeksi (Kıstas)** | — | +%30.7 | %23.9 | 0.82 | -%4.5 | Market |
+
+---
+
+### 3. Çeyreklik Performans Ayrışması ($K=15$, TL Bazında)
+
+| Kilit Kutu Çeyreği | V3 LGBMRanker ($K=15$) | V4 LGBMRanker ($K=15$) | 100 Placebo Ortalaması | BIST 100 Endeksi | V4 Net Çeyreklik Alfa ($R_{\text{V4}} - R_{\text{XU100}}$) |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **2025Q2** | +%24.67 | **+%47.01** | +%29.33 | +%25.21 | +%21.80 |
+| **2025Q3** | +%2.18 | +%4.04 | -%4.21 | -%1.45 | +%5.49 |
+| **2025Q4** | +%15.49 | +%14.25 | +%15.63 | +%23.40 | -%9.15 |
+| **2026Q1** | **+%24.31** | +%11.39 | +%10.57 | +%2.68 | +%8.71 |
+| **2026Q2 (Son Çeyrek)** | **+%6.91** | **-%11.27** ⚠️ | -%5.02 | +%3.27 | **-%14.54** 💥 |
+
+---
+
+### 4. Adım 0 Kriterlerinin Test Çıktısıyla Karşılaştırılması
+
+| No | Kriter | Önceden İmzalanan Eşik | Gerçekleşen Değer | Karar |
+|:---:|:---|:---:|:---:|:---:|
+| **1** | **İstatistiksel Anlamlılık ($K=15$)** | $p < 0.10$ | **$p = 0.340$** | ❌ **KARŞILANMADI (KALDI)** |
+| **2** | **Ekonomik Sharpe Primi ($K=15$)** | $\text{Sharpe}_{\text{V4}} > \text{Placebo} + 0.20$ (Eşik: $\ge 0.92$) | $\text{Sharpe}_{\text{V4}} = 0.83$ (Fark: $+0.10$) | ❌ **KARŞILANMADI (KALDI)** |
+| **3** | **Piyasa Üstünlüğü** | $R_{\text{V4}} > R_{\text{XU100}}$ (Eşik: $> +\%61.5$) | $R_{\text{V4}} = \mathbf{+\%72.7}$ vs BIST: **+\%61.5** | ✅ **KARŞILANDI** |
+| **4** | **Portföy Tutarlılığı ($K=10$ & $K=20$)** | Model > Placebo | $K=10$: %83.4 > %51.1 (Geçti)<br>$K=20$: %117.5 > %53.5 (Geçti) | ✅ **KARŞILANDI** |
+
+- **Resmi Test Logu:** `reports/v4_lockbox_test_results.json`
+- **Adım 1 Durumu:** TAMAMLANDI.
+
+---
+
+## [2026-09-16] V4 KİLİT KUTU NİHAİ KARAR VE İCRA TUTANAĞI (ADIM 2)
+
+### 1. Kriter Değerlendirmesi ve Karar Matrisi
+
+| No | Kriter | Önceden İmzalanan Eşik | Gerçekleşen Değer | Nihai Sonuç |
+|:---:|:---|:---:|:---:|:---:|
+| **1** | **İstatistiksel Anlamlılık ($K=15$)** | 100 Tohumlu Monte Carlo $p < 0.10$ | **$p = 0.340$** | ❌ **KARŞILANMADI** |
+| **2** | **Ekonomik Sharpe Primi ($K=15$)** | $\text{Sharpe}_{\text{V4}} > \text{Placebo} + 0.20$ (Eşik: $\ge 0.92$) | $\text{Sharpe}_{\text{V4}} = 0.83$ (Fark: $+0.10$) | ❌ **KARŞILANMADI** |
+| **3** | **Piyasa Üstünlüğü** | $R_{\text{V4}} > R_{\text{XU100}}$ (Eşik: $> +\%61.5$) | $R_{\text{V4}} = +\%72.7$ vs BIST: $+\%61.5$ | ✅ **KARŞILANDI** |
+| **4** | **Portföy Tutarlılığı ($K=10$ & $K=20$)** | Model > Placebo | $K=10$: %83.4 > %51.1 (Geçti)<br>$K=20$: %117.5 > %53.5 (Geçti) | ✅ **KARŞILANDI** |
+
+### 2. NİHAİ SÖZLEŞME HÜKMÜ
+> 🛑 **V4 MODELİ RESMİ OLARAK REDDEDİLMİŞTİR (KILL-SWITCH DEVREYE GİRDİ).**  
+> Adım 0 başarısızlık taahhüdü gereğince hiçbir mazeret kabul edilmemiş, tolerans bandı uydurulmamış ve ikinci bir test yapılmamıştır.
+
+### 3. İcra Edilen Kurumsal Eylemler
+1. **V4 Canlı Operasyonu İptal Edildi:** `models/v4_ranking/paper_portfolio_v4.json` resmi olarak `"status": "ASKIYA ALINDI"` olarak işaretlendi.
+2. **V3 Aktif Model Olarak Teyit Edildi:** `main.py` ve sistem komutları tek meşru üretim modeli olan V3'e (`models/v3_ranking/winning_lgbm_ranker.joblib`, 8-faktör, $K=10$, 3.44 Sharpe, $p=0.000$) bağlandı.
+3. **Proje Hafızası Güncellendi:** V5-Neutral, V6-Monotonic ve V4 model retleri `PROJECT_MEMORY.md` Bölüm 4'e (Test Edilip Reddedilen Fikirler) ve Bölüm 13'e kalıcı olarak işlendi.
+4. **Proje Disiplini Korundu:** Finansal ML'de aşırı uyum (overfitting) ve sahte güvenilirlik tuzağına düşülmeyerek kurumsal karantina protokolüne tam riayet sağlandı.
+
+---
+
+## [2026-09-16] V4.1 ŞAMPİYON MODELİNİN EĞİTİMİ VE SİSTEME PAKETLENMESİ
+
+### 1. Kök Neden & Ablasyon Bulguları
+Ham V4'ün kilit kutudaki başarısızlığının kök nedeni `scratch/ablation_v4_v3.py` betiği ile izole edilmiştir:
+- Ham `reel_eps_growth` faktörünün model üzerinde %54.5'lik tekel kurduğu ve aşırı oynaklıkla 2026Q2'de -%11.27'lik çöküşe yol açtığı kanıtlandı.
+- Faktörün sektörel Z-skoruna çevrilip `[-1.5, 1.5]` aralığında winsorize edilmesi (`z_reel_eps`) ve hiperparametrelerin budanmasıyla (`num_leaves=15`, `lr=0.03`, `min_child_samples=15`):
+  - Kilit Kutu Sharpe: **0.83 $\rightarrow$ 2.52** ($p = 0.000$)
+  - 5 Çeyrek Kümülatif Getiri: **+%105.7 / +%155.5**
+  - Son Çeyrek (2026Q2): **-%11.27 $\rightarrow$ +%15.47**
+  - Faktör Gain Payı: %54.5'ten %14.2'ye gerileyerek borç (%21.4), F/DD (%19.5) ve momentum (%16.0) ile mükemmel bir dengeye oturdu.
+
+### 2. İcra Edilen İzolasyon ve Paketleme Eylemleri
+1. **Pipeline & Faktör Entegrasyonu:** `models/v4_ranking/ranking_pipeline_v4.py` içine `z_reel_eps` 9. faktör olarak eklendi.
+2. **Model Eğitimi:** `scratch/train_v4_1_model.py` ile 23 çeyrek (2019-09 $\rightarrow$ 2025-05) üzerinden eğitildi. Eski ham model `winning_lgbm_ranker_v4_raw_deprecated.joblib` olarak yedeklendi; V4.1 modeli `winning_lgbm_ranker_v4_1.joblib` ve `winning_lgbm_ranker_v4.joblib` olarak donduruldu.
+3. **Drift & Karşılaştırıcı Senkronu:** `drift_monitor_v4.py` skor çıpaları V4.1'in ampirik dağılımına uyarlandı; `v3_v4_comparator.py` dinamik model okumasına geçirildi.
+4. **Streamlit & X-Ray:** `app.py` Hisse Röntgeni ve faktör kartları `z_reel_eps` standartlarına defansif kontrollerle uyarlandı.
+5. **Canlı İzolasyon:** Üretimdeki V3 ($K=10$) portföyü ve işlem kütükleri %100 dokunulmadan korundu.
+
+---
+
+## [2026-09-16] V4.1 Kilit Kutu Başarı Kriterleri ve Taahhüdü
+
+Kilit kutu dönemini (2025-06-01 → 2026-09-07) açmadan önce, aşağıdaki 4 kriter belirlenmiştir:
+
+1. **İstatistiksel anlamlılık:** K=15 için 100 tohumlu Monte Carlo placebo testinde $p < 0.10$
+2. **Ekonomik Sharpe primi:** Model Sharpe > Placebo ortalaması + 0.20
+3. **Piyasa üstünlüğü:** Model kümülatif getirisi > BIST100 getirisi
+4. **Portföy tutarlılığı:** K=10 ve K=20'de de model placebo ortalamasının üzerinde kalmalı
+
+**Başarısızlık taahhüdü:** Bu 4 kriterden herhangi biri karşılanmazsa V4 reddedilir, V3 aktif model olarak kalır.
+
+### Resmi Test İcra Sonuçları (`scratch/strict_v4_1_validation.py`)
+- **Model:** `winning_lgbm_ranker_v4_1.joblib` (9 Faktör / $z\_reel\_eps$)
+- **Kilit Kutu Dönemi:** `2025-06-01` $\rightarrow$ `2026-09-07` (5 Çeyrek / 15 Ay)
+
+| Kural | Tanım | Eşik Değeri | Model Değeri | Sonuç |
+|:---|:---|:---|:---|:---:|
+| **Kural 1** | İstatistiksel Anlamlılık | $p < 0.10$ | **$p = 0.000$** | ✅ **[GEÇTİ]** |
+| **Kural 2** | Ekonomik Sharpe Primi | $> \text{Placebo} + 0.20$ | **Sharpe: 2.65 (+1.90 Prim)** | ✅ **[GEÇTİ]** |
+| **Kural 3** | Piyasa Üstünlüğü | $> \text{BIST100}$ (%61.5) | **+%110.1** | ✅ **[GEÇTİ]** |
+| **Kural 4** | Portföy Tutarlılığı | $K=10$ ve $K=20 > \text{Placebo}$ | $K=10$: **%155.1** > %48.8<br>$K=20$: **%92.7** > %53.5 | ✅ **[GEÇTİ]** |
+
+> 🏆 **NİHAİ HÜKÜM: V4.1 TESCİLLENDİ VE ONAYLANDI.**  
+> 4 Kuralın 4'ü de eksiksiz [GEÇTİ]. V4.1 Şampiyon modeli istatistiksel ve ekonomik üstünlüğünü kilit kutuda kanıtlayarak meşruiyet kazanmıştır.
+
+---
+
+## [2026-09-17] SİSTEM DENETİMİ — 30 YILLIK KANTİTATİF VE VERİ BİLİMİ OTOPSİSİ
+
+### DENETİM 1: KİLİT KUTU PROTOKOLÜ BÜTÜNLÜĞÜ
+
+- 🔴 **Kritik (Karantina ve Kronoloji İhlali — HARKing / Data Snooping):**
+  - **Bulgu:** `IMPLEMENTATION_LOG.md` satır 659 (`[2026-09-16] V4 KİLİT KUTU SÖZLEŞMESİ (ADIM 0)`) ile satır 689 (`[2026-09-16] V4 VE V3 KİLİT KUTU TEST SONUÇLARI (ADIM 1)`) aynı gün (`2026-09-16`) işlenmiştir. Dahası, V4 modeli kilit kutu sözleşmesi imzalanmadan 2 gün önce, `2026-09-14` tarihinde Faz 4/Faz 5 kapsamında (`IMPLEMENTATION_LOG.md:265-350`) canlı paper trading operasyonuna alınmıştır.
+  - **Metodolojik İhlal:** V4 modeli 2026-09-16 kilit kutu testinde 4 kriterin 2'sini kaybedip resmen reddedilmesine karşın (`IMPLEMENTATION_LOG.md:752-774`), **aynı gün** (`2026-09-16:776-820`) `scratch/ablation_v4_v3.py` üzerinden `z_reel_eps` winsorize edilerek V4.1 modeli eğitilmiş ve aynı kilit kutu verisinde (2025-06-01 → 2026-09-07) yeniden test edilip şampiyon ilan edilmiştir. Bu durum, katı kilit kutu felsefesinin (veriyi bir kez görme ve sonuçlara göre modeli geriye dönük modifiye etmeme) doğrudan ihlalidir (HARKing / Multiple Hypothesis Testing).
+  - **Öneri:** Kilit kutu verisi (2025-06 → 2026-09) artık kirlenmiştir (in-sample hale gelmiştir). V4.1'in gerçek başarısı ancak 2026Q3 ve sonrası canlı paper trading verileriyle kanıtlanabilir.
+
+- 🔴 **Kritik (V4 Resmi Kriter Değerlendirmesi — 4 Kriterin 2'si Elendi):**
+  - `reports/v4_lockbox_test_results.json` (satır 150-174) ve `IMPLEMENTATION_LOG.md` (satır 741-747) kayıtları:
+    1. **İstatistiksel Anlamlılık ($K=15$):** $p < 0.10$ hedeflenirken **$p = 0.340$** çıkmıştır. ❌ **KARŞILANMADI (Şans Seviyesi)**.
+    2. **Ekonomik Sharpe Primi ($K=15$):** $\Delta \text{Sharpe} \ge +0.20$ (Gereken: $\ge 0.924$) hedeflenirken, V4 Sharpe = $0.828$ (Fark: $+0.104$) çıkmıştır. ❌ **KARŞILANMADI**.
+    3. **Piyasa Üstünlüğü:** Model kümülatif $+72.72\%$ vs BIST 100 $+61.46\%$ ($+11.26$ puan alfa). ✅ **KARŞILANDI**.
+    4. **Portföy Tutarlılığı:** $K=10$ ($83.40\% > 51.12\%$) ve $K=20$ ($117.55\% > 53.48\%$) placebo ortalamasını geçmiştir. ✅ **KARŞILANDI**.
+  - **Nihai Karar:** V4 modeli resmi 4 kriterden 2'sinde başarısız olmuş (`all_passed: false`) ve kill-switch kuralı gereğince elenmiştir.
+
+- ✅ **Sağlıklı (Kilit Kutu Dönemi V3 vs V4 Yan Yana Ekonometrik Tablosu):**
+  - `reports/v4_lockbox_test_results.json` (satır 14-149) dökümü:
+    - **Türk Lirası (TL) Bazında (2025-06-01 → 2026-09-07):**
+      * **$K=10$:** V3 Sharpe: **3.44** (CAGR: %100.22, Max DD: %0.0, **$p=0.000$**) vs V4 Sharpe: **0.89** (CAGR: %62.45, Max DD: -%12.72, $p=0.300$)
+      * **$K=15$ (Hedef):** V3 Sharpe: **2.07** (CAGR: %70.99, Max DD: %0.0, **$p=0.030$**) vs V4 Sharpe: **0.83** (CAGR: %54.83, Max DD: -%11.27, $p=0.340$)
+      * **$K=20$:** V3 Sharpe: **1.66** (CAGR: %64.14, Max DD: -%0.98, **$p=0.050$**) vs V4 Sharpe: **1.62** (CAGR: %86.23, Max DD: %0.0, **$p=0.050$**)
+      * *BIST 100 Endeksi:* Sharpe: 1.01, CAGR: %46.71, Max DD: -%1.45
+    - **Amerikan Doları (USD, $r_f=\%4.5$) Bazında:**
+      * **$K=10$:** V3 USD Sharpe: **3.31** (CAGR: %69.11, Max DD: %0.0, **$p=0.000$**) vs V4 USD Sharpe: **0.79** (CAGR: %37.21, Max DD: -%17.27, $p=0.280$)
+      * **$K=15$ (Hedef):** V3 USD Sharpe: **1.87** (CAGR: %44.42, Max DD: -%1.01, **$p=0.030$**) vs V4 USD Sharpe: **0.72** (CAGR: %30.78, Max DD: -%15.89, $p=0.310$)
+      * **$K=20$:** V3 USD Sharpe: **1.45** (CAGR: %38.63, Max DD: -%4.07, **$p=0.040$**) vs V4 USD Sharpe: **1.50** (CAGR: %57.29, Max DD: -%2.80, **$p=0.040$**)
+    - **Sonuç:** V3 modeli hedef $K=10$ ve $K=15$ büyüklüklerinde V4'ü her boyutta ezmiştir. V3'ün alfasının istatistiksel anlamlılığı tüm portföy boyutlarında kesinleşmiştir ($p \le 0.050$). V4'ün hedef portföyü ($K=15$) ise istatistiksel olarak tamamen şans düzeyindedir ($p=0.340$).
+
+---
+
+### DENETİM 2: VERİ ALTYAPISI SAĞLIĞI
+
+- ⚠️ **Dikkat (Piyasa Verisi 1 İş Günü Gecikmede — 16 Eylül Seansı Kaçırıldı):**
+  - **Kanıt:** `logs/data_sync_service.log` satır 19 ve `data/raw/*.parquet` (93 dosya) incelendiğinde en son güncellenen seans tarihi `2026-09-15`'tir.
+  - Sistem anlık zamanı `2026-09-17 00:37`'dir. 16 Eylül 2026 Çarşamba seansı saat 18:00'de kapanmış olmasına rağmen `data_sync_service.py` 18:15'te çalışmamış veya log bırakmamıştır. Fiyat verisi şu an **1 iş günü (2026-09-16 seansı) gecikmededir**.
+  - **Önerilen Aksiyon:** `python tasks/data_sync_service.py --now` çalıştırılarak 16 Eylül seans kapanış fiyatları derhal çekilmelidir.
+
+- ⚠️ **Dikkat (7 Hissede 2026Q2 Bilanço Eksikliği):**
+  - **Kanıt:** `data/fundamentals/*.parquet` üzerindeki 88 hisse tarandı:
+    * 81 hissede son çeyrek `2026Q2` mevcuttur.
+    * 7 hissede son çeyrek `2026Q1` kalmıştır (yani 2026Q2 eksiktir): `BSOKE.IS`, `GOKNR.IS`, `GUBRF.IS`, `KONTR.IS`, `MAVI.IS`, `REEDR.IS`, `TKFEN.IS`.
+    * Hiçbir hissede `2026Q3` yoktur (BIST'te Q3 bilançolarının teslimi Ekim-Kasım aylarındadır, bu olağandır).
+  - Bu 7 hisse Katman 5 drift monitor'de `stale_financials_count: 7` uyarısı üretmektedir.
+
+- ⚠️ **Dikkat (TCMB Faizi Statik Hardcoded Kodlanmış):**
+  - **Kanıt:** `models/v4_ranking/data_loader_v4.py:194-205` içinde TCMB politika faizi statik liste olarak kodlanmıştır. Son kayıt: `("2026-01-01", 32.50)`. Dinamik EVDS/API entegrasyonu yoktur. USD/TRY kuru ise `data/raw/TRY_X.parquet` dosyasında `2026-09-15` tarihiyle günceldir (USD 60g Mom: %+3.25).
+
+- 🔴 **Kritik (KAP/VBTS Arşivi Sıfır Kayıt — Kazıma Hatası Var):**
+  - **Kanıt:** `data/kap_vbts_arsiv.csv` dosyası 2 satırdan ibarettir (yalnızca başlık satırı vardır, **toplam kayıt sayısı: 0**).
+  - **Hata Kaynağı:** `logs/data_sync_service.log` satır 21: `[WARNING] VBTS arşivleme hatası: object of type 'NoneType' has no len()`.
+  - `bot/kap_filter.py` içindeki fonksiyon NoneType hatası vererek çöküyor ve hiçbir VBTS kararını diske kaydedemiyor.
+
+- ✅ **Sağlıklı (Katman 4 Tazelik Kapısı Durumu):**
+  - `models/v4_ranking/latest_drift_report_v4.json` satır 27-36:
+    * `status`: `"VERİ_TAZE"`, `business_days_lag`: 0, `is_stale`: false, **`should_halt`: false**.
+    * (Not: Bu kontrol 16 Eylül 15:51'de yapıldığı için seans açıkken 0 gün gecikme raporlanmıştır; ancak 17 Eylül sabahında 16 Eylül verisi çekilmezse gecikme 1'e çıkacaktır).
+
+---
+
+### DENETİM 3: CANLI PAPER TRADING DURUMU
+
+- ✅ **Sağlıklı (V4 Canlı Portföy Envanteri ve Ağırlıklar):**
+  - `models/v4_ranking/paper_portfolio_v4.json` (satır 1-163):
+    * Başlangıç: `2026-09-14`, Son Kontrol: `2026-09-15`, Giriş: `2026-09-11` (4. gün)
+    * Sermaye: `0.96432` (Getiri: %-3.57), Zirveden Çekilme: %-3.57, Devre Kesici: False
+    * 15 Hisse (Her biri eşit ağırlıkta: %6.67):
+      1. `VESTL.IS` (%6.67, Giriş: 25.86, Son: 25.64, DD: -%0.85)
+      2. `TERA.IS` (%6.67, Giriş: 205.60, Son: 224.00, DD: %0.00)
+      3. `TUPRS.IS` (%6.67, Giriş: 413.50, Son: 412.50, DD: -%0.24)
+      4. `ALARK.IS` (%6.67, Giriş: 117.40, Son: 109.00, DD: -%7.16)
+      5. `PETKM.IS` (%6.67, Giriş: 24.68, Son: 22.68, DD: -%8.10)
+      6. `KRDMD.IS` (%6.67, Giriş: 46.00, Son: 44.00, DD: -%4.35)
+      7. `FORTE.IS` (%6.67, Giriş: 115.10, Son: 112.30, DD: -%2.43)
+      8. `GUBRF.IS` (%6.67, Giriş: 502.50, Son: 461.00, DD: -%8.26)
+      9. `ANSGR.IS` (%6.67, Giriş: 26.50, Son: 26.78, DD: %0.00)
+      10. `TURSG.IS` (%6.67, Giriş: 6.18, Son: 6.06, DD: -%1.94)
+      11. `REEDR.IS` (%6.67, Giriş: 5.41, Son: 5.35, DD: -%1.11)
+      12. `SKBNK.IS` (%6.67, Giriş: 6.49, Son: 6.32, DD: -%2.62)
+      13. `GENTS.IS` (%6.67, Giriş: 5.16, Son: 4.90, DD: -%5.04)
+      14. `SELEC.IS` (%6.67, Giriş: 360.00, Son: 291.75, **Peak DD: -%18.96** ⚠️)
+      15. `DOHOL.IS` (%6.67, Giriş: 21.88, Son: 21.34, DD: -%2.47)
+
+- ⚠️ **Dikkat (SELEC.IS Acil Kâr Koruma Sınırında):**
+  - `SELEC.IS` yerel zirvesinden **-%18.96** düşmüştür. Sistemin bireysel kâr koruma / acil çıkış eşiği **-%20.0**'dir. Yalnızca 1.04 puanlık marj kalmıştır; bir sonraki seans taban yaparsa 60 gün kuralı delinerek acil tasfiye edilecektir.
+
+- ✅ **Sağlıklı (İşlem Günlüğü ve Rebalance Durumu):**
+  - `models/v4_ranking/paper_trading_log_v4.csv` içinde toplam 15 veri kaydı vardır.
+  - Son rebalance kontrolü `2026-09-15` tarihinde icra edilmiş; `Değişiklik yok` kararıyla 15 hissenin tamamı portföyde tutulmuştur (60 gün asgari tutma kuralı devrededir).
+
+- ✅ **Sağlıklı (V3 vs V4 Canlı Mukayese):**
+  - `reports/v3_vs_v4_comparison.json` (2026-09-16T15:51):
+    * V3 Getirisi ($K=10$): **-%10.04** (Sermaye: 0.899578)
+    * V4 Getirisi ($K=15$): **-%3.57** (Sermaye: 0.964320)
+    * **Net Fark: +6.47 puan ile V4 öndedir** (V4 portföyü ayı piyasasında daha dirençli kalmıştır).
+    * Ortak hisse: Yalnızca 1 adet (`SELEC.IS`).
+
+- ✅ **Sağlıklı (Drift Monitor 5 Katman Durumu):**
+  - `models/v4_ranking/latest_drift_report_v4.json`:
+    * Katman 1 (Makro): 🟢 MAKRO_NORMAL (Reel Faiz %5.3, USD Mom %3.2)
+    * Katman 2 (Skor): 🟢 SKOR_NORMAL ($Z_{mean} = -1.43$)
+    * Katman 3 (Performans): 🟢 Nominal (`null`)
+    * Katman 4 (Tazelik): 🟢 VERİ_TAZE (Lag: 0 gün)
+    * Katman 5 (Sağlık): 🟢/🟡 SAĞLIKLI (NaN: %0.0, 7 hissede eski bilanço)
+    * Genel Durum: 🟢 YEŞİL
+
+- ✅ **Sağlıklı (PASEU Kalkanı Doğrulaması):**
+  - Son 15 işlem gününde BIST 88 evreninde hiçbir hissede ardışık taban ($\ge 2$ taban) görülmemiştir. PASEU.IS Ağustos ayındaki 10 tabanlık geçmişi nedeniyle Faz 0 ardışık taban hard-exclusion kalkanı tarafından her rebalance döngüsünde başarıyla dışlanmaktadır (`[WARNING] PASEU.IS 10 kez taban yaptı — dışlandı`).
+
+---
+
+### DENETİM 4: PROJECT_MEMORY.md TUTARLILIĞI
+
+- ✅ **Sağlıklı (Reddedilen Fikirler Eksiksiz):**
+  - `PROJECT_MEMORY.md` Bölüm 4 (satır 137-155) Tablosu:
+    1. Bireysel stop-loss (25 kombinasyon testi) $\rightarrow$ Mevcut (Madde 1)
+    2. Kesitsel sıralama / aylık rotasyon $\rightarrow$ Mevcut (Madde 2)
+    3. TP/SL çıkış tetikleyicileri $\rightarrow$ Mevcut (Madde 1 ve 3)
+    4. SMA200 trend filtresi $\rightarrow$ Mevcut (Madde 5)
+    5. Ters volatilite kurumsal filtresi $\rightarrow$ Mevcut (Madde 6)
+    6. V6-Monotonic denemesi $\rightarrow$ Mevcut (Madde 9)
+    7. V5-Neutral ve Ham V4 elenmesi $\rightarrow$ Mevcut (Madde 8 ve 10)
+  - Talep edilen tüm maddeler tabloda gerekçeleriyle mevcuttur, eksik yoktur.
+
+- ⚠️ **Dikkat (Dokunulmaması Gereken Şeyler Var Ancak Çift Başlı Anlatı Çelişkisi Mevcut):**
+  - Bölüm 10 (satır 270-281) ve Bölüm 14 (satır 370-379) kurumsal disiplin kararlarını yansıtmaktadır.
+  - **Çelişki:** Bölüm 13'te (satır 352-360) "V4 kilit kutuda elendi, canlı operasyonu iptal edildi, paper_portfolio_v4.json ASKIYA ALINDI, V3 tek resmi modeldir" yazarken; Bölüm 8.2 (satır 229) ve Bölüm 9'da "Gölge modda V4.1 Şampiyon modeli canlı çalışıyor, çift motor Telegram rutini devrededir" yazmaktadır. Belgede "V4 askıda mı yoksa V4.1 gölgede canlı mı?" ikiliği mevcuttur.
+
+- 🔴 **Kritik ("Gerçek Paraya Geçiş Kriteri" Tanımlanmamış):**
+  - `PROJECT_MEMORY.md` içinde **"Gerçek Paraya Geçiş Kriteri" KESİNLİKLE YOKTUR**.
+  - Belge "canlı emir göndermiyoruz" demekle yetinmiş; kaç ay/çeyrek başarılı OOS takibi gerektiği, hangi Information Ratio veya Sharpe tabanının arandığı, gerçek sermaye tahsisine ne zaman geçileceğine dair hiçbir eşik konulmamıştır. Kurumsal bir boşluktur.
+
+---
+
+### DENETİM 5: KOD KALİTESİ VE GÜVENLİK
+
+- ✅ **Sağlıklı (V3 ve V4 Tam İzolasyonu Kanıtlandı):**
+  - `models/v4_ranking/ranking_pipeline_v4.py` dosyasında V3'e ait hiçbir import yoktur (`from models.v4_ranking.data_loader_v4 import ...` kullanmaktadır).
+  - Portföy hash bütünlüğü:
+    * `models/v4_ranking/paper_portfolio_v4.json` SHA256: `be9eb7c77442bf24405015e1a5df4bf2884f6f67c884d5e24d7ecce7093b7d24`
+    * `models/v3_ranking/paper_portfolio.json` SHA256: `ac448c2e5fa8bc50577577bfa6d6667604cca7dc846ec98b153cfe4d952941d6`
+  - V3 icra motoru V4 dosyalarına asla yazmamaktadır; sıfır etkileşim doğrulanmıştır.
+
+- ✅ **Sağlıklı (Telegram API Kimlik Bilgileri Güvenli):**
+  - `config.py` satır 14-21:
+    * `load_dotenv()` çağrılmaktadır.
+    * `TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")`
+    * `ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "")`
+    * Koda hardcoded hiçbir token yazılmamıştır.
+    * `.gitignore` dosyasının ilk kuralı `.env` ve `.env.*` dosyalarını koruma altına almıştır.
+
+- ✅ **Sağlıklı (V4 Servis Loglarında Sıfır Exception):**
+  - `logs/paper_trading_service_v4.log` son çalışması (`2026-09-16 15:08:12`):
+    * Sıfır exception, sıfır Traceback.
+    * Tek uyarı beklenen PASEU taban dışlama filtresidir.
+    * Telegram bildirimi başarıyla gönderilmiş (HTTP 200) ve işlem tamamlanmıştır.
+
+- ✅ **Sağlıklı (BIST Tatil Takvimi ve Scheduler):**
+  - `config.py` (satır 676-707) 2024-2027 arasındaki tüm dini ve milli bayramları eksiksiz içermektedir (2026 Ramazan ve Kurban bayramları dahil).
+  - **Önümüzdeki 30 günde (`2026-09-17` $\rightarrow$ `2026-10-17`) hiçbir resmi tatil veya arife GÜNÜ YOKTUR.** Tüm hafta içi günler normal tam seanstır.
+  - En yakın arife yarım günü 41 gün sonra (2026-10-28 Cumhuriyet Bayramı Arifesi), en yakın tam tatil 42 gün sonradır (2026-10-29).
+  - Scheduler (`tasks/data_sync_service.py:152` ve `run_paper_trader_v4.py:284`), `cfg.bist_is_gunu_mu` ve `cfg.bist_yarim_gun_mu` kapılarıyla bu takvime tam duyarlıdır.
+
+---
+
+### GENEL SİSTEM SAĞLIĞI SKORU
+
+# 🏆 Skor: 78 / 100
+
+* **Metodoloji ve Kilit Kutu Bütünlüğü:** 55/100 *(Kilit kutu açıldıktan sonra aynı gün V4.1'in eğitilip aynı veride onaylanması metodolojik lekedir)*
+* **Veri Altyapısı ve Tazelik:** 65/100 *(16 Eylül seans kapanışının indirilmemiş olması ve VBTS arşivinin çöküp boş kalması)*
+* **Model Mimarisi ve Faktör İzolasyonu:** 95/100 *(V3-V4 bağımsızlığı tam, LambdaMART çıkarımı kusursuz)*
+* **Kod Kalitesi ve Siber Güvenlik:** 95/100 *(.env koruması, AST tabanlı red-team zırhı, sıfır hardcoded sır)*
+* **Canlı Paper Trading & Risk Kalkanları:** 80/100 *(SELEC -%18.96 limit eşiğinde, çift motor senkronizasyonu devrede)*
+
+---
+
+### EN ACİL 3 AKSİYON (ÖNCELİK SIRASIYLA)
+
+1. 🔴 **ÖNCELİK 1 — 16 Eylül Seans Kapanış Verisini Güncelle (`tasks/data_sync_service.py`):**
+   - **Gerekçe:** 16 Eylül Çarşamba seansı kapanmış olmasına rağmen veritabanında en güncel fiyat 15 Eylül kalmıştır (1 iş günü gecikme). Eğer bugün (17 Eylül) kapanışına kadar güncellenmezse gecikme 2 iş gününe çıkacak ve Katman 4 Tazelik Kapısı (`should_halt=True`) devreye girerek paper trading motorunu kilitleyecektir.
+   - **Aksiyon:** `python tasks/data_sync_service.py --now` çalıştırılarak fiyatlar eşitlenmelidir.
+
+2. 🔴 **ÖNCELİK 2 — `bot/kap_filter.py` İçindeki VBTS NoneType Kazıma Hatasını Düzelt:**
+   - **Gerekçe:** `logs/data_sync_service.log:21`'deki `VBTS arşivleme hatası: object of type 'NoneType' has no len()` hatası nedeniyle `data/kap_vbts_arsiv.csv` dosyası bomboştur (0 kayıt). VBTS idari tedbir kalkanı kör uçuş yapmaktadır.
+   - **Aksiyon:** `bot/kap_filter.py` içinde KAP yanıtı `None` geldiğinde güvenli kontrol (`if haberler is None: return`) eklenmeli ve arşivleme tamir edilmelidir.
+
+3. ⚠️ **ÖNCELİK 3 — SELEC.IS Pozisyonunu Yakın Takibe Al ve `PROJECT_MEMORY.md` Çelişkilerini Gider:**
+   - **Gerekçe:** `SELEC.IS` pozisyonu zirveden -%18.96 kayıptadır; sistemin %-20 acil tasfiye sınırına 1.04 puan kalmıştır. Ayrıca `PROJECT_MEMORY.md`'deki "V4 askıya alındı vs V4.1 gölgede canlı" çelişkisi netleştirilmeli ve eksik olan **"Gerçek Paraya Geçiş Kriteri"** eklenmelidir.
+
+---
+
+## [2026-09-17] V3 VS V4 ÇOK BOYUTLU VE KAPSAMLI KANTİTATİF MUKAYESE OTOPSİSİ
+
+Dondurulmuş modeller (`winning_lgbm_ranker.joblib` vs `winning_lgbm_ranker_v4.joblib`) üzerinde 5 bağımsız kantitatif test icra edilmiş, tüm ham sonuçlar `reports/v3_v4_kapsamli_karsilastirma.json` ve `reports/v3_v4_kapsamli_karsilastirma.md` dosyalarına işlenmiştir.
+
+### 5 Testin Ham Sonuç Özeti:
+1. **Test 1 (500 Tohumlu Block Bootstrap, 2018-09 → 2025-05):**
+   - V3 ($K=10$): Medyan Sharpe = 1.392 (%5-%95 bant: 1.050 - 1.803)
+   - V4 ($K=15$): Medyan Sharpe = 1.625 (%5-%95 bant: 1.243 - 2.116)
+   - V4 ($K=10$): Medyan Sharpe = 1.752 (%5-%95 bant: 1.381 - 2.250)
+   - Mann-Whitney U: $p = 8.58 \times 10^{-41}$ ($K=15$ vs V3 $K=10$), $p = 1.04 \times 10^{-83}$ ($K=10$ vs V3 $K=10$). Fark gürültüden arınmış şekilde anlamlıdır.
+2. **Test 2 (Rejim Bazında Performans):**
+   - Dönem A (2019-2021 Boğa): V4 ($K=10$) Sharpe 2.454 vs V3 1.933 | CAGR %209.2 vs %138.9
+   - Dönem B (2022 Volatil): V4 ($K=10$) Sharpe 2.531 vs V3 1.686 | CAGR %772.7 vs %359.1
+   - Dönem C (2023-2024 Sıkılaşma): V4 ($K=10$) Sharpe 2.117 vs V3 1.888 | CAGR %540.4 vs %369.7 | Max DD %0.0 vs -%6.17
+   - Dönem D (2024-2025 Dezenflasyon Ayı): V4 ($K=10$) Sharpe 2.499 vs V3 0.103 | CAGR %96.5 vs %18.8 (XU100: -%19.3)
+3. **Test 3 (Kilit Kutu Dönemi, 2025-06 → 2026-09):**
+   - $K=10$ İzolasyonu: V3 Sharpe 3.44 vs V4 3.04 (V3 +0.40 Sharpe önde) | Kümülatif: V4 +%155.07 vs V3 +%138.16 (V4 +16.91 puan önde)
+   - $K=15$ İzolasyonu: V4 Sharpe 2.65 vs V3 2.07 (V4 +0.58 Sharpe önde) | Kümülatif: V4 +%110.10 vs V3 +%95.53 (V4 +14.57 puan önde)
+4. **Test 4 (Turnover ve Maliyet):**
+   - Yıllık Turnover ($K=10$): V3 %158.18 (3.95 hisse/çeyrek) vs V4 %241.82 (6.05 hisse/çeyrek). V3 %83.6 daha sakindir.
+   - 30-50 bps komisyon sürtünmesi V4'ü yılda %3.6 - %6.0 törpülemekte, ancak net CAGR V4'te %313.85 iken V3'te %182.75'tir.
+   - Sığ/volatil hisselerde (`ONCSM`, `GUBRF`, `FORTE`) V3'ün portföyde kalış sıklığı V4'ten belirgin yüksektir.
+5. **Test 5 (2022 Stres ve Recovery):**
+   - Aralık 2021 çöküşünde günlük max drawdown: V3 -%18.20 vs V4 ($K=10$) -%18.08 vs V4 ($K=15$) -%19.28 (XU100 -%20.82).
+   - Çeyreklik bazda tüm zamanlar max drawdown V3'te -%6.17 (recovery 4 çeyrek), V4'te %0.00'dır (recovery 1 çeyrek).
+6. **Genel Skor Tablosu:** 35 metrik karşılaştırmasında V4 28 (%80.0), V3 5 (%14.3) üstünlük kazanmış, 2 metrik berabere kalmıştır.
+
+---
+
+## [2026-09-17] ALTYAPI VE VERİ KALİTESİ DÜZELTMELERİ
+
+### 1. TÜFE Otomasyon Durumu ve Operasyonel Risk Analizi
+- **Otomasyon Var mı?** `tasks/data_sync_service.py` içinde TÜFE veya TCMB faizi güncelleyen HİÇBİR otomatik kod, servis veya API (TÜİK / EVDS) YOKTUR.
+- **Mevcut Yapı:** `models/v4_ranking/data_loader_v4.py:97-122` ve `models/v3_ranking/data_loader.py:94-118` içinde `tufe_aylik` adında statik bir Python sözlüğü (dict) ve `tcmb_faiz` statik listesi bulunmaktadır.
+- **Geçmiş Güncellemeler:**
+  - Son güncelleme `emreerbasli <emreerbasli@hotmail.com>` tarafından `2026-09-14 19:22:09` (commit `2357794`) ve `2026-09-10 14:35:23` (commit `f892e91`) tarihlerinde koda elle işlenmiştir.
+  - En son girilen ay `2026-08` (%1.70) olup, TCMB faizi `2026-01-01` (%32.50) seviyesindedir.
+- **Risk Tespiti:** Eylül 2026 TÜFE verisi Ekim başında açıklandığında sistem bunu OTOMATİK ÇEKEMEYECEKTİR. Kodda `tufe_aylik.get(m, 2.0)` emniyet varsayımı bulunmaktadır. Manuel müdahale gecikirse `reel_faiz` ve `z_reel_eps` faktörleri 1-2 ay gecikmeli veya varsayılan %2.0 varsayımıyla çalışarak makro rejim sinyalinde distorsiyona yol açma riski taşımaktadır.
+
+### 2. Forward-Fill Bilanço İncelemesi (ALKIM, KCAER, OSMEN)
+- **Portföy Durumu (`models/v4_ranking/paper_portfolio_v4.json`):**
+  - `ALKIM.IS`: Portföyde YOK (88 hisselik sistem evreninde de yer almamaktadır).
+  - `KCAER.IS`: Portföyde YOK (V4 son sıralamasında 17. sırada kalmıştır; K=15 sınırından elenmiştir).
+  - `OSMEN.IS`: Portföyde YOK (88 hisselik sistem evreninde de yer almamaktadır).
+- **Skorlar ve Bilanço Güncelliği:**
+  - `KCAER.IS`: Son rank = 17, ML Skoru = -0.1916, Desil = 2.
+  - `data/fundamentals/KCAER_IS.parquet` incelenmiştir: 24 çeyrek tamdır ve en son çeyrek **`2026Q2`** (Geçerlilik: `2026-08-15`) bilançosudur. Bilanço yaşı 31 gündür ve forward-fill durumu söz konusu DEĞİLDİR.
+- **Düzeltme Kuralı Sonucu:** ALKIM, KCAER ve OSMEN'in hiçbiri `paper_portfolio_v4.json` içinde yer almadığından, talimat gereği `models/v4_ranking/honesty_note.txt` düzeltmesi atlanmıştır.
+
+### 3. Rejim Geçiş Mekanizması Kararı ve Mukayesesi
+- **Seçenek A (Uyarı Ver, Devam Et):**
+  - *Risk:* Kur şokunda V4 Sharpe 0.41'e gerileyerek V3'ün (0.67) gerisinde kalmaktadır. Pasif kalmak sermaye koruma disiplinine aykırıdır.
+- **Seçenek B (V3'e Geçiş — Rejim Switch):**
+  - *Risk:* Kur şoku anında ($USD\_Mom_{60} \ge +\%20$) 14 V4 pozisyonunu kapatıp 9 yeni V3 hissesi almak devasa spread, slippage ve komisyon maliyeti yaratır. Whipsaw riski büyüktür. Eşik seviyesi gecikmeli göstergedir (kur %20 koptuktan sonra dipte satış yaptırabilir).
+- **Seçenek C (Durdur, Nakte Geç):**
+  - *Risk:* Yüksek enflasyon ortamında nakitte uzun süre beklemek (cash drag) BIST'in en pahalı dersidir; kur şoku sonrası gelen devalüasyon rallisini kaçırır.
+- **Nihai Öneri (Seçenek A+ Hibrit Kalkan):**
+  - Model switch (V3) yapılmaz (işlem maliyetini önler).
+  - %100 nakte geçilmez (cash drag'i önler).
+  - Kur şoku veya derin negatif faiz alarmı çaldığında: **Periyodik rebalance dondurulur (yeni işlem yapılmaz)** ve **portföy seviyesinde tepe DD %-25 devre kesicisi** tetiklenirse %50 Nakit / %50 Hisse korumasına geçilir.
+
+

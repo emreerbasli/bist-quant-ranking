@@ -1,0 +1,26 @@
+name,family,formula,lookback,minimum_history
+mom_20,MOMENTUM,close[t]/close[t-20]-1,20,21
+mom_40,MOMENTUM,close[t]/close[t-40]-1,40,41
+mom_63_rank,MOMENTUM,close[t]/close[t-63]-1,63,64
+mom_126,MOMENTUM,close[t]/close[t-126]-1,126,127
+mom_252,MOMENTUM,close[t]/close[t-252]-1,252,253
+mom_126_skip20,MOMENTUM,close[t-20]/close[t-146]-1,146,147
+mom_252_skip20,MOMENTUM,close[t-20]/close[t-272]-1,272,273
+positive_return_ratio_63,MOMENTUM_CONSISTENCY,mean(1[daily_return>0]) over last 63 returns,63,64
+sign_consistency_4x20,MOMENTUM_CONSISTENCY,mean(1[non-overlapping 20-session return>0]) over last four blocks,80,81
+ret_5,REVERSAL,close[t]/close[t-5]-1,5,6
+ret_10,REVERSAL,close[t]/close[t-10]-1,10,11
+ret_20,REVERSAL,close[t]/close[t-20]-1,20,21
+vol_20,RISK,std(last 20 daily returns),20,21
+vol_63_rank,RISK,std(last 63 daily returns),63,64
+vol_126,RISK,std(last 126 daily returns),126,127
+downside_vol_63,RISK,"sqrt(mean(min(return,0)^2)) over last 63 returns",63,64
+downside_vol_126,RISK,"sqrt(mean(min(return,0)^2)) over last 126 returns",126,127
+max_drawdown_63,RISK,minimum(close/cumulative_max(close)-1) over last 64 closes,63,64
+log_adv20,LIQUIDITY,log1p(median(raw_close*volume) over last 20 valid positive-volume observations),20,15
+log_adv63,LIQUIDITY,log1p(median(raw_close*volume) over last 63 valid positive-volume observations),63,45
+log_amihud20,LIQUIDITY,log1p(1e9*mean(abs(economic_return)/(raw_close*volume))) over last 20 valid observations,20,15
+log_amihud63,LIQUIDITY,log1p(1e9*mean(abs(economic_return)/(raw_close*volume))) over last 63 valid observations,63,45
+zero_return_ratio20,LIQUIDITY,mean(1[abs(economic_return)<=1e-12]) over last 20 valid returns,20,15
+zero_return_ratio63,LIQUIDITY,mean(1[abs(economic_return)<=1e-12]) over last 63 valid returns,63,45
+volume_cv63,LIQUIDITY,std(volume)/mean(volume) over last 63 valid positive-volume observations,63,45

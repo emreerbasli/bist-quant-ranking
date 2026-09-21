@@ -1,19 +1,48 @@
 {
   "as_of": "2026-09-15",
-  "generated_at": "2026-09-14T17:51:58.721699",
+  "generated_at": "2026-09-16T15:51:43.964163",
   "overall_status": "🟢 YEŞİL",
   "summary_message": "Tüm güvenlik ve drift katmanları nominal.",
   "macro": {
     "status": "MAKRO_NORMAL",
-    "reel_faiz": 6.0488328362638555,
-    "usd_mom_60": 0.0,
+    "reel_faiz": 5.342026886404799,
+    "usd_mom_60": 0.032497503752369,
     "politika_faizi": 32.5,
-    "yillik_tufe": 26.451167163736145,
+    "yillik_tufe": 27.1579731135952,
     "is_alarm": false,
-    "details": "Makro rejim stabil (Reel Faiz: %6.0, USD 60g İvme: %0.0)."
+    "details": "Makro rejim stabil (Reel Faiz: %5.3, USD 60g İvme: %3.2)."
   },
-  "score": null,
+  "score": {
+    "status": "SKOR_NORMAL",
+    "current_mean": -0.48094123699224856,
+    "current_std": 0.3131182061148632,
+    "current_min": -1.0572711217252795,
+    "current_max": 0.2656277630421958,
+    "z_score_mean": -1.4300486034872155,
+    "z_score_std": -1.597831080461226,
+    "is_drift": false,
+    "details": "V4 Skor dağılımı olağan (Ort: -0.4809, Std: 0.3131, Z_mean: -1.43)."
+  },
   "performance": null,
-  "freshness": null,
-  "health": null
+  "freshness": {
+    "status": "VERİ_TAZE",
+    "market_date": "2026-09-15",
+    "reference_date": "2026-09-15",
+    "business_days_lag": 0,
+    "max_allowed_lag": 2,
+    "is_stale": false,
+    "should_halt": false,
+    "details": "V4 Piyasa verisi taze (2026-09-15 kapanışı, referans: 2026-09-15, gecikme: 0 iş günü <= 2)."
+  },
+  "health": {
+    "status": "SAĞLIKLI",
+    "tickers_count": 88,
+    "total_bars": 157058,
+    "nan_ratio_pct": 0.0,
+    "pit_tickers_count": 88,
+    "stale_financials_count": 7,
+    "macro_usd_status": "OK",
+    "macro_cpi_status": "OK",
+    "details": "Fiyat: 88 hisse (157,058 bar, NaN: %0.00) | PIT Bilanço: 88 hisse (100g+ eski: 7) | Makro: USD=OK, TÜFE=OK"
+  }
 }

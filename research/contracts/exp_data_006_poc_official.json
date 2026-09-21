@@ -1,0 +1,44 @@
+{
+  "contract_version": "1.0.0",
+  "purpose": "Small, non-bulk proof of concept for recovering official disclosure metadata.",
+  "observations": [
+    {
+      "ticker": "ISCTR.IS",
+      "period": "2024Q3",
+      "period_end": "2024-09-30",
+      "official_disclosure_timestamp": "2024-11-04T18:22:35+03:00",
+      "notification_id": "1353364",
+      "statement_nature": "CONSOLIDATED_NON_CONSOLIDATED",
+      "evidence_grade": "EXACT_FINANCIAL_REPORT",
+      "source": "https://www.kap.org.tr/tr/Bildirim/1353364",
+      "local_proxy_date": "2024-11-15",
+      "official_net_profit_ytd_thousand_try": 34684797,
+      "local_snapshot_net_profit_try": 34684755378,
+      "note": "Official filing exposes timestamp, period, basis and current/YTD columns. Local latest snapshot differs slightly from the filing value, demonstrating vintage-overwrite risk."
+    },
+    {
+      "ticker": "SASA.IS",
+      "period": "2023Q3",
+      "period_end": "2023-09-30",
+      "official_disclosure_timestamp": "2023-10-24T07:41:38+03:00",
+      "notification_id": "1208792",
+      "statement_nature": "CONSOLIDATED",
+      "evidence_grade": "SUPPORTING_ACTIVITY_REPORT_NOT_FINANCIAL_STATEMENT",
+      "source": "https://www.kap.org.tr/tr/Bildirim/1208792",
+      "local_proxy_date": "2023-11-15",
+      "note": "Shows ticker-period-timestamp recovery, but is not accepted as the financial-statement vintage."
+    },
+    {
+      "ticker": "TUPRS.IS",
+      "period": "2026Q2",
+      "period_end": "2026-06-30",
+      "official_disclosure_timestamp": null,
+      "notification_id": "1643171",
+      "statement_nature": "CONSOLIDATED",
+      "evidence_grade": "SUPPORTING_GENERAL_DISCLOSURE_NOT_FINANCIAL_STATEMENT",
+      "source": "https://www.kap.org.tr/tr/Bildirim/1643171",
+      "local_proxy_date": "2026-08-15",
+      "note": "Confirms that the six-month financial statements were publicly disclosed, but does not replace the exact financial-report notification."
+    }
+  ]
+}

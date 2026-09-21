@@ -1,0 +1,29 @@
+{
+  "candidates": {
+    "RC-LAMBDAMART-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "version": "1.0.0"
+    },
+    "RC-LGBMR-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "version": "1.0.0"
+    }
+  },
+  "clean_forward_start": "NOT_STARTED",
+  "created_at": "2026-09-18T14:35:01.120073+03:00",
+  "experiment_id": "EXP-FREEZE-001R3C1F2A3",
+  "hashes": {
+    "research\\contracts\\exp_freeze_001r3.json": "00c0fc82a49673117c5385be829baff00ab56912f2955b9847f23dd5a69e6cbf",
+    "research\\exp_freeze_001r3c1f2a3.py": "33e63803a8235b549db36caf41d6d5b028c749c36474e50a2bd17d121903629a",
+    "research\\forward_infrastructure_001r3.py": "5a085bbb15af84198ded0cf75fd113fc955cc37b5fea86203c1d204b5810b33e",
+    "research\\forward_lifecycle_001r3.py": "a78b1498f60b91d8460900668d12beafc1ad6500b7917eb4321bc331339a843f",
+    "research\\run_frozen_shadow.py": "51762c155d0adb7e76e3710193db9fa1f06770ddc1764f80ef0ff0d6ede56239",
+    "research\\runner_data_sources.py": "e61307d3554bd85859aab7af3ba5ebb59161a27942c4efb928d1a83380f4b7c4",
+    "research\\tests\\test_runner_data_sources.py": "1dd10ed34089bf347bde2e1c62b482dc7c014f011c27120445cfad689e45b608"
+  },
+  "production_writes_allowed": false,
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "v8_manifest_sha256": "347f641c5b0ef6797ebc39d6bf8c89be8ece1215271906597f42e514adf94ff7"
+}

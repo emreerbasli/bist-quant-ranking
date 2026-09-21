@@ -1,0 +1,41 @@
+{
+  "candidates": {
+    "RC-LAMBDAMART-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "target": "BETA_RESIDUAL",
+      "version": "1.0.0"
+    },
+    "RC-LGBMR-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "target": "RAW",
+      "version": "1.0.0"
+    }
+  },
+  "clean_forward_start": "NOT_STARTED",
+  "created_at": "2026-09-19T03:15:50.219251+03:00",
+  "experiment_id": "EXP-FREEZE-001R3C1F2B2",
+  "hashes": {
+    "research/contracts/exp_freeze_001r3.json": "00c0fc82a49673117c5385be829baff00ab56912f2955b9847f23dd5a69e6cbf",
+    "research/contracts/exp_port_001.json": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+    "research/contracts/exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+    "research/contracts/exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+    "research/exp_freeze_001r3c1f2b2.py": "215770431cbb3a38e2555a304aeaf713d62f66da84af4896db355f55719247f2",
+    "research/forward_infrastructure_001r3.py": "0fe4657a1eaa534535240e5544aedf3fcd4baee0aa909dbc0c4d7f9664484489",
+    "research/forward_lifecycle_001r3.py": "df7baacd1e3ef866d1bf33ad97f89bc69f342d145cc860e5031392d5f35e96a4",
+    "research/run_frozen_shadow.py": "51762c155d0adb7e76e3710193db9fa1f06770ddc1764f80ef0ff0d6ede56239",
+    "research/runner_data_sources.py": "e61307d3554bd85859aab7af3ba5ebb59161a27942c4efb928d1a83380f4b7c4",
+    "research/tests/test_exp_freeze_001r3.py": "98addc7db9103ff9e9e1e399865e7278ab8164b7dda918db01a4bc8a275be4c1",
+    "research/tests/test_forward_manifest_v10.py": "5159f8b7b21eda2796217f266e99a9b0b62bbba2e6bbded79feb837ecc579948",
+    "research/tests/test_manifest_authority_resolver.py": "5b1ba4250921ac9345602446fd6b5d7e4e4bf99927628bec3dc4d85aad87cd9f",
+    "research/tests/test_runner_data_sources.py": "1dd10ed34089bf347bde2e1c62b482dc7c014f011c27120445cfad689e45b608"
+  },
+  "manifest_schema_version": "V10",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "production_writes_allowed": false,
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "v9_manifest_sha256": "325517612c609a171106c6afee41b4f281e8e1c15ef4483d59491fde465135a7"
+}

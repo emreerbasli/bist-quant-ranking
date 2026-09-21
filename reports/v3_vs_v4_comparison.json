@@ -1,35 +1,46 @@
 {
-  "tarih": "2026-09-11",
-  "olusturulma_zamani": "2026-09-14T17:42:28.327367",
+  "tarih": "2026-09-21",
+  "olusturulma_zamani": "2026-09-21T16:50:33.323185",
   "v3": {
-    "model": "V3-Orijinal (8 Faktör)",
+    "model": "V3.2 (Resmi Canlı Model / K=10)",
     "portfoy_boyutu": 10,
     "k_hedef": 10,
-    "sermaye": 0.983444,
-    "getiri_pct": -1.66,
-    "drawdown_pct": -1.66,
+    "sermaye": 0.780647,
+    "getiri_pct": -21.94,
+    "drawdown_pct": -21.94,
     "dd_kesici_aktif": false,
     "hisseler": [
       "ALFAS.IS",
+      "ASTOR.IS",
       "CLEBI.IS",
+      "FORTE.IS",
       "KCAER.IS",
       "LOGO.IS",
       "MAVI.IS",
-      "MIATK.IS",
       "MTRKS.IS",
       "ONCSM.IS",
-      "SELEC.IS",
       "VAKBN.IS"
     ],
-    "toplam_kontrol_sayisi": 2
+    "toplam_kontrol_sayisi": 6
   },
   "v4": {
-    "model": "V4-Raw (9 Faktör)",
+    "model": "V4.1 LGBMRanker (9 Feature: z_reel_eps win[-1.5, 1.5])",
+    "ozellikler": [
+      "z_fcf",
+      "z_roe",
+      "z_mom",
+      "z_borc",
+      "z_pb",
+      "reel_faiz",
+      "usd_mom_60",
+      "usd_mom_90",
+      "z_reel_eps"
+    ],
     "portfoy_boyutu": 15,
     "k_hedef": 15,
-    "sermaye": 1.0,
-    "getiri_pct": 0.0,
-    "drawdown_pct": 0.0,
+    "sermaye": 0.96432,
+    "getiri_pct": -3.57,
+    "drawdown_pct": -3.57,
     "dd_kesici_aktif": false,
     "hisseler": [
       "ALARK.IS",
@@ -48,23 +59,23 @@
       "TURSG.IS",
       "VESTL.IS"
     ],
-    "toplam_kontrol_sayisi": 8
+    "toplam_kontrol_sayisi": 14
   },
   "karsilastirma": {
-    "sermaye_farki": 0.016556,
-    "getiri_farki_pct": 1.66,
-    "drawdown_farki_pct": 1.66,
+    "sermaye_farki": 0.183673,
+    "getiri_farki_pct": 18.37,
+    "drawdown_farki_pct": 18.37,
     "ortak_hisseler_sayisi": 1,
     "ortak_hisseler": [
-      "SELEC.IS"
+      "FORTE.IS"
     ],
     "yalnizca_v3_hisseler": [
       "ALFAS.IS",
+      "ASTOR.IS",
       "CLEBI.IS",
       "KCAER.IS",
       "LOGO.IS",
       "MAVI.IS",
-      "MIATK.IS",
       "MTRKS.IS",
       "ONCSM.IS",
       "VAKBN.IS"
@@ -73,12 +84,12 @@
       "ALARK.IS",
       "ANSGR.IS",
       "DOHOL.IS",
-      "FORTE.IS",
       "GENTS.IS",
       "GUBRF.IS",
       "KRDMD.IS",
       "PETKM.IS",
       "REEDR.IS",
+      "SELEC.IS",
       "SKBNK.IS",
       "TERA.IS",
       "TUPRS.IS",

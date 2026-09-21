@@ -1,0 +1,14 @@
+{
+  "experiment_id": "EXP-FREEZE-001",
+  "phase_l_gate": "PASS",
+  "regression": "FROZEN",
+  "lambdamart": "FROZEN",
+  "ensemble": "EXCLUDED",
+  "forward_monitoring": "READY",
+  "freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "clean_forward_start": "2026-09-18T02:25:56.600962+03:00",
+  "candidates": [
+    "RC-LGBMR-001",
+    "RC-LAMBDAMART-001"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "experiment_id": "EXP-FREEZE-001R3A",
+  "gate": "PARTIAL",
+  "acceptance_matrix": {"pass": 29, "fail": 16, "total": 45},
+  "candidates": {"RC-LGBMR-001": "UNCHANGED", "RC-LAMBDAMART-001": "UNCHANGED"},
+  "forward_manifest": "V5 9d9b0ca02133709262ef8dfbbe1ea4a49fb9259ec40eb74023ec6defb2e474f2",
+  "dedicated_tests": "19/19 PASS",
+  "full_research_tests": "221/221 PASS",
+  "production": "PASS 0 changed",
+  "official_logs": "EMPTY",
+  "clean_forward": "NOT_STARTED"
+}

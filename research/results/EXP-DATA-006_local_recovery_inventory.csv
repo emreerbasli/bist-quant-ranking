@@ -1,0 +1,8 @@
+artifact,files,notification_id,disclosure_timestamp,vintage_history,period_mapping,recovery_use
+data/fundamentals/*.parquet,88,False,False,False,True,DERIVED_DATASET_ONLY_FIXED_LAG
+data/raw/isyatirim_cache/*_{year}_{group}.json,753,False,False,False,True,RAW_CURRENT_SNAPSHOT_VALUES_ONLY
+data/raw/isyatirim_cache/*_tekil.parquet,88,False,False,False,False,DATED_MARKET_CAP_AND_CAPITAL_ONLY
+data/raw/yf_pit_cache/*.parquet,86,False,False,False,True,ALTERNATE_45_DAY_PROXY_NOT_PROVENANCE
+data/events.csv,1,False,False,False,False,SYNTHETIC_CALENDAR_NOT_COMPANY_FILINGS
+scripts/kap_*.html and KAP scripts,2,False,False,False,False,AD_HOC_PAGES; EXISTING API SCRIPT_TIMED_OUT
+targeted official KAP HTTP proof,0,True,True,SINGLE_FILING_ONLY,True,ACCURATE_PER_FILING_BUT_NOT_LOCALLY_INDEXED_OR_SCALABLE_YET

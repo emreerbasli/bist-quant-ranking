@@ -1,0 +1,27 @@
+{
+  "experiment_id": "EXP-TGT-002",
+  "generated_at_utc": "2026-09-17T18:50:07.813453+00:00",
+  "contract_sha256": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+  "code_sha256": "47348367c97f3b3e05e207298d51491feea750a1e7707e1d8f0dbd6b0d62173c",
+  "exp_tgt_001_code_sha256": "18f36854a64a4ad5404e54d47857e50ef22c0b5548c91f99506a10d7e3f489f9",
+  "config_sector_mapping_sha256": "468ada86019f62b0a6a40965818fe3270fa8d941eb78108dcf155a963a1c0b56",
+  "seed": 0,
+  "tests": "22/22 PASS",
+  "production_hash_status": "PASS (0 changed)",
+  "outputs": [
+    "EXP-TGT-002_coverage.csv",
+    "EXP-TGT-002_daily_nav.csv",
+    "EXP-TGT-002_ex_ante_beta.csv",
+    "EXP-TGT-002_horizon_selection_by_target.csv",
+    "EXP-TGT-002_inner_metrics.csv",
+    "EXP-TGT-002_inner_selections.csv",
+    "EXP-TGT-002_outer_metrics.csv",
+    "EXP-TGT-002_outer_robustness.csv",
+    "EXP-TGT-002_report.md",
+    "EXP-TGT-002_sector_mapping.csv",
+    "EXP-TGT-002_summary.json",
+    "EXP-TGT-002_test_results.json",
+    "EXP-TGT-002_target_diagnostics.csv",
+    "EXP-TGT-002_trades.csv"
+  ]
+}

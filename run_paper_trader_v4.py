@@ -146,7 +146,7 @@ class SingleExecutionLockV4:
                 pass
 
 
-def periyodik_gorev_calistir_v4(force: bool = False) -> bool:
+def periyodik_gorev_calistir_v4(force: bool = False, send_telegram: bool = True) -> bool:
     """
     V4 Ranker 14 günlük periyodik rebalance ve sağlık denetimini icra eder.
     """
@@ -242,6 +242,7 @@ def periyodik_gorev_calistir_v4(force: bool = False) -> bool:
                 tufe_aylik=tufe_aylik,
                 scores_universe=scores_all,
                 days_elapsed=max(0, days_elapsed),
+                send_telegram=send_telegram,
                 fiyat_dict=fiyat_dict,
                 pit_bellek=pit_bellek
             )

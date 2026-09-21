@@ -1,0 +1,49 @@
+{
+  "experiment": "EXP-DATA-005",
+  "thresholds": {
+    "large_raw_return_abs": 0.25,
+    "adjustment_ratio_change_abs": 0.005
+  },
+  "scan": {
+    "dividend_rows": 443,
+    "split_rows": 75,
+    "ratio_jump_rows": 383,
+    "ratio_jump_without_event": 0,
+    "large_return_rows": 10
+  },
+  "new_candidate": {
+    "symbol": "KONTR.IS",
+    "provider_adjusted_date": "2025-12-01",
+    "official_ex_date": "2025-12-09",
+    "quarantined_rows": 6,
+    "classification": "CONTROLLED_QUARANTINED_RISK"
+  },
+  "dataset": {
+    "total_rows": 159229,
+    "eligible_rows": 157304,
+    "ineligible_rows": 1925,
+    "controlled_quarantine_rows": 133,
+    "unknown_unresolved_rows": 1792,
+    "provider_only_rows": 157298
+  },
+  "ticker_bands": {
+    "SMALL_COVERAGE_LOSS": 82,
+    "MATERIALLY_PROBLEMATIC": 7
+  },
+  "sasa": {
+    "symbol": "SASA.IS",
+    "rows": 2201,
+    "eligible_rows": 2038,
+    "unresolved_rows": 163,
+    "unresolved_pct": 0.0740572467060427,
+    "max_unresolved_streak": 29,
+    "coverage_band": "MATERIALLY_PROBLEMATIC",
+    "scheduled_signal_dates": 33,
+    "signal_hits": 4,
+    "scheduled_entry_dates": 33,
+    "entry_hits": 3
+  },
+  "gate": "PRICE DATA = PASS FOR RESEARCH",
+  "provider_independent_verification": "NOT AVAILABLE",
+  "baseline_materiality": "NOT_RERUN: KONTR quarantine begins after the 2025-05 DATA-004 baseline end; conservative exclusions already drove DATA-004 execution."
+}

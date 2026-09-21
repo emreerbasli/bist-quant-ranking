@@ -1,0 +1,46 @@
+test_id,requirement,test_name,status,evidence,covered_by,notes
+1,invalid activation artifact rejected,activation absent,PASS,ForwardIntegrityError,test_exp_freeze_001r3.test_01,runner gate
+2,wrong approved manifest rejected,activation manifest binding,FAIL,no exact wrong-manifest runner scenario,test_exp_freeze_001r3a.test_01,missing deterministic case
+3,arbitrary AUDIT_PASSED JSON rejected,arbitrary json,PASS,missing audit artifact,test_exp_freeze_001r3.test_02b,audit path/hash required
+4,runtime manifest mismatch rejected,manifest hash binding,FAIL,no current-byte tamper test,test_exp_freeze_001r3a.test_01,missing deterministic case
+5,process-session cannot bypass validation,runner process flag,PASS,ForwardIntegrityError,test_exp_freeze_001r3.test_10,real runner
+6,pre-baseline source data rejected,baseline class,PASS,NON_CLEAN_BACKFILL,test_exp_freeze_001r3a.test_02,timing policy
+7,independent source max persisted,snapshot source max,PASS,source_max_session,test_exp_freeze_001r3a.test_03,data-derived
+8,missed session event,missed timing,FAIL,no runner event persistence test,test_exp_freeze_001r3a.test_02,classification only
+9,late historical run backfill,late timing,FAIL,no runner backfill persistence test,test_exp_freeze_001r3a.test_02,classification only
+10,candidate session lock,lock primitive,FAIL,no concurrent process test,forward_infrastructure_001r3.file_lock,missing contention case
+11,crash before commit,prepared journal,FAIL,no fault injection,forward_lifecycle_001r3.commit,missing crash case
+12,crash after staged execution,prepared replay,FAIL,no fault injection,forward_lifecycle_001r3.commit,missing crash case
+13,crash before NAV commit,prepared replay,FAIL,no fault injection,forward_lifecycle_001r3.commit,missing crash case
+14,restart no duplicate trade,restart trade,PASS,one execution set,test_exp_freeze_001r3.test_04,semantic idempotency
+15,restart no duplicate cost,restart cost,PASS,one NAV cost,test_exp_freeze_001r3.test_04,semantic idempotency
+16,restart no duplicate NAV,restart nav,PASS,one NAV,test_exp_freeze_001r3.test_04,semantic idempotency
+17,semantic idempotency across run id,append semantic key,PASS,one row,test_exp_freeze_001r3.test_02,stable keys
+18,order id preserved,fill lineage,PASS,order_id,test_exp_freeze_001r3a.test_05,lineage
+19,BLOCKED distinct,blocked state,PASS,BLOCKED,test_exp_freeze_001r3.test_07,not UNFILLED
+20,sell cash sign,execution accounting,FAIL,no executed sell reconciliation test,forward_lifecycle_001r3.process_session,missing sell case
+21,ADV reference metadata,execution metadata,PASS,adv_reference_session,test_exp_freeze_001r3a.test_05,complete fields
+22,gross net NAV reconciles,NAV accounting,PASS,gross-cost=net,test_exp_freeze_001r3a.test_05,identity
+23,mark provenance persisted,NAV marks,PASS,mark_provenance,test_exp_freeze_001r3a.test_05,per position
+24,60 eligible session scheduler,scheduler count,FAIL,no gaps/holiday exact-60 fixture,test_exp_freeze_001r3a.test_04,missing required fixture
+25,next signal advances once,schedule state,PASS,next_signal_session,test_exp_freeze_001r3a.test_04,committed state
+26,restart preserves scheduler,schedule checkpoint,PASS,state journal,test_exp_freeze_001r3a.test_04,reload-safe
+27,full scored cross section persisted,signal data,PASS,12 members,test_exp_freeze_001r3a.test_07,more than K
+28,cohort references full cross section,cohort members,PASS,total_scored=12,test_exp_freeze_001r3a.test_07,not top10 only
+29,H59 pending,H59 state,PASS,active cohort,test_exp_freeze_001r3.test_05,calendar based
+30,H60 completed,H60 state,PASS,completion event,test_exp_freeze_001r3.test_05,once only
+31,label end separate process time,label endpoint,PASS,actual_label_end_session,test_exp_freeze_001r3.test_05,not timestamp
+32,frozen eligibility applied,label eligibility,PASS,reason distribution,test_exp_freeze_001r3a.test_06,quality/trading
+33,RAW full universe Rank IC,raw metric,PASS,rank_ic,test_exp_freeze_001r3a.test_07,12 names
+34,RAW NDCG10,raw ndcg,FAIL,no independent expected-value assertion,test_exp_freeze_001r3a.test_07,field presence only
+35,beta residual realized target,beta lifecycle,FAIL,no independent beta/residual fixture,test_exp_freeze_001r3.test_06,target family only
+36,Lambda Rank IC,Lambda metric,FAIL,no independent expected-value assertion,test_exp_freeze_001r3.test_06,field presence only
+37,Lambda NDCG10,Lambda ndcg,FAIL,no independent expected-value assertion,test_exp_freeze_001r3.test_06,field presence only
+38,Top K spread,raw top K spread,PASS,top_k_spread_raw,test_exp_freeze_001r3a.test_07,historical definition
+39,partial labels categorized,eligibility reasons,PASS,reason_distribution,test_exp_freeze_001r3a.test_06,no zero fill
+40,pending excluded,pending cohort,PASS,active cohort,test_exp_freeze_001r3a.test_06,no metrics yet
+41,overlap metadata,overlap field,FAIL,no two-active-cohort assertion,test_exp_freeze_001r3.test_08,missing overlap case
+42,operational failure persisted,runner failure,FAIL,no durable representative failure-event test,run_frozen_shadow.run,missing persistence case
+43,official logs untouched by tests,log isolation,PASS,zero bytes,test_exp_freeze_001r3a.test_08,sandbox only
+44,candidate artifacts byte identical,model hashes,PASS,exact sha256,test_exp_freeze_001r3a.test_08,unchanged
+45,production protected hash diff,production hash,PASS,0 changed,research.verify_production_hashes,final check

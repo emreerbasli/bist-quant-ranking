@@ -1,0 +1,16 @@
+{
+  "event_classifications": {
+    "CONFIRMED_DATA_ERROR": 5
+  },
+  "ohlc_classifications": {
+    "DATA_ERROR": 1,
+    "ROUNDING_ONLY": 1
+  },
+  "zero_volume_bars": 1728,
+  "zero_volume_categories": {
+    "LEGITIMATE_NO_TRADE / SUSPENSION": 855,
+    "UNKNOWN": 683,
+    "MISSING_VOLUME_ONLY": 190
+  },
+  "gate": "PARTIAL"
+}

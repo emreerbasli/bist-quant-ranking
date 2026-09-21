@@ -1,0 +1,10 @@
+{
+  "experiment_id": "EXP-FREEZE-001R",
+  "remediation_gate": "PARTIAL",
+  "clean_forward_start": "PENDING_INDEPENDENT_AUDIT",
+  "candidates": {"RC-LGBMR-001": "UNCHANGED", "RC-LAMBDAMART-001": "UNCHANGED"},
+  "dedicated_tests": "31/31 PASS",
+  "full_research_tests": "192/192 PASS",
+  "production_integrity": "PASS 0 changed",
+  "official_clean_forward_logs": "EMPTY"
+}

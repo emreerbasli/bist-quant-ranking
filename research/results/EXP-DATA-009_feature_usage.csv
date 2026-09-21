@@ -1,0 +1,4 @@
+component,risk,use
+V3/V4 real rate,missing publication/vintage plus fallback,policy minus trailing 12m CPI
+V4 real EPS,DOUBLE_ADJUSTMENT_RISK with TFRS29,net income CPI deflation
+feature_engine USDTRY,"date-only availability, ffill",5d/20d returns and beta

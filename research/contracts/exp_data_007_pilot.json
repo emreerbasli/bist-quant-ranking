@@ -1,0 +1,44 @@
+{
+  "experiment": "EXP-DATA-007",
+  "locked_before_recovery": "2026-09-17T00:00:00+03:00",
+  "purpose": "Bounded feasibility pilot for exact KAP disclosure timing and first-publication vintage recovery; not a full reconstruction.",
+  "selection_rule": "Performance-independent stratification by company type, qualitative size/liquidity, sector, pre/post-TFRS29 period and Q1/Q2/Q3/Q4 period type.",
+  "scope_guards": {
+    "pilot_observations": 30,
+    "full_2646_scrape_forbidden": true,
+    "production_writes_forbidden": true,
+    "target_or_model_work_forbidden": true,
+    "missing_must_remain_null": true
+  },
+  "bulk_go_thresholds": {
+    "mapping_accuracy_pct_min": 95,
+    "first_publication_recovery_pct_min": 70,
+    "exact_date_or_timestamp_pct_min": 80,
+    "accounting_semantics_resolved_pct_min": 80,
+    "false_match_pct_max": 2,
+    "completely_unrecoverable_pct_max": 10,
+    "existing_infrastructure_required": true,
+    "rule": "GO requires every threshold; otherwise PARTIAL or NO-GO. Thresholds may not be relaxed after results."
+  },
+  "mapping_policy": {
+    "candidate_key": "ticker + report year + KAP period + exact subject 'Finansal Rapor'",
+    "non_financial_preferred_basis": "CONSOLIDATED",
+    "bank_preferred_basis": "NON_CONSOLIDATED",
+    "insurance_financial_preferred_basis": "NON_CONSOLIDATED",
+    "ambiguous_basis_rule": "Do not select a first match; mark UNKNOWN unless the detail page proves the preferred basis.",
+    "duplicate_rule": "Retain every exact-key notification, order by publish timestamp, and use modify status plus detail-page correction markers to establish lineage.",
+    "first_value_rule": "The earliest proven preferred-basis financial report is the first-published candidate; later corrected/revised candidates are retained separately."
+  },
+  "tickers": [
+    {"ticker": "TUPRS.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "LARGE_LIQUID", "sector": "ENERGY_REFINING", "periods": ["2022Q1", "2023Q4", "2024Q2"]},
+    {"ticker": "THYAO.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "LARGE_LIQUID", "sector": "AIR_TRANSPORT", "periods": ["2022Q3", "2023Q4", "2024Q2"]},
+    {"ticker": "BIMAS.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "LARGE_LIQUID", "sector": "RETAIL", "periods": ["2022Q1", "2023Q4", "2024Q3"]},
+    {"ticker": "AEFES.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "MEDIUM", "sector": "BEVERAGES", "periods": ["2022Q3", "2023Q4", "2024Q2"]},
+    {"ticker": "ASELS.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "MEDIUM", "sector": "DEFENCE_TECH", "periods": ["2022Q1", "2023Q4", "2024Q3"]},
+    {"ticker": "LOGO.IS", "company_type": "NON_FINANCIAL", "size_liquidity": "SMALLER", "sector": "SOFTWARE", "periods": ["2022Q3", "2023Q4", "2024Q2"]},
+    {"ticker": "ISCTR.IS", "company_type": "BANK", "size_liquidity": "LARGE_LIQUID", "sector": "BANKING", "periods": ["2022Q1", "2023Q4", "2024Q3"]},
+    {"ticker": "AKBNK.IS", "company_type": "BANK", "size_liquidity": "LARGE_LIQUID", "sector": "BANKING", "periods": ["2022Q3", "2023Q4", "2024Q2"]},
+    {"ticker": "ANSGR.IS", "company_type": "INSURANCE_FINANCIAL", "size_liquidity": "MEDIUM", "sector": "INSURANCE", "periods": ["2022Q1", "2023Q4", "2024Q3"]},
+    {"ticker": "TURSG.IS", "company_type": "INSURANCE_FINANCIAL", "size_liquidity": "MEDIUM", "sector": "INSURANCE", "periods": ["2022Q3", "2023Q4", "2024Q2"]}
+  ]
+}

@@ -1,0 +1,3 @@
+fallback_expression,future_dated_cpi_months,occurrences,status
+"tufe_aylik.get(m, 2.0)",,2,RESEARCH_EXCLUDE
+,,0,FABRICATED_FUTURE_RISK

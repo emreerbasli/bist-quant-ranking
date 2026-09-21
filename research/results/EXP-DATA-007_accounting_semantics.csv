@@ -1,0 +1,31 @@
+observation_id,ticker,financial_period,period_type,balance_sheet_semantics,flow_semantics,single_quarter_decomposition_safe,decomposition_reason,missing_values_preserved
+TUPRS.IS:2022Q1,TUPRS.IS,2022Q1,SINGLE_QUARTER,POINT_IN_TIME,SINGLE_QUARTER,True,Q1 is itself a single quarter,True
+TUPRS.IS:2023Q4,TUPRS.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+TUPRS.IS:2024Q2,TUPRS.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+THYAO.IS:2022Q3,THYAO.IS,2022Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+THYAO.IS:2023Q4,THYAO.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+THYAO.IS:2024Q2,THYAO.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+BIMAS.IS:2022Q1,BIMAS.IS,2022Q1,SINGLE_QUARTER,POINT_IN_TIME,SINGLE_QUARTER,True,Q1 is itself a single quarter,True
+BIMAS.IS:2023Q4,BIMAS.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+BIMAS.IS:2024Q3,BIMAS.IS,2024Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AEFES.IS:2022Q3,AEFES.IS,2022Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AEFES.IS:2023Q4,AEFES.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AEFES.IS:2024Q2,AEFES.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ASELS.IS:2022Q1,ASELS.IS,2022Q1,SINGLE_QUARTER,POINT_IN_TIME,SINGLE_QUARTER,True,Q1 is itself a single quarter,True
+ASELS.IS:2023Q4,ASELS.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ASELS.IS:2024Q3,ASELS.IS,2024Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+LOGO.IS:2022Q3,LOGO.IS,2022Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+LOGO.IS:2023Q4,LOGO.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+LOGO.IS:2024Q2,LOGO.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ISCTR.IS:2022Q1,ISCTR.IS,2022Q1,SINGLE_QUARTER,POINT_IN_TIME,SINGLE_QUARTER,True,Q1 is itself a single quarter,True
+ISCTR.IS:2023Q4,ISCTR.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ISCTR.IS:2024Q3,ISCTR.IS,2024Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AKBNK.IS:2022Q3,AKBNK.IS,2022Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AKBNK.IS:2023Q4,AKBNK.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+AKBNK.IS:2024Q2,AKBNK.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ANSGR.IS:2022Q1,ANSGR.IS,2022Q1,SINGLE_QUARTER,POINT_IN_TIME,SINGLE_QUARTER,True,Q1 is itself a single quarter,True
+ANSGR.IS:2023Q4,ANSGR.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+ANSGR.IS:2024Q3,ANSGR.IS,2024Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+TURSG.IS:2022Q3,TURSG.IS,2022Q3,YTD_9M,POINT_IN_TIME,YTD_9M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+TURSG.IS:2023Q4,TURSG.IS,2023Q4,ANNUAL,POINT_IN_TIME,ANNUAL,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True
+TURSG.IS:2024Q2,TURSG.IS,2024Q2,YTD_6M,POINT_IN_TIME,YTD_6M,False,NOT_TESTED_SAFE: comparable first-vintage predecessor and same accounting basis not jointly proven,True

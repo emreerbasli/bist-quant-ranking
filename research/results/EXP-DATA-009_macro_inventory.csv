@@ -1,0 +1,6 @@
+coverage,fallback,pit_quality,readiness,release_metadata,revision_status,series,source_claim,storage
+2018-01-01..2026-01-01,ffill by date,INVALID,NO,none,unknown,policy_rate,TCMB (unverifiable local claim),V3/V4 code literal
+2018-09..2026-08,2.0% fabricated,INVALID,NO,none,unknown,monthly_cpi,TÜİK (unverifiable local claim),V3/V4 code literal
+2018-01-01..2026-09-15,ffill on equity index,PROXY_DATE_ONLY,PARTIAL,none,unknown,usdtry,yfinance (loader),data/raw/TRY_X.parquet
+same as inputs,inherits 2.0% CPI,INVALID,NO,none,unknown,real_rate,derived,derived policy rate - trailing CPI
+PIT financial records,inherits 2.0% CPI,DOUBLE_ADJUSTMENT_RISK,NO,none,unknown,inflation_adjusted_real_eps,derived,V4 calculation

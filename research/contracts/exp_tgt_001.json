@@ -1,0 +1,69 @@
+{
+  "experiment_id": "EXP-TGT-001",
+  "title": "RAW RETURN HORIZON COMPARISON",
+  "status": "LOCKED_BEFORE_RESULTS",
+  "hypothesis": "20/40/60 trading-session forward return horizons, under the same price-only predictor/control, produce different and measurable ranking stability.",
+  "data_scope": {
+    "price": "EXP-DATA-005 research price view; PRICE DATA = PASS FOR RESEARCH",
+    "fundamental": "EXCLUDED_FROM_THIS_EXPERIMENT",
+    "macro_including_usdtry": "EXCLUDED",
+    "value": "EXCLUDED",
+    "legacy_approximate_fundamental": "EXCLUDED",
+    "end_date": "2025-05-30",
+    "reason_for_end_date": "2025-06-01 onward remains descriptive-only under the common research contract"
+  },
+  "target": {
+    "type": "raw_forward_return_ranking",
+    "horizons_sessions": [20, 40, 60],
+    "formula": "research_close[label_end] / research_close[label_start] - 1",
+    "label_fields": ["signal_date", "entry_date", "label_start", "label_end", "horizon_sessions"],
+    "target_variants_excluded": ["sector_relative", "beta_residual", "volatility_scaled"]
+  },
+  "features": [
+    {"name": "mom_12_1", "formula": "last_valid_close[-21] / last_valid_close[-252] - 1"},
+    {"name": "mom_63", "formula": "last_valid_close / last_valid_close[-64] - 1"},
+    {"name": "vol_63", "formula": "std of the last 63 valid close-to-close returns"}
+  ],
+  "model": {
+    "family": "fixed_ridge_linear_ranking_control",
+    "alpha": 1.0,
+    "preprocessing": "training-only median imputation and z-score scaling",
+    "target_transform": "within-signal percentile rank",
+    "seed": 0,
+    "same_configuration_across_horizons": true
+  },
+  "signal_schedule": "every 60 benchmark sessions after 252-session warm-up",
+  "portfolio": {
+    "top_k": 10,
+    "weighting": "equal_weight",
+    "rebalance_sessions": 60,
+    "holding_sessions": 60,
+    "prediction_horizon_is_separate": true,
+    "cost_bps_one_way": [0, 30, 50, 100],
+    "primary_cost_bps": 50,
+    "capital": 1.0
+  },
+  "outer_folds": [
+    {"id": "O1", "test_start": "2022-01-01", "test_end": "2022-12-31", "inner_validation_years": [2020, 2021]},
+    {"id": "O2", "test_start": "2023-01-01", "test_end": "2023-12-31", "inner_validation_years": [2021, 2022]},
+    {"id": "O3", "test_start": "2024-01-01", "test_end": "2024-12-31", "inner_validation_years": [2022, 2023]},
+    {"id": "O4", "test_start": "2025-01-01", "test_end": "2025-05-30", "inner_validation_years": [2023, 2024]}
+  ],
+  "purge_rule": "for each horizon, keep a training observation only when its actual label_end is strictly before validation/test start",
+  "horizon_selection": {
+    "source": "INNER_ONLY",
+    "primary_statistic": "median across inner folds of fold mean Rank IC",
+    "tie_rule": "if absolute difference is <= 0.01 choose the shorter horizon",
+    "outer_feedback": false,
+    "final_preference_rule": "A horizon is PREFERRED only if selected in at least 3 of 4 outer folds and the selected-procedure outer mean Rank IC is positive, median fold Rank IC is non-negative, and positive-fold ratio is at least 0.5; otherwise NO CLEAR WINNER. Outer results may veto preference but may not choose a different horizon."
+  },
+  "eligibility": {
+    "signal_date_only": true,
+    "minimum_valid_history": 252,
+    "recent_window_sessions": 25,
+    "minimum_recent_valid_sessions": 20,
+    "future_label_availability_not_used_to_form_universe": true
+  },
+  "forbidden_fields": ["fundamental", "market_cap", "capital", "policy_rate", "cpi", "real_rate", "usdtry", "macro", "legacy_approximate_fundamental"],
+  "production_writes_allowed": false
+}

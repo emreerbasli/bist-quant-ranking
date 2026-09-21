@@ -1,0 +1,78 @@
+{
+  "experiment_id": "EXP-TGT-002",
+  "title": "TARGET FAMILY COMPARISON",
+  "status": "LOCKED_BEFORE_RESULTS",
+  "hypothesis": "Economically different target definitions may produce different and repeatable ranking information under the same price-only control predictor in nested temporal validation.",
+  "global_horizon": "NOT_FIXED",
+  "candidate_horizons_sessions": [20, 40, 60],
+  "horizon_selection": "TARGET_FAMILY_SPECIFIC_INNER_TEMPORAL_VALIDATION_ONLY",
+  "outer_horizon_feedback": false,
+  "data_scope": {
+    "price": "EXP-DATA-005 research price view",
+    "end_date": "2025-05-30",
+    "fundamental": "EXCLUDED",
+    "macro_including_usdtry": "EXCLUDED",
+    "value": "EXCLUDED"
+  },
+  "target_families": {
+    "RAW": "raw forward return",
+    "SECTOR_RELATIVE": "raw forward return minus same-signal same-horizon sector median return",
+    "BETA_RESIDUAL": "raw forward return minus ex-ante beta times BIST100 forward return",
+    "VOL_SCALED": "raw forward return divided by clipped ex-ante daily volatility"
+  },
+  "sector_contract": {
+    "mapping": "config.HISSE_SEKTOR time-invariant taxonomy snapshot locked before results",
+    "mapping_quality": "PROXY_TAXONOMY; historical classification vintages unavailable",
+    "future_reassignment_allowed": false,
+    "minimum_group_size": 5,
+    "small_or_missing_sector_fallback": "cross-sectional universe median return"
+  },
+  "beta_contract": {
+    "estimation_window_sessions": 252,
+    "minimum_aligned_returns": 126,
+    "estimation_end": "signal_date",
+    "beta_floor": -3.0,
+    "beta_cap": 3.0,
+    "insufficient_history": "target observation missing; no fallback beta"
+  },
+  "volatility_contract": {
+    "estimation_window_returns": 63,
+    "estimation_end": "signal_date",
+    "daily_vol_floor": 0.005,
+    "daily_vol_cap": 0.10,
+    "forward_volatility_allowed": false
+  },
+  "features": ["mom_12_1", "mom_63", "vol_63"],
+  "model": {
+    "family": "fixed_ridge_linear_ranking_control",
+    "alpha": 1.0,
+    "preprocessing": "training-only median imputation and z-score scaling",
+    "target_transform": "within-signal percentile rank",
+    "seed": 0,
+    "same_across_target_families": true
+  },
+  "folds": "identical to EXP-TGT-001: four expanding outer folds, two prior inner validation years each",
+  "purge": "observation-specific actual label_end strictly before validation/test start",
+  "portfolio": {
+    "top_k": 10,
+    "weighting": "equal_weight",
+    "holding_sessions": 60,
+    "rebalance_sessions": 60,
+    "primary_cost_bps": 50,
+    "cost_sensitivity_bps": [0, 30, 50, 100]
+  },
+  "inner_family_selection": {
+    "score": "median across inner folds of mean Rank IC at that family's inner-selected horizon",
+    "tie_tolerance": 0.01,
+    "tie_priority": ["RAW", "SECTOR_RELATIVE", "BETA_RESIDUAL", "VOL_SCALED"]
+  },
+  "final_decision": {
+    "family_viability": "selected-horizon outer mean Rank IC > 0, median fold Rank IC >= 0, positive-fold ratio >= 0.5, mean NDCG@10 > 0.5",
+    "preferred": "exactly one viable family and it was inner-selected in at least 3 of 4 outer procedures",
+    "multiple_viable": "at least two families meet viability",
+    "otherwise": "NO CLEAR TARGET WINNER",
+    "outer_may_veto_but_not_reselect": true
+  },
+  "forbidden_inputs": ["fundamental", "market_cap", "capital", "policy_rate", "cpi", "real_rate", "usdtry", "macro"],
+  "production_writes_allowed": false
+}

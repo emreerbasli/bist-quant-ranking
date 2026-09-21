@@ -1,0 +1,24 @@
+{
+  "experiment": "EXP-DATA-004-FINAL",
+  "as_of_date": "2026-09-17",
+  "start_state": "Partial row-wise canonical build",
+  "end_state": "Vectorized 89/89 canonical build",
+  "symbols_requested": 89,
+  "symbols_built": 89,
+  "rows": 159229,
+  "date_min": "2018-01-01",
+  "date_max": "2026-09-15",
+  "hashes": {
+    "exp_data_004_py": "071b8c0a012482dd62f1ae3e90c9cddd210d605fae87876d3c0e23b1e6fb946d",
+    "fetch_data004_provider_snapshot_py": "b9c58aee5757a896f13a467a72951283eddbce3e9132364162374d08f7b6861b",
+    "official_event_contract": "2fd35f867d07aacf1da0939d1e470b68b161cfcd9d09fe936ffdcf230256746f",
+    "provider_manifest": "6efb092fc80359e661be474654d47c283e6f70bc36af6d9105b10121407b32ab",
+    "provider_parquets_combined": "bdc57115c04232331136a5cfd5047917dc52fffc77fdb989c08a3e04373ba8e4",
+    "canonical_view_parquets_combined": "6e74cfbeba4550fe1dc821fcfe22ea06f8d23ebc709535fd16180c9b186df24c"
+  },
+  "optimization": "Row-wise pandas status/chain access replaced by precomputed masks and NumPy arrays without changing quarantine or ex-date semantics.",
+  "equivalence": "PASS on all five controlled event windows",
+  "tests": "19/19 PASS",
+  "production_changes": 0,
+  "gate": "PARTIAL"
+}

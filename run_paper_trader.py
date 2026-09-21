@@ -169,7 +169,7 @@ class SingleExecutionLock:
                 pass
 
 
-def periyodik_gorev_calistir(force: bool = False) -> bool:
+def periyodik_gorev_calistir(force: bool = False, send_telegram: bool = True) -> bool:
     """
     14 günlük rebalance kontrolünü icra eden ana operasyon fonksiyonu.
     Tam exception korumalıdır; beklenmedik hatalar schedule döngüsünü öldüremez.
@@ -270,6 +270,7 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
                 tufe_aylik=tufe_aylik,
                 scores_universe=scores_all,
                 days_elapsed=max(0, days_elapsed),
+                send_telegram=send_telegram,
                 fiyat_dict=fiyat_dict
             )
 
@@ -296,20 +297,179 @@ def periyodik_gorev_calistir(force: bool = False) -> bool:
                 logger.debug(f"Karşılaştırma raporu güncelleme uyarısı: {e}")
 
             # ZORUNLU KAYIT: Operasyonel netlik logu
-            logger.info("✅ sistem çalıştı — Paper trading kontrolü ve bildirimi başarıyla tamamlandı.")
+            logger.info("✅ V3.2 sistem çalıştı — Paper trading kontrolü ve bildirimi başarıyla tamamlandı.")
             return True
 
         except Exception as e:
-            logger.error(f"❌ Paper trading servisinde hata oluştu: {e}")
+            logger.error(f"❌ V3.2 Paper trading servisinde hata oluştu: {e}")
             import traceback
             traceback.print_exc()
             return False
 
 
+def calistir_hibrid_motor_sirali(force: bool = False, send_telegram: bool = True) -> bool:
+    """
+    HİBRİT ÇİFT MOTOR ORKESTRASYONU (V3 Ana Kasa + Phase H Shadow):
+    1. V3.2 Üretim Motorunu Çalıştır -> V3 Telegram
+    2. Phase H Prospective Readiness (Acquisition -> KAP -> Canonical)
+    3. Genuinely Eligible Session Tespiti
+    4. Phase H Official Processing (RC-LGBMR-001, RC-LAMBDAMART-001)
+    5. Phase H Telegram Bildirimi (sadece yeni COMMITTED varsa)
+    """
+    logger.info("=" * 80)
+    logger.info("🚀 HİBRİT ÇİFT MOTOR (V3 + PHASE H SHADOW) SIRALI ÇALIŞTIRMA BAŞLADI")
+    logger.info("=" * 80)
+
+    # 1. MOTOR: V3.2 Üretim Modeli (Ana Kasa)
+    logger.info("▶️ [STEP 1] V3.2 Üretim Motoru icra ediliyor...")
+    v3_ok = periyodik_gorev_calistir(force=force, send_telegram=send_telegram)
+    if not v3_ok and not force:
+        logger.warning("⚠️ V3.2 kontrolü beklemede veya tamamlanamadı.")
+
+    # 2. PHASE H PROSPECTIVE READINESS
+    logger.info("▶️ [STEP 2] Phase H Prospective Readiness başlatılıyor...")
+    research_dir = str(ROOT_DIR / "research")
+    python_exe = str(sys.executable)
+    
+    readiness_scripts = [
+        "prospective_acquisition_phase_ab.py",
+        "prospective_kap_corporate_actions.py",
+        "prospective_canonical_extension.py"
+    ]
+    
+    readiness_ok = True
+    for script in readiness_scripts:
+        try:
+            import subprocess
+            logger.info(f"  -> Running {script}...")
+            res = subprocess.run([python_exe, script], cwd=research_dir, check=True, capture_output=True, text=True)
+            logger.debug(res.stdout)
+        except subprocess.CalledProcessError as e:
+            logger.error(f"❌ Readiness script failed: {script}\n{e.stderr}")
+            readiness_ok = False
+            break
+        except Exception as e:
+            logger.error(f"❌ Readiness execution error: {e}")
+            readiness_ok = False
+            break
+
+    if not readiness_ok:
+        logger.error("🚨 Phase H Prospective Readiness failed. Aborting RC processing.")
+        return v3_ok
+
+    # 3. ACTUAL ELIGIBLE SESSION TESPİTİ
+    logger.info("▶️ [STEP 3] Actual Eligible Session Tespiti...")
+    actual_date_str = None
+    try:
+        sys.path.insert(0, research_dir)
+        from runner_data_sources import CanonicalRunnerDataSources
+        import forward_infrastructure_001r3 as fw
+        import pandas as pd
+        
+        data = CanonicalRunnerDataSources()
+        braw = data.benchmark()
+        symbols = data.symbols()
+        raw = {s: data.view(s) for s in symbols}
+        
+        # Sadece bugüne kadar olan takvimi al
+        cal = pd.DatetimeIndex(braw.index[braw.index <= pd.Timestamp.now()]).sort_values().unique()
+        actual = fw.actual_signal_date(cal, raw)
+        actual_date_str = str(actual.date())
+        logger.info(f"  -> Latest eligible session found: {actual_date_str}")
+        
+    except Exception as e:
+        logger.error(f"❌ Error determining eligible session: {e}")
+        return v3_ok
+
+    # Check if already processed
+    try:
+        from shadow_reader import get_shadow_system_state
+        state = get_shadow_system_state(ROOT_DIR)
+        if state and state.get("status") == "OFFICIAL_CLEAN_FORWARD" and state.get("session_date") == actual_date_str:
+            logger.info(f"PHASE H: NO NEW ELIGIBLE SESSION (Session {actual_date_str} already processed). Clean NO-OP.")
+            return v3_ok
+    except Exception as e:
+        logger.error(f"❌ Error checking shadow state: {e}")
+
+    # 4. PHASE H OFFICIAL PROCESSING
+    logger.info(f"▶️ [STEP 4] Phase H Official Processing for {actual_date_str}...")
+    candidates = ["RC-LGBMR-001", "RC-LAMBDAMART-001"]
+    processing_ok = True
+    
+    for candidate in candidates:
+        try:
+            logger.info(f"  -> Processing {candidate}...")
+            import subprocess
+            cmd = [python_exe, "run_frozen_shadow.py", "--candidate", candidate, "--asof", actual_date_str, "--process-session"]
+            res = subprocess.run(cmd, cwd=research_dir, check=True, capture_output=True, text=True)
+            logger.debug(res.stdout)
+        except subprocess.CalledProcessError as e:
+            logger.error(f"❌ Processing failed for {candidate}:\n{e.stderr}")
+            processing_ok = False
+        except Exception as e:
+            logger.error(f"❌ Execution error for {candidate}: {e}")
+            processing_ok = False
+
+    if not processing_ok:
+        logger.warning("⚠️ Phase H processing completed with errors.")
+    else:
+        logger.info("✅ Phase H official processing completed.")
+
+    # 5. TELEGRAM NOTIFICATION
+    logger.info("▶️ [STEP 5] Phase H Telegram Notification Check...")
+    if send_telegram:
+        try:
+            from shadow_reader import get_shadow_system_state
+            final_state = get_shadow_system_state(ROOT_DIR)
+            if final_state and final_state.get("status") == "OFFICIAL_CLEAN_FORWARD" and final_state.get("session_date") == actual_date_str:
+                logger.info("✅ Genuinely new COMMITTED official event verified. Triggering Telegram...")
+                import subprocess
+                cmd = [python_exe, "shadow_telegram.py"]
+                subprocess.run(cmd, cwd=str(ROOT_DIR / "bot"), check=True)
+                logger.info("✅ Telegram check completed.")
+            else:
+                logger.warning(f"⚠️ No new valid COMMITTED event found for {actual_date_str}. Telegram blocked.")
+        except Exception as e:
+            logger.error(f"❌ Telegram trigger failed: {e}")
+
+    logger.info("=" * 80)
+    logger.info("🏁 HİBRİT ÇİFT MOTOR SIRALI DÖNGÜSÜ TAMAMLANDI")
+    logger.info("=" * 80)
+    return v3_ok
+
+
+def seans_1335_cift_motor(force: bool = False) -> bool:
+    """Arife / Yarım Gün Çift Motor Tetikleyicisi (13:35)."""
+    simdi = datetime.now()
+    if not force:
+        if not bist_acik_mi(simdi):
+            logger.info("BIST piyasası kapalı (Hafta sonu veya tatil). Saat 13:35 kontrolü atlandı.")
+            return False
+        if not cfg.bist_yarim_gun_mu(simdi):
+            logger.info("Bugün BIST normal tam seans günü. Saat 13:35 kontrolü güvenlik kapısıyla engellendi; 18:35'te çalışacak.")
+            return False
+    logger.info("📢 Arife/Yarım gün seans kapanış tespiti — Çift Motor kontrolü başlatılıyor...")
+    return calistir_hibrid_motor_sirali(force=force, send_telegram=True)
+
+
+def seans_1835_cift_motor(force: bool = False) -> bool:
+    """Normal Gün Çift Motor Tetikleyicisi (18:35)."""
+    simdi = datetime.now()
+    if not force:
+        if not bist_acik_mi(simdi):
+            logger.info("BIST piyasası kapalı (Hafta sonu veya tatil). Saat 18:35 kontrolü atlandı.")
+            return False
+        if cfg.bist_yarim_gun_mu(simdi):
+            logger.info("Bugün BIST yarım gündü ve kontrol 13:35'te tamamlandı. Saat 18:35 mükerrer koşusu atlandı.")
+            return False
+    logger.info("📢 Seans kapanışı ve veri mutabakatı tespiti — Çift Motor kontrolü başlatılıyor...")
+    return calistir_hibrid_motor_sirali(force=force, send_telegram=True)
+
+
 def main():
     """Servis döngüsü başlatıcı."""
     print("=" * 80)
-    print("BIST V3 KANTİTATİF MODEL: PAPER TRADING SERVİSİ (ZAMANLANMIŞ)")
+    print("BIST HİBRİT ÇİFT MOTOR: PAPER TRADING SERVİSİ (V3.2 + V4.1 ZAMANLANMIŞ)")
     print("KRİTİK SINIR: Bu servis SADECE bildirim gönderir, otomatik al-sat yapmaz.")
     print("=" * 80)
 
@@ -320,23 +480,18 @@ def main():
         periyodik_gorev_calistir_v4(force=True)
         return
 
-    if len(sys.argv) > 1 and "--all" in sys.argv:
-        from run_paper_trader_v4 import periyodik_gorev_calistir_v4
-        logger.info("Çift model bayrağı algılandı, V3 ve V4 paralel çalıştırılıyor...")
-        periyodik_gorev_calistir(force=True)
-        periyodik_gorev_calistir_v4(force=True)
+    if len(sys.argv) > 1 and sys.argv[1] in ["--all", "--dual", "--cift", "--now", "--run-once", "-f"]:
+        logger.info("Manuel tetikleme algılandı, Çift Motor hemen sırayla çalıştırılıyor...")
+        calistir_hibrid_motor_sirali(force=True, send_telegram=True)
         return
 
-    # Parametre olarak --run-once veya --now verilirse hemen tek seferlik çalıştır
-    if len(sys.argv) > 1 and sys.argv[1] in ["--now", "--run-once", "-f"]:
-        logger.info("Manuel tetikleme bayrağı algılandı, hemen çalıştırılıyor...")
-        periyodik_gorev_calistir(force=True)
-        return
-
-    # Zamanlayıcı planı: Her gün saat 18:30'da (BIST seans kapanışı sonrası) kontrol et
-    schedule.every().day.at("18:30").do(periyodik_gorev_calistir)
-    logger.info("Servis zamanlayıcısı kuruldu: Her gün 18:30'da BIST seans kapanış kontrolü.")
-    logger.info("Servis döngüsü başlatıldı (Durdurmak için Ctrl+C)...")
+    # Zamanlayıcı planı: 13:35 (yarım gün) ve 18:35 (tam gün)
+    schedule.every().day.at("13:35").do(seans_1335_cift_motor)
+    schedule.every().day.at("18:35").do(seans_1835_cift_motor)
+    logger.info("Çift Motor Servis zamanlayıcısı kuruldu:")
+    logger.info("  • Normal Seans: Her iş günü saat 18:35'te Çift Motor kontrolü (V3.2 -> V4.1 -> Karşılaştırma).")
+    logger.info("  • Yarım Seans:  Arife günlerinde saat 13:35'te Çift Motor kontrolü.")
+    logger.info("Çift Motor Servis döngüsü başlatıldı (Durdurmak için Ctrl+C)...")
 
     while True:
         try:

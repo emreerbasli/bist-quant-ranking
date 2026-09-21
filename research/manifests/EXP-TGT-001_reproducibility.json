@@ -1,0 +1,25 @@
+{
+  "experiment_id": "EXP-TGT-001",
+  "generated_at_utc": "2026-09-17T18:37:38.499112+00:00",
+  "contract_sha256": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+  "code_sha256": "18f36854a64a4ad5404e54d47857e50ef22c0b5548c91f99506a10d7e3f489f9",
+  "input_view": "EXP-DATA-004 base + EXP-DATA-005 overlay",
+  "seed": 0,
+  "tests": "14/14 PASS",
+  "production_hash_status": "PASS (0 changed)",
+  "outputs": [
+    "EXP-TGT-001_baselines.csv",
+    "EXP-TGT-001_coverage.csv",
+    "EXP-TGT-001_coverage_by_signal.csv",
+    "EXP-TGT-001_fold_manifest.csv",
+    "EXP-TGT-001_inner_metrics.csv",
+    "EXP-TGT-001_inner_selections.csv",
+    "EXP-TGT-001_outer_metrics.csv",
+    "EXP-TGT-001_report.md",
+    "EXP-TGT-001_selected_outer_daily_nav.csv",
+    "EXP-TGT-001_selected_outer_trades.csv",
+    "EXP-TGT-001_summary.json",
+    "EXP-TGT-001_test_results.json",
+    "EXP-TGT-001_unavailable_legacy_baselines.csv"
+  ]
+}

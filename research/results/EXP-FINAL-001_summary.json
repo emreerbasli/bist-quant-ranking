@@ -1,0 +1,39 @@
+{
+  "experiment_id": "EXP-FINAL-001",
+  "execution": "PASS",
+  "phase_j_gate": "PASS",
+  "dominance": "BOTH NON-DOMINATED",
+  "decision": "BOTH FINALISTS CARRIED FORWARD",
+  "ensemble_justification": "YES",
+  "rank_correlation": 0.5574770172733827,
+  "top10_overlap": 0.3785714285714286,
+  "architectures": [
+    {
+      "architecture": "LGBM_REGRESSION",
+      "RETURN": "STRONG",
+      "RISK": "STRONG",
+      "ALPHA": "ACCEPTABLE",
+      "STABILITY": "ACCEPTABLE",
+      "COST": "STRONG",
+      "COMPLEXITY": "STRONG",
+      "DATA_QUALITY": "ACCEPTABLE",
+      "hard_rejection": false,
+      "carry_forward": true,
+      "freeze_readiness": "READY WITH CAVEATS"
+    },
+    {
+      "architecture": "LAMBDAMART",
+      "RETURN": "STRONG",
+      "RISK": "ACCEPTABLE",
+      "ALPHA": "ACCEPTABLE",
+      "STABILITY": "WEAK",
+      "COST": "STRONG",
+      "COMPLEXITY": "ACCEPTABLE",
+      "DATA_QUALITY": "ACCEPTABLE",
+      "hard_rejection": false,
+      "carry_forward": true,
+      "freeze_readiness": "READY WITH CAVEATS"
+    }
+  ],
+  "generated_at_utc": "2026-09-17T23:03:58.513865+00:00"
+}

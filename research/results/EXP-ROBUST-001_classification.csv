@@ -1,0 +1,3 @@
+architecture,classification,dimensions_passed,bootstrap_prob_ic_positive,bootstrap_prob_net_positive,alpha_pass,feature_pass,time_pass,sector_pass,stock_pass,cost_pass,delay_pass,liquidity_pass,seed_parameter_pass
+LGBM_REGRESSION,ROBUST WITH CAVEATS,8,0.837,0.9995,False,True,True,True,True,True,True,True,True
+LAMBDAMART,ROBUST WITH CAVEATS,7,0.6875,1.0,False,True,True,False,True,True,True,True,True

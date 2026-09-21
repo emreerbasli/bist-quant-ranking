@@ -1,0 +1,725 @@
+{
+  "generated_at_utc": "2026-09-17T00:17:07.876604+00:00",
+  "provider": "Yahoo Finance via installed yfinance",
+  "request": {
+    "start": "2018-01-01",
+    "end_exclusive": "2026-09-16",
+    "auto_adjust": false,
+    "actions": true,
+    "repair": false
+  },
+  "records": [
+    {
+      "symbol": "AEFES.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/AEFES_IS.parquet"
+    },
+    {
+      "symbol": "AGHOL.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/AGHOL_IS.parquet"
+    },
+    {
+      "symbol": "AGROT.IS",
+      "status": "OK",
+      "rows": 706,
+      "first_date": "2023-11-23",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/AGROT_IS.parquet"
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/AKBNK_IS.parquet"
+    },
+    {
+      "symbol": "ALARK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ALARK_IS.parquet"
+    },
+    {
+      "symbol": "ALFAS.IS",
+      "status": "OK",
+      "rows": 959,
+      "first_date": "2022-11-16",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ALFAS_IS.parquet"
+    },
+    {
+      "symbol": "ALVES.IS",
+      "status": "OK",
+      "rows": 637,
+      "first_date": "2024-02-29",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ALVES_IS.parquet"
+    },
+    {
+      "symbol": "ANSGR.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ANSGR_IS.parquet"
+    },
+    {
+      "symbol": "ARCLK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ARCLK_IS.parquet"
+    },
+    {
+      "symbol": "ASELS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ASELS_IS.parquet"
+    },
+    {
+      "symbol": "ASTOR.IS",
+      "status": "OK",
+      "rows": 914,
+      "first_date": "2023-01-18",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ASTOR_IS.parquet"
+    },
+    {
+      "symbol": "BIMAS.IS",
+      "status": "OK",
+      "rows": 2203,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/BIMAS_IS.parquet"
+    },
+    {
+      "symbol": "BINHO.IS",
+      "status": "OK",
+      "rows": 622,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/BINHO_IS.parquet"
+    },
+    {
+      "symbol": "BIZIM.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/BIZIM_IS.parquet"
+    },
+    {
+      "symbol": "BRSAN.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/BRSAN_IS.parquet"
+    },
+    {
+      "symbol": "BSOKE.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/BSOKE_IS.parquet"
+    },
+    {
+      "symbol": "CANTE.IS",
+      "status": "OK",
+      "rows": 1345,
+      "first_date": "2021-04-30",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CANTE_IS.parquet"
+    },
+    {
+      "symbol": "CCOLA.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CCOLA_IS.parquet"
+    },
+    {
+      "symbol": "CIMSA.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CIMSA_IS.parquet"
+    },
+    {
+      "symbol": "CLEBI.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CLEBI_IS.parquet"
+    },
+    {
+      "symbol": "CVKMD.IS",
+      "status": "OK",
+      "rows": 858,
+      "first_date": "2023-04-13",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CVKMD_IS.parquet"
+    },
+    {
+      "symbol": "CWENE.IS",
+      "status": "OK",
+      "rows": 841,
+      "first_date": "2023-05-10",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/CWENE_IS.parquet"
+    },
+    {
+      "symbol": "DOAS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/DOAS_IS.parquet"
+    },
+    {
+      "symbol": "DOHOL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/DOHOL_IS.parquet"
+    },
+    {
+      "symbol": "ECILC.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ECILC_IS.parquet"
+    },
+    {
+      "symbol": "EKGYO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/EKGYO_IS.parquet"
+    },
+    {
+      "symbol": "ENKAI.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ENKAI_IS.parquet"
+    },
+    {
+      "symbol": "EREGL.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/EREGL_IS.parquet"
+    },
+    {
+      "symbol": "EUPWR.IS",
+      "status": "OK",
+      "rows": 853,
+      "first_date": "2023-04-20",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/EUPWR_IS.parquet"
+    },
+    {
+      "symbol": "FORTE.IS",
+      "status": "OK",
+      "rows": 620,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/FORTE_IS.parquet"
+    },
+    {
+      "symbol": "FROTO.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/FROTO_IS.parquet"
+    },
+    {
+      "symbol": "GARAN.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/GARAN_IS.parquet"
+    },
+    {
+      "symbol": "GENTS.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/GENTS_IS.parquet"
+    },
+    {
+      "symbol": "GESAN.IS",
+      "status": "OK",
+      "rows": 1273,
+      "first_date": "2021-08-19",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/GESAN_IS.parquet"
+    },
+    {
+      "symbol": "GOKNR.IS",
+      "status": "OK",
+      "rows": 882,
+      "first_date": "2023-03-09",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/GOKNR_IS.parquet"
+    },
+    {
+      "symbol": "GUBRF.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/GUBRF_IS.parquet"
+    },
+    {
+      "symbol": "HALKB.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/HALKB_IS.parquet"
+    },
+    {
+      "symbol": "HEKTS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/HEKTS_IS.parquet"
+    },
+    {
+      "symbol": "INVES.IS",
+      "status": "OK",
+      "rows": 628,
+      "first_date": "2024-03-11",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/INVES_IS.parquet"
+    },
+    {
+      "symbol": "ISCTR.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ISCTR_IS.parquet"
+    },
+    {
+      "symbol": "ISGYO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ISGYO_IS.parquet"
+    },
+    {
+      "symbol": "KBORU.IS",
+      "status": "OK",
+      "rows": 622,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KBORU_IS.parquet"
+    },
+    {
+      "symbol": "KCAER.IS",
+      "status": "OK",
+      "rows": 1055,
+      "first_date": "2022-06-30",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KCAER_IS.parquet"
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KCHOL_IS.parquet"
+    },
+    {
+      "symbol": "KONTR.IS",
+      "status": "OK",
+      "rows": 1481,
+      "first_date": "2020-10-19",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KONTR_IS.parquet"
+    },
+    {
+      "symbol": "KORDS.IS",
+      "status": "OK",
+      "rows": 2206,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KORDS_IS.parquet"
+    },
+    {
+      "symbol": "KRDMD.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/KRDMD_IS.parquet"
+    },
+    {
+      "symbol": "LOGO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/LOGO_IS.parquet"
+    },
+    {
+      "symbol": "MAVI.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/MAVI_IS.parquet"
+    },
+    {
+      "symbol": "MGROS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/MGROS_IS.parquet"
+    },
+    {
+      "symbol": "MIATK.IS",
+      "status": "OK",
+      "rows": 1208,
+      "first_date": "2021-11-22",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/MIATK_IS.parquet"
+    },
+    {
+      "symbol": "MOGAN.IS",
+      "status": "OK",
+      "rows": 597,
+      "first_date": "2024-05-02",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/MOGAN_IS.parquet"
+    },
+    {
+      "symbol": "MTRKS.IS",
+      "status": "OK",
+      "rows": 1362,
+      "first_date": "2021-04-06",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/MTRKS_IS.parquet"
+    },
+    {
+      "symbol": "ODAS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ODAS_IS.parquet"
+    },
+    {
+      "symbol": "ONCSM.IS",
+      "status": "OK",
+      "rows": 924,
+      "first_date": "2023-01-04",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ONCSM_IS.parquet"
+    },
+    {
+      "symbol": "OTKAR.IS",
+      "status": "OK",
+      "rows": 2198,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/OTKAR_IS.parquet"
+    },
+    {
+      "symbol": "OYAKC.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/OYAKC_IS.parquet"
+    },
+    {
+      "symbol": "PASEU.IS",
+      "status": "OK",
+      "rows": 621,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/PASEU_IS.parquet"
+    },
+    {
+      "symbol": "PETKM.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/PETKM_IS.parquet"
+    },
+    {
+      "symbol": "PGSUS.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/PGSUS_IS.parquet"
+    },
+    {
+      "symbol": "PLTUR.IS",
+      "status": "OK",
+      "rows": 939,
+      "first_date": "2022-12-14",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/PLTUR_IS.parquet"
+    },
+    {
+      "symbol": "REEDR.IS",
+      "status": "OK",
+      "rows": 620,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/REEDR_IS.parquet"
+    },
+    {
+      "symbol": "SAHOL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SAHOL_IS.parquet"
+    },
+    {
+      "symbol": "SASA.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SASA_IS.parquet"
+    },
+    {
+      "symbol": "SDTTR.IS",
+      "status": "OK",
+      "rows": 929,
+      "first_date": "2023-01-04",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SDTTR_IS.parquet"
+    },
+    {
+      "symbol": "SELEC.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SELEC_IS.parquet"
+    },
+    {
+      "symbol": "SISE.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SISE_IS.parquet"
+    },
+    {
+      "symbol": "SKBNK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SKBNK_IS.parquet"
+    },
+    {
+      "symbol": "SOKM.IS",
+      "status": "OK",
+      "rows": 2101,
+      "first_date": "2018-05-18",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SOKM_IS.parquet"
+    },
+    {
+      "symbol": "SURGY.IS",
+      "status": "OK",
+      "rows": 621,
+      "first_date": "2024-03-21",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/SURGY_IS.parquet"
+    },
+    {
+      "symbol": "TABGD.IS",
+      "status": "OK",
+      "rows": 725,
+      "first_date": "2023-10-26",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TABGD_IS.parquet"
+    },
+    {
+      "symbol": "TAVHL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TAVHL_IS.parquet"
+    },
+    {
+      "symbol": "TCELL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TCELL_IS.parquet"
+    },
+    {
+      "symbol": "TERA.IS",
+      "status": "OK",
+      "rows": 932,
+      "first_date": "2022-12-26",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TERA_IS.parquet"
+    },
+    {
+      "symbol": "THYAO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/THYAO_IS.parquet"
+    },
+    {
+      "symbol": "TKFEN.IS",
+      "status": "OK",
+      "rows": 2201,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TKFEN_IS.parquet"
+    },
+    {
+      "symbol": "TOASO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TOASO_IS.parquet"
+    },
+    {
+      "symbol": "TRGYO.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TRGYO_IS.parquet"
+    },
+    {
+      "symbol": "TSKB.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TSKB_IS.parquet"
+    },
+    {
+      "symbol": "TTKOM.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TTKOM_IS.parquet"
+    },
+    {
+      "symbol": "TTRAK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TTRAK_IS.parquet"
+    },
+    {
+      "symbol": "TUPRS.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TUPRS_IS.parquet"
+    },
+    {
+      "symbol": "TUREX.IS",
+      "status": "OK",
+      "rows": 1360,
+      "first_date": "2021-04-08",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TUREX_IS.parquet"
+    },
+    {
+      "symbol": "TURSG.IS",
+      "status": "OK",
+      "rows": 2204,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/TURSG_IS.parquet"
+    },
+    {
+      "symbol": "ULKER.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/ULKER_IS.parquet"
+    },
+    {
+      "symbol": "VAKBN.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/VAKBN_IS.parquet"
+    },
+    {
+      "symbol": "VESTL.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/VESTL_IS.parquet"
+    },
+    {
+      "symbol": "XU100.IS",
+      "status": "OK",
+      "rows": 2171,
+      "first_date": "2018-01-02",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/XU100_IS.parquet"
+    },
+    {
+      "symbol": "YKBNK.IS",
+      "status": "OK",
+      "rows": 2200,
+      "first_date": "2018-01-01",
+      "last_date": "2026-09-15",
+      "path": "data/provider_snapshot/YKBNK_IS.parquet"
+    }
+  ]
+}

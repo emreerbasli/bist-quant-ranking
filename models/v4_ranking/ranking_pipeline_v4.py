@@ -16,7 +16,7 @@ dondurulan 9 Faktörlü LGBMRanker modelinin (winning_lgbm_ranker_v4.joblib)
   6. reel_faiz: TCMB Politika Faizi - Yıllık TÜFE Enflasyonu
   7. usd_mom_60: 60 Günlük USD/TRY Kuru İvmesi
   8. usd_mom_90: 90 Günlük USD/TRY Kuru İvmesi
-  9. reel_eps_growth: TÜFE Enflasyonundan Arındırılmış Yıllık Reel EPS Büyümesi
+  9. z_reel_eps: Sektörel Reel EPS Büyümesi Z-Skoru ([-1.5, 1.5] Winsorized)
 
 GÜVENLİK KATMANLARI:
   - Faz 0 Ardışık Taban Hard Exclusion: Son 10 işlem gününde >=5 gün <=-%9.5 taban
@@ -137,9 +137,15 @@ class LGBMRankingPipelineV4:
     """
 
     DEFAULT_MODEL_PATH = Path(__file__).resolve().parent / "winning_lgbm_ranker_v4.joblib"
+    V4_1_MODEL_PATH = Path(__file__).resolve().parent / "winning_lgbm_ranker_v4_1.joblib"
 
     def __init__(self, model_path: Optional[Path] = None):
-        self.model_path = Path(model_path) if model_path else self.DEFAULT_MODEL_PATH
+        if model_path:
+            self.model_path = Path(model_path)
+        elif self.V4_1_MODEL_PATH.exists():
+            self.model_path = self.V4_1_MODEL_PATH
+        else:
+            self.model_path = self.DEFAULT_MODEL_PATH
         self.model_data = None
         self.model = None
         self.feature_cols = None
@@ -152,7 +158,7 @@ class LGBMRankingPipelineV4:
         self.model_data = joblib.load(self.model_path)
         self.model = self.model_data["model"]
         self.feature_cols = self.model_data["feature_cols"]
-        self.model_name = self.model_data.get("model_name", "V4 LGBMRanker (9 Feature)")
+        self.model_name = self.model_data.get("model_name", "V4.1 LGBMRanker (9 Feature: z_reel_eps)")
         logger.info(f"V4 Ranker Yüklendi: {self.model_name} | Özellikler: {self.feature_cols}")
 
     def compute_features(self,
@@ -186,7 +192,7 @@ class LGBMRankingPipelineV4:
             ebit = curr.get("ebitda", 1.0) or 1.0
             borc_ebitda = -net_b / max(1.0, abs(ebit)) if not is_bank else np.nan
 
-            # 9. Faktör: reel_eps_growth
+            # 9. Faktör ham hesaplama: reel_eps_raw
             reel_eps = extract_reel_eps_growth_pit(t, pit_bellek.get(s, []), tufe_aylik)
 
             # Bilanço tazelik hesabı
@@ -203,6 +209,7 @@ class LGBMRankingPipelineV4:
                 "sembol": s, "sektor": sektor, "is_bank": is_bank,
                 "fcf_v": fcf_v, "roe": roe, "mom": mom,
                 "borc_ebitda": borc_ebitda, "pb": pb,
+                "reel_eps_raw": reel_eps,
                 "reel_eps_growth": reel_eps,
                 "data_age_days": data_age_days
             })
@@ -218,6 +225,9 @@ class LGBMRankingPipelineV4:
         df["z_borc"] = hesapla_sektor_zscore(df, "borc_ebitda", min_grup=4).fillna(0.0)
         df["z_pb"]   = -hesapla_sektor_zscore(df, "pb", min_grup=4).fillna(0.0)
 
+        # 9. Resmi V4.1 Faktörü: Sektörel Z-Skor ve [-1.5, 1.5] Winsorize Kırpma
+        df["z_reel_eps"] = hesapla_sektor_zscore(df, "reel_eps_raw", min_grup=4).fillna(0.0).clip(-1.5, 1.5)
+
         # Makro Özellikler
         df["reel_faiz"]  = reel_faiz
         df["usd_mom_60"] = mom_60_usd
@@ -226,7 +236,7 @@ class LGBMRankingPipelineV4:
         return df
 
     def rank_stocks(self, df_features: pd.DataFrame) -> pd.DataFrame:
-        """Özellik matrisini V4 modeliyle skorlar ve sıralar."""
+        """Özellik matrisini V4/V4.1 modeliyle skorlar ve sıralar."""
         if df_features.empty:
             return df_features
 
@@ -240,7 +250,7 @@ class LGBMRankingPipelineV4:
         df_out["decile"] = pd.qcut(df_out["ml_score"], q=10, labels=False, duplicates="drop")
         df_out["decile"] = 10 - df_out["decile"]
 
-        cols_to_ret = ["rank", "sembol", "sektor", "ml_score", "decile", "reel_eps_growth", "z_pb", "z_borc", "z_mom", "z_roe", "z_fcf"]
+        cols_to_ret = ["rank", "sembol", "sektor", "ml_score", "decile", "z_reel_eps", "reel_eps_growth", "z_pb", "z_borc", "z_mom", "z_roe", "z_fcf"]
         if "data_age_days" in df_out.columns:
             cols_to_ret.append("data_age_days")
 

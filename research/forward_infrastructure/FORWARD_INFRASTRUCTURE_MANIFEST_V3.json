@@ -1,0 +1,32 @@
+{
+  "experiment_id": "EXP-FREEZE-001R2",
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "clean_forward_start": "NOT_STARTED",
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "candidates": {
+    "RC-LGBMR-001": {
+      "version": "1.0.0",
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "target": "RAW",
+      "horizon": 60
+    },
+    "RC-LAMBDAMART-001": {
+      "version": "1.0.0",
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "target": "BETA_RESIDUAL",
+      "horizon": 60
+    }
+  },
+  "hashes": {
+    "research\\run_frozen_shadow.py": "1c70f7134bab9419885bfc52b12b9716cf1db9fe4ccdd9058d89bc3b6978570e",
+    "research\\forward_infrastructure_001.py": "f47ef099fbee7d963051ca9dd48ca434d44b44029a489f50886eb2d61325dec3",
+    "research\\forward_lifecycle_001r2.py": "a94972d38a9a021ae1246114a149a85835ea0b2cffccb02ba9a78b1e2467ee3f",
+    "research\\exp_freeze_001r2.py": "dc76c309c05148979bd9c25257290118f52ae722ce45684d1672390bb97a2106",
+    "research\\contracts\\exp_freeze_001r.json": "f865b89ddcbc66f7275bf8e8cdf1aeb3ff8fe6132691d76be68e510bc1ed5f31",
+    "research\\tests\\test_exp_freeze_001r.py": "635baaf27b7ee2c675e48fc5e579702264fedcbc736fbabb74135b4a803f6a01",
+    "research\\tests\\test_exp_freeze_001r2.py": "174d8202b925fe6a2e7abcbbf47259675c3b119a81de0031517562211401e8b3"
+  },
+  "v2_manifest_sha256": "087d2d346699a3756c039a60dc52925e2f3c5472fd91544d4135a4ee840fb465",
+  "created_at": "2026-09-18T12:55:50.821837+03:00",
+  "production_writes_allowed": false
+}

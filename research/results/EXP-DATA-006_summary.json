@@ -1,0 +1,38 @@
+{
+  "experiment": "EXP-DATA-006",
+  "records": 2646,
+  "tickers": 88,
+  "pit_quality": {
+    "APPROXIMATE_FIXED_LAG": 2646
+  },
+  "local_duplicate_ticker_period_rows": 0,
+  "vintage_unknown_rows": 2646,
+  "tfrs29_mechanical_flag_rows": 848,
+  "market_cap_fallback_candidate_or_missing_rows": 190,
+  "future_latest_capital_fallback_rows": 0,
+  "signal_date_dynamic_valuation_rows": 0,
+  "missing_to_zero_code_findings": 34,
+  "poc_exact_financial_reports": 1,
+  "field_status_cells": {
+    "PROXY_UNVERIFIED": 36056,
+    "INVALID": 11541,
+    "MISSING": 5323
+  },
+  "family_decisions": {
+    "QUALITY": "PARTIAL",
+    "PROFITABILITY": "PARTIAL",
+    "CASH_FLOW": "PARTIAL",
+    "BALANCE_SHEET": "PARTIAL",
+    "EARNINGS": "PARTIAL",
+    "VALUE": "FAIL_CURRENT_STORED_RATIOS"
+  },
+  "readiness": {
+    "QUALITY_FEATURES": "PARTIAL",
+    "CASH_FLOW_FEATURES": "PARTIAL",
+    "BALANCE_SHEET_FEATURES": "PARTIAL",
+    "EARNINGS_FEATURES": "PARTIAL",
+    "VALUE_FEATURES": "NO_CURRENT_STORED_RATIOS",
+    "FULL_FUNDAMENTAL_ML": "NO"
+  },
+  "gate": "FUNDAMENTAL DATA = PARTIAL"
+}

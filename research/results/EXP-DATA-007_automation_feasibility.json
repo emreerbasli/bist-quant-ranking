@@ -1,0 +1,17 @@
+{
+  "safe_automation_with_existing_code": "YES_WITH_STAGED_CACHE_AND_RATE_CONTROLS",
+  "pilot_request_count": 83,
+  "last_run_request_stats": {
+    "logical_requests": 83,
+    "network_attempts": 0,
+    "cache_hits": 83
+  },
+  "conservative_2646_observation_coverage_estimate_pct": 100.0,
+  "estimated_bulk_requests": "roughly 792 annual list requests (88 tickers x 9 years) plus 2,646-5,292 detail requests; approximately 3,438-6,084 logical requests before retries",
+  "rate_blocking_risk": "MEDIUM_HIGH: public web proxy, no documented bulk SLA, large multi-megabyte detail pages",
+  "new_provider_required": false,
+  "new_package_required": false,
+  "new_api_required": false,
+  "paid_source_required": false,
+  "bulk_started": false
+}

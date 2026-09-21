@@ -1,0 +1,10 @@
+{
+  "contract_sha256": "2a09d64bb338fa32da012fac1da2812942bfa5910052d56f9e354e0a35ffa1fa",
+  "code_sha256": "638bdbfe537d3522c9804eac8248684175382c9909615efa2ff8e6df370bf2cd",
+  "combined_freeze_manifest_sha256": "32638a86ab0d79e623727bb621265479216fcd211bb3b86a96291faee971bd77",
+  "files": {
+    "EXP-FREEZE-001_report.md": "6f680c2e52b573258bf5150d3452ad254f5a661f62210fd8a7e87c7625231f97",
+    "EXP-FREEZE-001_reproducibility_tests.csv": "6a8134e345674e391a87a118490976d0c0f9ee154382d2fd5857c2c042780df9",
+    "EXP-FREEZE-001_summary.json": "fd5d3f3d2af9ecde9c9281e1bc94eea12db743ffdd5ae9fbcb7d347b1c4800e6"
+  }
+}

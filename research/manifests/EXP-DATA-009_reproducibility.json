@@ -1,0 +1,11 @@
+{
+  "experiment": "EXP-DATA-009",
+  "generated_at_utc": "2026-09-19T11:32:24.510909+00:00",
+  "inputs": {
+    "v3_loader_sha256": "6f38c1c50371ac75aa28237f56b1178543e95794d04da53e47b9dc70abf16349",
+    "v4_loader_sha256": "04f446fa104e2a0884472fa3dd3371e45bdbda091ef4d5173e09b7f4e19bf58a",
+    "try_x_sha256": "2365d9b0090fd0089ed4be4138f93020bcec80fa07d3387eae00340daa4492ce"
+  },
+  "output_gate": "EXCLUDE",
+  "production_changes": 0
+}

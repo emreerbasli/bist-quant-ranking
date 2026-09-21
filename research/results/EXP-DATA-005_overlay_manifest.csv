@@ -1,0 +1,2 @@
+symbol,base_view,overlay_file,quarantined_rows,official_ex_quality
+KONTR.IS,data\price_view_data004\KONTR_IS.parquet,data\price_view_data005_overlay\KONTR_IS.parquet,6,RECONSTRUCTED

@@ -1,0 +1,7 @@
+cluster_id,members,member_count
+1,mom_20|ret_20,2
+2,base_rank_mom_63|mom_63_rank,2
+3,mom_126|mom_126_skip20,2
+4,base_rank_mom_12_1|mom_252|mom_252_skip20,3
+5,base_rank_vol_63|downside_vol_126|vol_126|vol_63_rank,4
+6,log_adv20|log_adv63|log_amihud20|log_amihud63,4

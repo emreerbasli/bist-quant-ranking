@@ -1,0 +1,15 @@
+{
+  "experiment_id": "EXP-FEAT-001",
+  "execution": "PASS",
+  "phase_d_gate": "FAIL",
+  "candidate_count": 25,
+  "classification_counts": {
+    "REJECTED": 25
+  },
+  "viable_features": [],
+  "weak_features": [],
+  "combined_outer_mean_delta_rank_ic": 0.03738071868652096,
+  "macro_used": false,
+  "fundamental_used": false,
+  "production_changes": 0
+}

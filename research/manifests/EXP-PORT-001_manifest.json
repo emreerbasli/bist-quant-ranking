@@ -1,0 +1,18 @@
+{
+  "contract_sha256": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+  "model_contract_sha256": "4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d",
+  "code_sha256": "e90ec898511a61a833b58707185eaa005f61cad2bdda76b770e7d87af24a5637",
+  "files": {
+    "EXP-PORT-001_capacity_summary.csv": "7ab8a090476ff3040809db1da02a66ca4c99e6d393e144f151af816bb2df5d61",
+    "EXP-PORT-001_classification.csv": "cbfff77296198015b417c838109fd31c838b16db7a276833b2d7c36296939c31",
+    "EXP-PORT-001_cost_summary.csv": "a565df943416cbdc58a65a4549980b811ed6b95a87af6fd89d7af1e0c0dc502f",
+    "EXP-PORT-001_daily_nav.csv": "a8f0c991ba9ccbc8d550ba40431b6b20539703fee44557ebded16d698956a969",
+    "EXP-PORT-001_delay_summary.csv": "baa48a2c1f786a88be6a54c122b89ff75bcc8404a18157a2bf7e281c384ad98f",
+    "EXP-PORT-001_k_summary.csv": "0022a73129636076a51a4c9b67686bdcb3185a82afbb991011adb02c262687a5",
+    "EXP-PORT-001_outer_metrics.csv": "e706332050f8c2d783713699024aa3afe7d0128db41beafd8ad8ce40583c20e5",
+    "EXP-PORT-001_positions.csv": "d756c80b8ab84c07d43d80c047f8c433b4d72365eac60291561f0f98d98cb1f1",
+    "EXP-PORT-001_report.md": "4c389f78c505530ddfa6bffc00fec771db649bb4b55b53011caec8e64f3e2d9f",
+    "EXP-PORT-001_summary.json": "7f3e8eeb7070e1bdea830aaf002f35ae253abc3a4783c0b8a3812cfd96012c28",
+    "EXP-PORT-001_trades.csv": "9f8f99e8fad2da8fba31ecc8593cf5c93ffcf7968ebbcbaa023f749bd0d42215"
+  }
+}

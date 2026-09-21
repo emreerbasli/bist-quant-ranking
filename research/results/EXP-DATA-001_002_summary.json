@@ -1,0 +1,28 @@
+{
+  "price_status": {
+    "PROXY_UNVERIFIED": 88
+  },
+  "price_missing_during_life": 139,
+  "price_pre_first_bar_sessions": 35882,
+  "price_zero_volume_after_first_positive": 1728,
+  "corporate_action_flags": 5,
+  "fundamental_status": {
+    "PROXY_UNVERIFIED": 88
+  },
+  "fundamental_summary": {
+    "total_records": 2646,
+    "fixed_schedule_records": 2646,
+    "market_cap_fallback_records": 190,
+    "future_last_capital_fallback_records": 190,
+    "actual_announcement_timestamp_coverage": 0,
+    "vintage_or_restatement_coverage": 0,
+    "statement_basis_coverage": 0
+  },
+  "repository_evidence": {
+    "historical_universe_candidate_files": [],
+    "current_hardcoded_universe_present": true,
+    "macro_missing_month_fallback_present": true,
+    "fixed_fundamental_schedule_present": true,
+    "fundamental_builder_last_capital_fallback_present": true
+  }
+}

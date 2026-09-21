@@ -1,0 +1,96 @@
+{
+  "candidate_id": "RC-LAMBDAMART-001",
+  "candidate_version": "1.0.0",
+  "status": "FROZEN RESEARCH CANDIDATE / CLEAN FORWARD MONITORING",
+  "model_type": "LAMBDAMART",
+  "model_path": "research\\frozen_candidates\\RC-LAMBDAMART-001\\model.joblib",
+  "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+  "training_start": "2019-01-04",
+  "training_cutoff": "2025-05-30",
+  "training_observations": 1538,
+  "training_last_label_end": "2025-04-09",
+  "target_procedure": "BETA_RESIDUAL",
+  "horizon_procedure": 60,
+  "features": [
+    {
+      "name": "mom_12_1",
+      "formula": "last_valid_close[-22] / last_valid_close[-253] - 1",
+      "lookback": "252 sessions with 1-month skip",
+      "minimum_history": 253,
+      "transform": "raw price return",
+      "dtype": "float64"
+    },
+    {
+      "name": "mom_63",
+      "formula": "last_valid_close / last_valid_close[-64] - 1",
+      "lookback": "63 returns",
+      "minimum_history": 64,
+      "transform": "raw price return",
+      "dtype": "float64"
+    },
+    {
+      "name": "vol_63",
+      "formula": "std of last 63 valid close-to-close returns",
+      "lookback": "63 returns",
+      "minimum_history": 64,
+      "transform": "raw volatility",
+      "dtype": "float64"
+    }
+  ],
+  "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+  "seed_policy": {
+    "values": [
+      11,
+      29,
+      47
+    ],
+    "aggregation": "median prediction",
+    "deterministic": true,
+    "n_jobs": 1,
+    "force_col_wise": true,
+    "reproduction_tolerance": 1e-12
+  },
+  "code_hashes": {
+    "research\\exp_model_001.py": "c7bbd3dd71ff3edb65417f89051d3668c12539310b437f34f11fb18ec9e75ee8",
+    "research\\exp_tgt_001.py": "18f36854a64a4ad5404e54d47857e50ef22c0b5548c91f99506a10d7e3f489f9",
+    "research\\exp_tgt_002.py": "47348367c97f3b3e05e207298d51491feea750a1e7707e1d8f0dbd6b0d62173c",
+    "research\\exp_port_001.py": "e90ec898511a61a833b58707185eaa005f61cad2bdda76b770e7d87af24a5637",
+    "research\\temporal_validation.py": "c62a1a07d9c274c8235df927b163751e1341a3166478867fbcfff1d62e95c37e",
+    "config.py": "15b7dda978b514936d8ecd52bfe4195f25ca60fd8b1d6128c8c865222057f008",
+    "research\\contracts\\exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+    "research\\contracts\\exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+    "research\\contracts\\exp_model_001.json": "4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d",
+    "research\\contracts\\exp_port_001.json": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+    "research\\contracts\\exp_robust_001.json": "6e1b3b245c56e1451d23cf26381fc5322f8d5c4533f63d1ef89da2d16c7a8ae5",
+    "research\\contracts\\exp_final_001.json": "523f628c7b7e91b6e7f033dde8eec76991b88713e537292c6ef0de0555d5c37b",
+    "research\\contracts\\exp_ens_001.json": "6ef653e53010d5a5a8ae6b07b0d11091c1d2e355555e99c59b326e525037f242",
+    "research\\contracts\\exp_freeze_001.json": "2a09d64bb338fa32da012fac1da2812942bfa5910052d56f9e354e0a35ffa1fa"
+  },
+  "data_hashes": {
+    "exp_data_005_manifest_sha256": "4da86a3a5935cede5da79c6156a72559b999c43b4530071e35b60095b96d0aff",
+    "feature_input_dataframe_sha256": "f10e8f517c5ae61dfd494a16de0a8f722ae351f1c3b9c13ca9dbb6f21d9320d6",
+    "target_dataframe_sha256": "1653f6dbb1433729ceb88d07d6a7f419f1bed3694e72f722dbe6cd7482d3beb1",
+    "eligible_universe_sha256": "5caf502d1f8414d9dec0ee05c92ee2ef7d105b9e95102118b9bec678e4a4aa0f",
+    "ticker_count": 88,
+    "price_status": "PASS FOR RESEARCH",
+    "date_range": [
+      "2018-01-02",
+      "2025-05-30"
+    ]
+  },
+  "portfolio_contract_hash": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+  "reproduction_command": ".\\venv\\Scripts\\python.exe research\\run_frozen_shadow.py --candidate RC-LAMBDAMART-001 --asof YYYY-MM-DD",
+  "known_caveats": [
+    "survivor universe",
+    "provider-dependent price history",
+    "only three price features",
+    "mom_63 dependency",
+    "macro excluded",
+    "fundamental excluded",
+    "historical evidence is not clean forward",
+    "sector concentration",
+    "weaker stability classification",
+    "lower bootstrap P(IC>0)",
+    "ranking-objective complexity"
+  ]
+}

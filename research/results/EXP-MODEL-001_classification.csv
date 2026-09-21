@@ -1,0 +1,5 @@
+architecture,absolute_viable,incremental_viable,classification,mean_controlled_delta_rank_ic,median_controlled_delta_rank_ic,positive_delta_fold_ratio,mean_controlled_delta_ndcg,mean_seed_rank_ic_std
+FACTOR_COMPOSITE,True,,CONTROL / BASELINE,,,,,
+RIDGE,False,,CONTROL / BASELINE,,,,,
+LGBM_REGRESSION,True,True,VIABLE,0.22316591819074788,0.16274389259228603,1.0,0.10291799498857171,0.008725332413323057
+LAMBDAMART,True,True,VIABLE,0.1809044631544531,0.10712347252089433,1.0,0.09086287091422035,0.015885870201373435

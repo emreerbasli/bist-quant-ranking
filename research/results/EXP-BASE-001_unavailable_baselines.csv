@@ -1,0 +1,4 @@
+baseline,status,reason
+VALUE_QUALITY,N/A,fundamental PIT/accounting gate not passed
+V3,N/A,common refit comparison requires unverified fundamental/macro inputs
+V4_1,N/A,common refit comparison requires unverified fundamental/macro inputs and old lockbox is contaminated

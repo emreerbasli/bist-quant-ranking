@@ -60,8 +60,8 @@ def test_xray_2_runtime():
         sym = row["sembol"]
         clean_sym = sym.replace("^", "IDX_").replace(".", "_").replace("=", "_")
         
-        # A. 7 Faktör / Model Skoru kontrolü
-        for col in ["reel_eps_growth", "z_roe", "z_pb", "z_borc", "z_mom", "z_fcf", "ml_score"]:
+        # A. 7 Faktör / Model Skoru kontrolü (V4.1 z_reel_eps ve reel_eps_growth)
+        for col in ["z_reel_eps", "reel_eps_growth", "z_roe", "z_pb", "z_borc", "z_mom", "z_fcf", "ml_score"]:
             val = row.get(col)
             assert pd.notna(val), f"{sym} için {col} NaN olamaz!"
 

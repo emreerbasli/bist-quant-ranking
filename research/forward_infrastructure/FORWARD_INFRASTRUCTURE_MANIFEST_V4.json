@@ -1,0 +1,36 @@
+{
+  "candidates": {
+    "RC-LAMBDAMART-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "4744a5109bc3f97b11f2ef6f890cdded5672fd5a25a9a8252f9e1ad7fb31d849",
+      "target": "BETA_RESIDUAL",
+      "version": "1.0.0"
+    },
+    "RC-LGBMR-001": {
+      "feature_schema_hash": "cf5a089859ea18638efdee4236667091441eb5930537d366f06d819f9e52e30b",
+      "horizon": 60,
+      "model_sha256": "350fb049f7f2e392a62fc89516acbb00676e1b1ef922559fc2f1dc3bfe9e81f6",
+      "target": "RAW",
+      "version": "1.0.0"
+    }
+  },
+  "clean_forward_start": "NOT_STARTED",
+  "created_at": "2026-09-18T13:28:46.880465+03:00",
+  "experiment_id": "EXP-FREEZE-001R3",
+  "hashes": {
+    "research\\contracts\\exp_freeze_001r3.json": "00c0fc82a49673117c5385be829baff00ab56912f2955b9847f23dd5a69e6cbf",
+    "research\\contracts\\exp_port_001.json": "6418537ab8006366b9022fd313d49f37ca2b3f26844d484cd92be4616fc22cd1",
+    "research\\contracts\\exp_tgt_001.json": "0d5618bb4da9b0b1db026c4e19f35e07080fa1cba71973b1b90cc774ae3e7c73",
+    "research\\contracts\\exp_tgt_002.json": "a168c8ac3ff8f2192207c0a773af8640f67d6d04f7471e55ac07eb616891f09b",
+    "research\\exp_freeze_001r3.py": "3393f86a60323184b1223031ff63b686d9827e68c502ee379c68c8bbeb310af4",
+    "research\\forward_infrastructure_001r3.py": "fcb08860565e7e08568f05279cd3a01a1752c1563c73452780208207cbcf4c6f",
+    "research\\forward_lifecycle_001r3.py": "e578c08cd75dfc14d961415c2cd9656b5977c3fd69754f10102db9e8d9f407b4",
+    "research\\run_frozen_shadow.py": "e934f13dc167febe52f4dd24699b98cd821666161ee8660a262fe586a911ff63",
+    "research\\tests\\test_exp_freeze_001r3.py": "98addc7db9103ff9e9e1e399865e7278ab8164b7dda918db01a4bc8a275be4c1"
+  },
+  "original_model_freeze_timestamp": "2026-09-18T02:25:56.600962+03:00",
+  "production_writes_allowed": false,
+  "status": "PENDING_INDEPENDENT_AUDIT",
+  "v3_manifest_sha256": "5e3941089bc32bc769991a2e04d7a8a679e086253533f4e7a2e3115ab6677203"
+}

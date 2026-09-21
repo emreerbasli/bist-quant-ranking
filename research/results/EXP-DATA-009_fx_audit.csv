@@ -1,0 +1,8 @@
+metric,value
+fx_rows,2266
+fx_duplicate_dates,0
+fx_null_close,0
+bist_dates_without_fx,3
+missing_bist_dates,2019-05-22|2025-04-18|2025-04-21
+uses_reindex_ffill,yes
+future_index_reference_in_v3v4,no (<= t slicing)

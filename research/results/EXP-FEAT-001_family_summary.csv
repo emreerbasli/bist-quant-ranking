@@ -1,0 +1,6 @@
+family,candidate_count,viable_count,weak_count,rejected_count,strongest_representations,best_median_inner_delta_rank_ic,mean_outer_delta_rank_ic_evaluated,high_correlation_cluster_ids
+LIQUIDITY,7,0,0,7,log_adv63|log_adv20|log_amihud20,0.021816666132659916,0.09131251741039462,6
+MOMENTUM,7,0,0,7,mom_252|mom_20|mom_126,0.0027120292193885138,0.018952935577485192,1|2|3|4
+MOMENTUM_CONSISTENCY,2,0,0,2,sign_consistency_4x20|positive_return_ratio_63,0.013063880973815634,-0.016130436293463217,
+REVERSAL,3,0,0,3,ret_20|ret_10|ret_5,-0.00022999042094964603,0.045965385574618454,1
+RISK,6,0,0,6,vol_126|vol_63_rank|downside_vol_63,0.03408610932480336,0.08630265561340572,5

@@ -1,0 +1,10 @@
+{
+  "experiment_id": "EXP-TGT-002",
+  "test_command": "venv\\Scripts\\python.exe -m unittest research.tests.test_temporal_validation research.tests.test_exp_tgt_001 research.tests.test_exp_tgt_002",
+  "tests_run": 22,
+  "tests_passed": 22,
+  "tests_failed": 0,
+  "status": "PASS",
+  "production_hash_status": "PASS",
+  "production_changed_count": 0
+}

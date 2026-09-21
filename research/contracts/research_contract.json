@@ -1,0 +1,40 @@
+{
+  "contract_version": "1.0.0",
+  "status": "PRECOMMITTED_RESEARCH_CONTROL",
+  "signal_timing": "after_close",
+  "execution_timing": "next_session_open_when_valid",
+  "prediction_horizons_sessions": [20, 40, 60],
+  "initial_target_wave": ["raw_return_ranking"],
+  "legacy_target_name": "LEGACY_V3_TARGET",
+  "legacy_target_definition": "approximately three calendar months using the first and last available prices in the legacy interval",
+  "holding_period": {
+    "minimum_sessions": 60,
+    "is_separate_from_prediction_horizon": true
+  },
+  "rebalance_frequency": {
+    "research_control_sessions": 60,
+    "is_separate_from_prediction_horizon": true,
+    "is_optimized_in_initial_package": false
+  },
+  "portfolio_control": {
+    "weighting": "equal_weight",
+    "top_k": 10,
+    "top_k_is_assumed_optimal": false
+  },
+  "transaction_cost_one_way_bps": [0, 30, 50, 100],
+  "label_contract_fields": [
+    "signal_date",
+    "entry_date",
+    "label_start",
+    "label_end",
+    "horizon_sessions"
+  ],
+  "purge_rule": "exclude every training observation whose actual label_end_date is on or after the validation_or_test_start_date",
+  "horizon_selection": "inner_temporal_validation_only",
+  "outer_feedback_for_selection": false,
+  "contaminated_period_start": "2025-06-01",
+  "contaminated_period_usage": "descriptive_only",
+  "rejected_rotation_rule": "forced portfolio renewal every 20 trading sessions",
+  "prediction_horizon_20_is_rotation": false,
+  "production_writes_allowed": false
+}

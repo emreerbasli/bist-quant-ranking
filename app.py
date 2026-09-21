@@ -18,6 +18,8 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Union
 
 import streamlit as st
+import shadow_reader
+import pandas as pd
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -295,6 +297,194 @@ def load_v3_vs_v4_comparison() -> Optional[Dict[str, Any]]:
     return None
 
 
+@st.cache_data(ttl=600)
+def load_rc_research_evidence(candidate_id: str) -> Dict[str, Any]:
+    """RC adayları için dondurulmuş araştırma JSON artifact'larından doğrulanmış kanıtları dinamik olarak çeker."""
+    manifest_path = ROOT_DIR / "research" / "frozen_candidates" / candidate_id / "candidate_manifest.json"
+    port_path = ROOT_DIR / "research" / "results" / "EXP-PORT-001_summary.json"
+    rob_path = ROOT_DIR / "research" / "results" / "EXP-ROBUST-001_summary.json"
+    fin_path = ROOT_DIR / "research" / "results" / "EXP-FINAL-001_summary.json"
+    act_path = ROOT_DIR / "research" / "forward_infrastructure" / "forward_activation.json"
+    
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    port_sum = json.loads(port_path.read_text(encoding="utf-8")) if port_path.exists() else {}
+    rob_sum = json.loads(rob_path.read_text(encoding="utf-8")) if rob_path.exists() else {}
+    fin_sum = json.loads(fin_path.read_text(encoding="utf-8")) if fin_path.exists() else {}
+    act = json.loads(act_path.read_text(encoding="utf-8")) if act_path.exists() else {}
+    
+    arch = "LGBM_REGRESSION" if "LGBM" in candidate_id else "LAMBDAMART"
+    
+    port_cls = next((c for c in port_sum.get("classifications", []) if c.get("architecture") == arch), {})
+    rob_cls = next((c for c in rob_sum.get("classifications", []) if c.get("architecture") == arch), {})
+    fin_arch = next((a for a in fin_sum.get("architectures", []) if a.get("architecture") == arch), {})
+    
+    return {
+        "candidate_id": candidate_id,
+        "architecture": arch,
+        "model_type": manifest.get("model_type", arch),
+        "target_procedure": manifest.get("target_procedure", "N/A"),
+        "horizon_procedure": manifest.get("horizon_procedure", 60),
+        "features": [f.get("name") for f in manifest.get("features", [])],
+        "model_sha256": manifest.get("model_sha256", "N/A"),
+        "training_start": manifest.get("training_start", "N/A"),
+        "training_cutoff": manifest.get("training_cutoff", "N/A"),
+        "clean_forward_start": act.get("clean_forward_start", "N/A"),
+        # Port metrics from EXP-PORT-001
+        "mean_net_return": port_cls.get("mean_net_return"),
+        "mean_cagr": port_cls.get("mean_cagr"),
+        "mean_sharpe": port_cls.get("mean_sharpe"),
+        "worst_daily_maxdd": port_cls.get("worst_daily_maxdd"),
+        "worst_day": port_cls.get("worst_day"),
+        "mean_turnover": port_cls.get("mean_turnover"),
+        "mean_fill_rate": port_cls.get("mean_fill_rate"),
+        "k": port_cls.get("k", 10),
+        "classification": port_cls.get("classification", "N/A"),
+        # Robust metrics from EXP-ROBUST-001
+        "robust_classification": rob_cls.get("classification", "N/A"),
+        "dimensions_passed": rob_cls.get("dimensions_passed"),
+        "bootstrap_prob_ic_positive": rob_cls.get("bootstrap_prob_ic_positive"),
+        "bootstrap_prob_net_positive": rob_cls.get("bootstrap_prob_net_positive"),
+        # Final decision from EXP-FINAL-001
+        "final_decision": fin_sum.get("decision", "N/A")
+    }
+
+
+@st.cache_data(ttl=600)
+def load_rc_research_nav(candidate_id: str) -> pd.DataFrame:
+    """EXP-PORT-001 OOS araştırma simülasyonunun günlük NAV ve getiri serisini yükler.
+    
+    Metodolojik İlkeler:
+    1. EXP-PORT-001 içinde her OOS fold (O1, O2, O3, O4) bağımsız olarak 1.0 başlangıç sermayesiyle başlar.
+    2. Fold içi günlük getiri: r_t = NAV_t / NAV_{t-1} - 1 (t=0 için r_0 = NAV_0 - 1.0).
+    3. Fold sınırları arasında return hesaplanmaz; fold reset düşüşleri filtrelenir.
+    4. Kümülatif bileşik seri: chained_nav_t = chained_nav_{t-1} * (1 + r_t).
+    """
+    nav_file = ROOT_DIR / "research" / "results" / "EXP-PORT-001_daily_nav.csv"
+    if not nav_file.exists():
+        return pd.DataFrame()
+    try:
+        df = pd.read_csv(nav_file)
+        arch = "LGBM_REGRESSION" if "LGBM" in candidate_id else "LAMBDAMART"
+        sub = df[
+            (df["case"] == "K_SENSITIVITY") &
+            (df["k"] == 10) &
+            (df["cost_bps"] == 50) &
+            (df["delay_sessions"] == 0) &
+            (df["architecture"] == arch)
+        ].copy()
+        if sub.empty:
+            return pd.DataFrame()
+        
+        # Kronolojik ve fold sırasına göre sırala
+        sub = sub.sort_values(["outer_fold", "date"]).reset_index(drop=True)
+        
+        daily_rets = []
+        fold_nav_pct = []
+        for fold, fdf in sub.groupby("outer_fold", sort=False):
+            f_navs = fdf["nav"].values
+            for i, val in enumerate(f_navs):
+                if i == 0:
+                    ret = float(val - 1.0)
+                else:
+                    ret = float(val / f_navs[i - 1] - 1.0)
+                daily_rets.append(ret)
+                fold_nav_pct.append(float(val - 1.0) * 100.0)
+                
+        sub["daily_return"] = daily_rets
+        sub["fold_nav_pct"] = fold_nav_pct
+        sub["chained_nav"] = (1.0 + sub["daily_return"]).cumprod()
+        sub["chained_nav_pct"] = (sub["chained_nav"] - 1.0) * 100.0
+        return sub
+    except Exception:
+        return pd.DataFrame()
+
+
+def build_rc_oos_figure(
+    df_nav: pd.DataFrame,
+    candidate_label: str,
+    base_color: str = "#00e676",
+    view_mode: str = "CONTINUOUS_CHAIN",
+    is_dash: bool = False
+) -> go.Figure:
+    """EXP-PORT-001 OOS NAV grafiğini metodolojik kurallara uygun olarak çizer.
+    
+    1. CONTINUOUS_CHAIN: Her fold'un bileşik günlük getirisi önceki fold'un son NAV seviyesinden devam eder.
+       Fold aralarındaki ambargo/purge periyodu boş bırakılır; sahte diagonal bağlantı veya reset düşüşü çizilmez.
+    2. SEPARATE_FOLD_TRACES: Her fold (O1, O2, O3, O4) bağımsız olarak %0 (1.0) seviyesinden ayrı trace olarak çizilir.
+    """
+    fig = go.Figure()
+    if view_mode == "CONTINUOUS_CHAIN":
+        first = True
+        for fold, fdf in df_nav.groupby("outer_fold", sort=False):
+            fig.add_trace(go.Scatter(
+                x=fdf["date"],
+                y=fdf["chained_nav_pct"],
+                mode="lines",
+                name=f"{candidate_label} (Kümülatif OOS NAV)",
+                legendgroup=candidate_label,
+                showlegend=first,
+                line=dict(color=base_color, width=2.5, dash="dash" if is_dash else "solid"),
+                hovertemplate="<b>%{x}</b><br>Kümülatif Getiri: +%{y:.2f}%<extra></extra>"
+            ))
+            first = False
+    else:
+        fold_palette = ["#00e676", "#38bdf8", "#f59e0b", "#ec4899"]
+        for idx, (fold, fdf) in enumerate(df_nav.groupby("outer_fold", sort=False)):
+            col = fold_palette[idx % len(fold_palette)]
+            end_ret = fdf["fold_nav_pct"].iloc[-1]
+            fig.add_trace(go.Scatter(
+                x=fdf["date"],
+                y=fdf["fold_nav_pct"],
+                mode="lines",
+                name=f"{fold} (+%{end_ret:.1f})",
+                line=dict(color=col, width=2.2),
+                hovertemplate=f"<b>%{{x}}</b><br>{fold} Getirisi: +%{{y:.2f}}%<extra></extra>"
+            ))
+            
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor="#0b0f19",
+        plot_bgcolor="#111827",
+        height=400,
+        margin=dict(l=20, r=20, t=30, b=20),
+        xaxis=dict(gridcolor="#1f293d", title="Tarih"),
+        yaxis=dict(
+            gridcolor="#1f293d",
+            title="OOS Net Kümülatif Getiri (%)" if view_mode == "CONTINUOUS_CHAIN" else "Fold İçi Net Getiri (%)"
+        ),
+        hovermode="x unified"
+    )
+    return fig
+
+
+def load_rc_forward_status(candidate_id: str) -> Dict[str, Any]:
+    """Official clean-forward infrastructure ve committed kayıt durumunu sorgular."""
+    act_path = ROOT_DIR / "research" / "forward_infrastructure" / "forward_activation.json"
+    act = json.loads(act_path.read_text(encoding="utf-8")) if act_path.exists() else {}
+    
+    events_path = ROOT_DIR / "research" / "forward_infrastructure" / "events" / f"{candidate_id}.jsonl"
+    tx_dir = ROOT_DIR / "research" / "forward_infrastructure" / "transactions" / candidate_id
+    
+    completed_observations = []
+    if tx_dir.exists():
+        for tx_file in tx_dir.glob("*.json"):
+            try:
+                tx_data = json.loads(tx_file.read_text(encoding="utf-8"))
+                if tx_data.get("status") == "COMMITTED" and "return" in tx_data:
+                    completed_observations.append(tx_data)
+            except Exception:
+                pass
+                
+    return {
+        "clean_forward_start": act.get("clean_forward_start", "N/A"),
+        "activation_mode": act.get("activation_mode", "N/A"),
+        "manifest_ref": act.get("approved_forward_manifest_reference", "N/A"),
+        "audit_status": act.get("audit_status", "N/A"),
+        "completed_count": len(completed_observations),
+        "observations": completed_observations
+    }
+
+
 @st.cache_data(ttl=300)
 def load_stock_history(sembol: str) -> Optional[pd.DataFrame]:
     """Seçilen hissenin OHLCV mum verisini diskten yükler."""
@@ -438,20 +628,21 @@ def trigger_paper_trader_check():
 
 
 def trigger_paper_trader_check_v4():
-    """Arka planda tek seferlik zorunlu V4 kontrolünü tetikler."""
+    """Arka planda tek seferlik zorunlu V4.1 kontrolünü tetikler."""
     try:
         from run_paper_trader_v4 import periyodik_gorev_calistir_v4
-        with st.spinner("V4 Model ve piyasa verileri taranıyor, Faz 0 filtreleri denetleniyor..."):
+        with st.spinner("V4.1 Şampiyon Model ve piyasa verileri taranıyor..."):
             basarili = periyodik_gorev_calistir_v4(force=False)
         if basarili:
             st.cache_data.clear()
-            st.success("✅ V4 rebalance kontrolü tamamlandı.")
+            st.success("✅ V4.1 Gölge Mod kontrolü tamamlandı.")
             time.sleep(1)
             st.rerun()
         else:
-            st.warning("⚠️ V4 kontrolü beklemede: 14 gün, piyasa açıklığı veya süreç kilidi koşulları henüz dolmadı.")
+            st.warning("⚠️ V4.1 kontrolü beklemede: 14 gün, piyasa açıklığı veya süreç kilidi koşulları sağlanmadı.")
     except Exception as e:
-        st.error(f"❌ V4 Çalıştırma hatası: {str(e)}")
+        st.error(f"❌ V4.1 Çalıştırma hatası: {str(e)}")
+
 
 
 def trigger_comparison_refresh():
@@ -523,20 +714,21 @@ with st.sidebar:
     
     st.divider()
 
-    # 1. MODEL SEÇİCİ (V4 DEFAULT)
+    # 1. MODEL SEÇİCİ (ÇİFT MOTOR MİMARİSİ)
     secilen_model = st.selectbox(
         "🎯 Aktif Model / Görünüm",
         [
-            "🏆 V4-Raw Canlı Üretim (9F / K=15)",
-            "⚖️ Çift Model Karşılaştırma (V3 vs V4)",
-            "🏛️ V3-Kontrol Referans (8F / K=10)"
+            "🚀 PRIMARY SHADOW MODEL — RC-LGBMR-001",
+            "⭐ SECONDARY SHADOW MODEL — RC-LAMBDAMART-001",
+            "⚖️ Çift Motor Karşılaştırma (Primary vs Secondary)",
+            "🕰️ LEGACY PRODUCTION — V3"
         ],
         index=0
     )
 
     st.divider()
 
-    if secilen_model != "⚖️ Çift Model Karşılaştırma (V3 vs V4)":
+    if secilen_model != "⚖️ Çift Motor Karşılaştırma (Primary vs Secondary)":
         sayfa = st.radio(
             "Menü Gezintisi",
             [
@@ -555,25 +747,27 @@ with st.sidebar:
     st.divider()
 
     # Model Yapılandırması ve Yolları
-    if secilen_model == "🏆 V4-Raw Canlı Üretim (9F / K=15)":
-        PORTFOLIO_FILE = ROOT_DIR / "models" / "v4_ranking" / "paper_portfolio_v4.json"
-        LOG_FILE = ROOT_DIR / "models" / "v4_ranking" / "paper_trading_log_v4.csv"
-        RANKING_CACHE_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_ranking_cache_v4.parquet"
-        SELECTION_CACHE_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_selection_cache_v4.parquet"
-        DRIFT_REPORT_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_drift_report_v4.json"
-        SERVICE_LOG_FILE = ROOT_DIR / "logs" / "paper_trading_service_v4.log"
-        target_k = 15
-        model_badge = "🟢 CANLI ÜRETİM (V4-RAW)"
+    if secilen_model == "🚀 PRIMARY SHADOW MODEL — RC-LGBMR-001":
+        SERVICE_LOG_FILE = ROOT_DIR / "logs" / "shadow_service.log"
+        model_badge = "🚀 PRIMARY SHADOW (RC-LGBMR-001)"
+        target_k = 10
         st.markdown(r"""
-        **Model:** `V4-Raw LGBMRanker (9 Faktör)`  
-        **Öncü Motor:** `reel_eps_growth (%54.5)`  
-        **Portföy:** $K=15$ Eşit Ağırlıklı (%6.67)  
-        **Rotasyon:** $H=60$ İşlem Günü Sabit  
-        **Kalkan:** Faz 0 Taban Veto (PASEU Kalkanı)  
-        **Risk Radarı:** 5 Katmanlı Drift & Tazelik  
-        **Kilit Kutu:** 2026-09-14 ($p=0.000$)
+        **Model:** `RC-LGBMR-001` (Primary)  
+        **Portföy:** $K=10$ Eşit Ağırlıklı (%10)  
+        **Mimari:** Yeni nesil shadow architecture.  
+        **Durum:** 🟢 YENİ SİSTEM DEVREDE
         """)
-    elif secilen_model == "🏛️ V3-Kontrol Referans (8F / K=10)":
+    elif secilen_model == "⭐ SECONDARY SHADOW MODEL — RC-LAMBDAMART-001":
+        SERVICE_LOG_FILE = ROOT_DIR / "logs" / "shadow_service.log"
+        model_badge = "⭐ SECONDARY SHADOW (RC-LAMBDAMART-001)"
+        target_k = 10
+        st.markdown(r"""
+        **Model:** `RC-LAMBDAMART-001` (Secondary)  
+        **Portföy:** $K=10$ Eşit Ağırlıklı (%10)  
+        **Mimari:** Yeni nesil shadow architecture (LambdaMART).  
+        **Durum:** 🟢 YENİ SİSTEM DEVREDE
+        """)
+    elif secilen_model == "🕰️ LEGACY PRODUCTION — V3":
         PORTFOLIO_FILE = ROOT_DIR / "models" / "v3_ranking" / "paper_portfolio.json"
         LOG_FILE = ROOT_DIR / "models" / "v3_ranking" / "paper_trading_log.csv"
         RANKING_CACHE_FILE = ROOT_DIR / "models" / "v3_ranking" / "latest_ranking_cache.parquet"
@@ -581,44 +775,29 @@ with st.sidebar:
         DRIFT_REPORT_FILE = ROOT_DIR / "models" / "v3_ranking" / "latest_drift_report.json"
         SERVICE_LOG_FILE = ROOT_DIR / "logs" / "paper_trading_service.log"
         target_k = 10
-        model_badge = "🔒 DONDURULMUŞ REFERANS (V3)"
+        model_badge = "🕰️ LEGACY V3"
         st.markdown(r"""
-        **Model:** `V3-Kontrol LGBMRanker (8 Faktör)`  
-        **Portföy:** $K=10$ Eşit Ağırlıklı (%10)  
-        **Rotasyon:** $H=60$ İşlem Günü Sabit  
-        **Devre Kesici:** Zirveden $\le -\%25$ DD  
-        **Durum:** İzole Referans Havuzu
+        **Model:** `V3.2 LGBMRanker` (Eski Nesil)  
+        **Durum:** ⚠️ V3 Production continues seamlessly without changes.
         """)
     else:
-        PORTFOLIO_FILE = ROOT_DIR / "models" / "v4_ranking" / "paper_portfolio_v4.json"
-        LOG_FILE = ROOT_DIR / "models" / "v4_ranking" / "paper_trading_log_v4.csv"
-        RANKING_CACHE_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_ranking_cache_v4.parquet"
-        SELECTION_CACHE_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_selection_cache_v4.parquet"
-        DRIFT_REPORT_FILE = ROOT_DIR / "models" / "v4_ranking" / "latest_drift_report_v4.json"
-        SERVICE_LOG_FILE = ROOT_DIR / "logs" / "paper_trading_service_v4.log"
-        target_k = 15
-        model_badge = "⚖️ ÇİFT MODEL MUKAYESE"
+        SERVICE_LOG_FILE = ROOT_DIR / "logs" / "shadow_service.log"
+        model_badge = "⚖️ ÇİFT MOTOR (RC)"
+        target_k = 10
         st.markdown(r"""
-        **Karşılaştırma:** V3-Kontrol vs V4-Raw  
-        **V3:** 8-Faktör / K=10 (%10)  
-        **V4:** 9-Faktör / K=15 (%6.67)  
-        **Aktif Alfa:** +%13.46 (V4 Lehine)  
-        **Max DD:** -%9.73 (V4) vs -%13.39 (V3)
+        **Karşılaştırma:** Primary (RC-LGBMR-001) vs Secondary (RC-LAMBDAMART-001)  
+        **Mimari:** Çift Motor (Dual-Engine) Eşzamanlı Canlı Takip
         """)
 
     st.divider()
 
     # Manuel Tetikleme Butonu
     st.markdown("#### ⚡ Manuel Operasyon")
-    if secilen_model == "🏆 V4-Raw Canlı Üretim (9F / K=15)":
-        if st.button("V4 Rebalance Kontrolünü Çalıştır", width="stretch", type="primary"):
-            trigger_paper_trader_check_v4()
-    elif secilen_model == "🏛️ V3-Kontrol Referans (8F / K=10)":
-        if st.button("V3 Rebalance Kontrolünü Çalıştır", width="stretch", type="secondary"):
+    if secilen_model == "🕰️ LEGACY PRODUCTION — V3":
+        if st.button("V3 Rebalance Kontrolünü Çalıştır", width="stretch", type="primary"):
             trigger_paper_trader_check()
     else:
-        if st.button("Karşılaştırma Raporunu Güncelle", width="stretch", type="primary"):
-            trigger_comparison_refresh()
+        st.info("Yeni RC modeller için manuel operasyonlar (forward_infrastructure) dışarıdan script ile tetiklenir.")
 
     st.caption("14 günlük zamanlama, piyasa açıklığı ve PIT veri tazeliği sağlanırsa çalışır.")
 
@@ -660,13 +839,55 @@ st.markdown("""
 
 
 # ─── VERİLERİ ÇEK ──────────────────────────────────────────────────────────
-portfolio_data = load_portfolio_data(PORTFOLIO_FILE)
-df_logs = load_trading_logs(LOG_FILE)
-df_ranking = load_latest_ranking(str(RANKING_CACHE_FILE))
-df_selection = load_latest_selection(str(SELECTION_CACHE_FILE))
-market_alignment = load_market_alignment()
-drift_snapshot = load_latest_drift_report(str(DRIFT_REPORT_FILE))
-comparison_data = load_v3_vs_v4_comparison()
+is_rc_model = "RC-" in secilen_model or "Çift Motor (RC)" in getattr(sys.modules[__name__], 'model_badge', '')
+
+shadow_state = None
+if is_rc_model:
+    portfolio_data = {"equity": 1.0, "peak_equity": 1.0, "drawdown": 0.0, "positions": {}}
+    df_logs = pd.DataFrame()
+    df_ranking = pd.DataFrame()
+    df_selection = pd.DataFrame()
+    market_alignment = {"aligned": True, "market_date": "N/A"}
+    drift_snapshot = None
+    comparison_data = {}
+    try:
+        shadow_state = shadow_reader.get_shadow_system_state()
+        if shadow_state:
+            active_model = "primary"
+            if "RC-LAMBDAMART-001" in secilen_model:
+                active_model = "secondary"
+            
+            # Construct the full frozen cross-section from the chosen shadow model.
+            # The reader exposes Top-10 as a convenience view, but X-Ray must not
+            # silently discard the remaining eligible universe.
+            if shadow_state.get(active_model):
+                cross_section = shadow_state[active_model].get("cross_section") or shadow_state[active_model].get("ordered_top10", [])
+                
+                rows = []
+                for item in cross_section:
+                    rows.append({
+                        "sembol": item["ticker"],
+                        "ml_score": item["raw_score"],
+                        "Sıra": item["rank"],
+                        "selected_top10": bool(item.get("selected_top10", False)),
+                    })
+                df_ranking = pd.DataFrame(rows)
+                df_selection = df_ranking[df_ranking["selected_top10"]].copy() if not df_ranking.empty else pd.DataFrame()
+            
+            market_alignment["market_date"] = shadow_state.get("session_date", "N/A")
+            
+    except Exception as e:
+        print(f"Error reading shadow state: {e}")
+        shadow_state = None
+else:
+    portfolio_data = load_portfolio_data(PORTFOLIO_FILE)
+    df_logs = load_trading_logs(LOG_FILE)
+    df_ranking = load_latest_ranking(str(RANKING_CACHE_FILE))
+    df_selection = load_latest_selection(str(SELECTION_CACHE_FILE))
+    market_alignment = load_market_alignment()
+    drift_snapshot = load_latest_drift_report(str(DRIFT_REPORT_FILE))
+    comparison_data = load_v3_vs_v4_comparison()
+
 
 equity = float(portfolio_data.get("equity", 1.0))
 peak_equity = float(portfolio_data.get("peak_equity", 1.0))
@@ -684,6 +905,13 @@ else:
         f"Panel yalnızca son kaydı gösterir; yeni portföy kontrolü engellenir."
     )
 
+
+
+if shadow_state:
+    if shadow_state["status"] == "VALIDATED_DRY_RUN":
+        st.warning(f"**VALIDATED DRY-RUN:** Bu gösterim official clean-forward signal DEĞİLDİR. (Tarih: {shadow_state['session_date']})")
+    elif shadow_state["status"] == "OFFICIAL_CLEAN_FORWARD":
+        st.success(f"**OFFICIAL CLEAN-FORWARD:** Canlı forward sinyal aktiftir. (Tarih: {shadow_state['session_date']})")
 
 # ─── ÜST KPI METRİK KARTLARI ───────────────────────────────────────────────
 kasa_buyuklugu = equity * 100_000.0
@@ -749,586 +977,241 @@ with k5:
 
 st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
+# ─── ORTAK GRAFİK FONKSİYONU ───────────────────────────────────────────────
+def render_shared_price_chart(ticker: str, rank_label: str, score_label: str, model_badge_text: str):
+    st.markdown("#### 📈 Hisse Detay Grafiği (X-Ray)")
+    st.markdown(f"**Hisse:** `{ticker}` | **Sıra:** #{rank_label} | **Skor:** {score_label}")
+    
+    _xr_df_fiyat = load_stock_history(ticker)
+    if _xr_df_fiyat is not None and not _xr_df_fiyat.empty and "close" in _xr_df_fiyat.columns and len(_xr_df_fiyat) >= 20:
+        _xr_df_ti = compute_technical_indicators(_xr_df_fiyat)
+        _xr_period_options = {
+            "1 Ay": 22,
+            "3 Ay": 66,
+            "6 Ay": 132,
+            "1 Yıl": 264,
+            "Tüm Veri": None,
+        }
+        _xr_period_label = st.selectbox(
+            "Grafik dönemi",
+            list(_xr_period_options.keys()),
+            index=2,
+            key=f"xray_period_{ticker}_{model_badge_text}",
+        )
+        _xr_period_rows = _xr_period_options[_xr_period_label]
+        _xr_df_sub = (
+            _xr_df_ti.copy()
+            if _xr_period_rows is None
+            else _xr_df_ti.tail(_xr_period_rows).copy()
+        )
+        st.caption(f"Gösterilen dönem: {_xr_period_label} · {_xr_df_sub.index[0]} → {_xr_df_sub.index[-1]} · {_xr_df_sub.shape[0]} işlem günü")
 
-# ═══════════════════════════════════════════════════════════════════════════
-# SAYFA: ÇİFT MODEL KARŞILAŞTIRMA (V3 VS V4)
-# ═══════════════════════════════════════════════════════════════════════════
-if sayfa == "⚖️ Çift Model Karşılaştırma":
-    st.subheader("⚖️ Çift Model Canlı Paper Trading Mukayese Paneli")
-    st.caption("V3-Kontrol (8-Faktör / K=10) ile V4-Raw (9-Faktör / K=15) canlı performans, risk ve portföy ayrışması.")
-
-    comp = comparison_data or {}
-    if comp:
-        v3 = comp.get("v3", {})
-        v4 = comp.get("v4", {})
-        c = comp.get("karsilastirma", {})
-
-        # Karşılaştırmalı 4 KPI Kartı
-        cp1, cp2, cp3, cp4 = st.columns(4)
-        with cp1:
-            st.markdown(f"""
-            <div class="metric-container">
-                <div class="metric-title">Mevcut Sermaye</div>
-                <div class="metric-value">V3: {float(v3.get('sermaye') or 1.0):.4f} | V4: {float(v4.get('sermaye') or 1.0):.4f}</div>
-                <div class="metric-subtitle">Sermaye Farkı: {float(c.get('sermaye_farki') or 0.0):+.4f}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with cp2:
-            st.markdown(f"""
-            <div class="metric-container">
-                <div class="metric-title">Kümülatif Getiri</div>
-                <div class="metric-value">V3: %{float(v3.get('getiri_pct') or 0.0):.2f} | V4: %{float(v4.get('getiri_pct') or 0.0):.2f}</div>
-                <div class="metric-subtitle">Getiri Farkı: %{float(c.get('getiri_farki_pct') or 0.0):+.2f}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with cp3:
-            st.markdown(f"""
-            <div class="metric-container">
-                <div class="metric-title">Tepe Drawdown</div>
-                <div class="metric-value">V3: %{float(v3.get('drawdown_pct') or 0.0):.2f} | V4: %{float(v4.get('drawdown_pct') or 0.0):.2f}</div>
-                <div class="metric-subtitle">Max DD OOS: -%13.39 vs -%9.73 (%27.3 İyileşme)</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with cp4:
-            st.markdown(f"""
-            <div class="metric-container">
-                <div class="metric-title">Aktif Pozisyon / K Hedef</div>
-                <div class="metric-value">V3: {int(v3.get('portfoy_boyutu') or 10)}/10 | V4: {int(v4.get('portfoy_boyutu') or 15)}/15</div>
-                <div class="metric-subtitle">Ortak Hisse: {int(c.get('ortak_hisseler_sayisi') or 0)} Adet</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-
-        # Portföy Ayrışması ve Hisseler
-        st.markdown("#### 🎯 Portföy Hisseleri Ayrışma Matrisi")
-        col_ortak, col_v4, col_v3 = st.columns(3)
-
-        with col_ortak:
-            st.markdown(f"**🤝 Ortak Hisseler ({c.get('ortak_hisseler_sayisi', 0)} Adet):**")
-            ortak_list = c.get("ortak_hisseler", [])
-            if ortak_list:
-                for h in ortak_list:
-                    st.markdown(f"<span class='badge-stable' style='margin: 3px;'>{h}</span>", unsafe_allow_html=True)
-            else:
-                st.caption("Ortak hisse bulunmuyor.")
-
-        with col_v4:
-            v4_ozel = c.get("yalnizca_v4_hisseler", [])
-            st.markdown(f"**🏆 Yalnızca V4 Hisseleri ({len(v4_ozel)} Adet):**")
-            if v4_ozel:
-                for h in v4_ozel:
-                    st.markdown(f"<span class='badge-free' style='margin: 3px;'>{h}</span>", unsafe_allow_html=True)
-            else:
-                st.caption("Özel hisse yok.")
-
-        with col_v3:
-            v3_ozel = c.get("yalnizca_v3_hisseler", [])
-            st.markdown(f"**🏛️ Yalnızca V3 Hisseleri ({len(v3_ozel)} Adet):**")
-            if v3_ozel:
-                for h in v3_ozel:
-                    st.markdown(f"<span class='badge-lock' style='margin: 3px;'>{h}</span>", unsafe_allow_html=True)
-            else:
-                st.caption("Özel hisse yok.")
-
-        st.divider()
-
-        # Kurumsal Mukayese Tablosu
-        st.markdown("#### 📊 Kurumsal Model Mukayese Tablosu (4-Fold Walk-Forward OOS)")
-        df_comp_table = pd.DataFrame([
-            {"Metrik": "Model Mimarisi", "V3-Kontrol (Referans)": "8 Faktörlü LambdaMART", "V4-Raw (Canlı Üretim)": "9 Faktörlü LambdaMART (+reel_eps_growth)", "Kurumsal Yorum": "PB tekeli %57'den %14'e kırıldı"},
-            {"Metrik": "Portföy Boyutu", "V3-Kontrol (Referans)": "K=10 Eşit Ağırlık (%10.0)", "V4-Raw (Canlı Üretim)": "K=15 Eşit Ağırlık (%6.67)", "Kurumsal Yorum": "Daha yüksek çeşitlendirme"},
-            {"Metrik": "OOS Sharpe Oranı", "V3-Kontrol (Referans)": "0.994", "V4-Raw (Canlı Üretim)": "0.972", "Kurumsal Yorum": "|Δ| = 0.022 ≤ 0.05 tolerans dahilinde"},
-            {"Metrik": "Maksimum Drawdown", "V3-Kontrol (Referans)": "-%13.39", "V4-Raw (Canlı Üretim)": "-%9.73", "Kurumsal Yorum": "Sermaye çekilmesinde %27.3 net düşüş"},
-            {"Metrik": "Information Ratio (IR)", "V3-Kontrol (Referans)": "-0.713", "V4-Raw (Canlı Üretim)": "+0.509", "Kurumsal Yorum": "Güçlü pozitif aktif alfa"},
-            {"Metrik": "Yıllık Aktif Alfa", "V3-Kontrol (Referans)": "-%9.60", "V4-Raw (Canlı Üretim)": "+%13.46", "Kurumsal Yorum": "Piyasa kıstasına karşı +%13.46 üstünlük"},
-            {"Metrik": "Dönem B Sıkılaşma Ayı Piyasası", "V3-Kontrol (Referans)": "-%13.39 Zarar", "V4-Raw (Canlı Üretim)": "+%8.15 Net Kâr", "Kurumsal Yorum": "Zombi şirketleri ezip kâr yazdı"},
-            {"Metrik": "CAGR / Kümülatif Getiri", "V3-Kontrol (Referans)": "%86.02 / %651.7", "V4-Raw (Canlı Üretim)": "%87.09 / %665.9", "Kurumsal Yorum": "Daha düşük riskle daha yüksek getiri"},
-            {"Metrik": "Emniyet Kalkanı", "V3-Kontrol (Referans)": "Likidite + Sektör Tavanı", "V4-Raw (Canlı Üretim)": "Faz 0 Taban Veto + VBTS Kalkanı", "Kurumsal Yorum": "PASEU benzeri çöküşler doğrudan vetolu"}
-        ])
-        st.dataframe(df_comp_table, width="stretch", hide_index=True)
-    else:
-        st.info("Karşılaştırma raporu henüz oluşturulmadı. Sol menüdeki 'Karşılaştırma Raporunu Güncelle' butonunu kullanabilirsiniz.")
-
-
-# ═══════════════════════════════════════════════════════════════════════════
-# SAYFA 1: PORTFÖYÜM & POZİSYON YÖNETİMİ (ESKİSİ GİBİ ZENGİN GÖRÜNÜM)
-# ═══════════════════════════════════════════════════════════════════════════
-elif sayfa == "💼 Portföyüm & Pozisyon Yönetimi":
-    st.subheader(f"💼 Aktif Portföy — {len(positions)} / {target_k} Hisse")
-    st.caption("Pozisyonlar, çeyreklik rotasyonla en az 60 işlem günü tutulur. Listeden düşse bile 60 gün dolmadan satış yapılmaz.")
-
-    if positions:
-        # Özet Tablo Listesi
-        pos_rows = []
-        toplam_portfoy_pnl_tl = 0.0
-
-        for sembol, info in positions.items():
-            entry_p = float(info.get("entry_price", 100.0))
-            last_p = float(info.get("last_price", entry_p))
-            peak_p = float(info.get("personal_peak_price", max(entry_p, last_p)))
-            peak_dd = float(info.get("peak_drawdown_pct", ((last_p - peak_p) / peak_p * 100.0) if peak_p > 0 else 0.0))
-            pnl_pct = ((last_p - entry_p) / entry_p * 100) if entry_p > 0 else 0.0
-            days_held = int(info.get("days_held", 0))
-            weight_pct = float(info.get("weight") or (1.0 / max(1, target_k))) * 100
-            tutar_tl = kasa_buyuklugu * (weight_pct / 100.0)
-            pnl_tl = tutar_tl * (pnl_pct / 100.0)
-            toplam_portfoy_pnl_tl += pnl_tl
-            
-            kalan_gun = max(0, 60 - days_held)
-            kilit_metin = f"⏳ {kalan_gun} gün kaldı" if kalan_gun > 0 else "✅ Çıkışa Uygun (≥60g)"
-            
-            clean_ticker = sembol.replace(".IS", "")
-            sektor_v2 = cfg.HISSE_SEKTOR_V2.get(sembol, "DİĞER")
-            peak_dd_str = f"%{peak_dd:.1f} 🚨" if peak_dd <= -20.0 else f"%{peak_dd:.1f}"
-            
-            pos_rows.append({
-                "Hisse": f"#{clean_ticker} ({sektor_v2})",
-                "sembol": sembol,
-                "Giriş Tarihi": info.get("entry_date", last_date),
-                "Alış Fiyatı (TL)": f"₺{entry_p:,.2f}",
-                "Son Fiyat (TL)": f"₺{last_p:,.2f}",
-                "Zirve Fiyat (TL)": f"₺{peak_p:,.2f}",
-                "Zirveden Çekilme": peak_dd_str,
-                "Kâr / Zarar (%)": f"%{pnl_pct:+.2f}",
-                "Kâr / Zarar (TL)": f"₺{pnl_tl:+,.2f}",
-                "Pozisyon Tutarı": f"₺{tutar_tl:,.0f}",
-                "Elde Tutulan": f"{days_held} gün",
-                "60 Gün Kuralı": kilit_metin,
-                "Hedef Ağırlık": f"%{weight_pct:.1f}",
-                "raw_pnl_pct": pnl_pct,
-                "raw_days": days_held,
-                "raw_entry": entry_p,
-                "raw_last": last_p,
-                "raw_peak": peak_p,
-                "raw_peak_dd": peak_dd
-            })
-
-        # İki sütunlu özet kartı
-        c_p1, c_p2, c_p3 = st.columns([1.5, 1.5, 1.5])
-        with c_p1:
-            st.metric("Toplam Açık Pozisyon Tutarı", f"₺{kasa_buyuklugu:,.0f}")
-        with c_p2:
-            st.metric("Portföy Anlık Net Kâr/Zarar", f"₺{toplam_portfoy_pnl_tl:+,.2f}")
-        with c_p3:
-            st.metric("Nakit Rezervi", f"₺{(kasa_buyuklugu * 0.50):,.0f}" if dd_aktif else "₺0 (Tam Yatırımda)")
-
-        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-
-        # Tablo
-        df_table = pd.DataFrame(pos_rows)
-        table_cols = [
-            "Hisse", "Giriş Tarihi", "Alış Fiyatı (TL)", "Son Fiyat (TL)",
-            "Zirve Fiyat (TL)", "Zirveden Çekilme", "Kâr / Zarar (%)",
-            "Kâr / Zarar (TL)", "Pozisyon Tutarı", "Elde Tutulan", "60 Gün Kuralı", "Hedef Ağırlık"
-        ]
-        st.dataframe(
-            df_table[table_cols],
-            width="stretch",
-            hide_index=True
+        _xr_fig = make_subplots(
+            rows=4, cols=1,
+            shared_xaxes=True,
+            vertical_spacing=0.03,
+            row_heights=[0.48, 0.16, 0.17, 0.19],
+            subplot_titles=(None, "İşlem Hacmi", "RSI (14) Momentum", "MACD (12,26,9)")
         )
 
-        st.divider()
+        _xr_fig.add_trace(go.Candlestick(
+            x=_xr_df_sub.index,
+            open=_xr_df_sub["open"], high=_xr_df_sub["high"],
+            low=_xr_df_sub["low"], close=_xr_df_sub["close"],
+            name="OHLC",
+            increasing_line_color="#00e676", decreasing_line_color="#ff1744",
+            increasing_fillcolor="#00e676", decreasing_fillcolor="#ff1744",
+            line_width=1.2
+        ), row=1, col=1)
 
-        # ─── SEÇİLEN HİSSE İÇİN GRAFİK VE DETAYLI ANALİZ (PROFESYONEL TRADINGVIEW STİLİ) ───
-        st.subheader("🔍 Portföy Hissesi Detaylı Grafiği & Mum Analizi")
-
-        c_sel1, c_sel2 = st.columns([3, 1])
-        with c_sel1:
-            tum_evren_sec = st.checkbox("🌐 Tüm BIST 88 Evrenini Göster", value=False, help="İşaretlendiğinde portföy dışındaki 88 BIST hissesini de teknik ve model analizi için seçebilirsiniz.")
-            if tum_evren_sec and df_ranking is not None and not df_ranking.empty:
-                hisse_secenekleri = df_ranking["sembol"].tolist()
-            else:
-                hisse_secenekleri = [r["sembol"] for r in pos_rows] if pos_rows else (df_ranking["sembol"].tolist() if df_ranking is not None else cfg.HISSELER[:10])
-
-            secilen_hisse = st.selectbox(
-                "Detaylı İncelenecek Hisseyi Seçiniz:",
-                hisse_secenekleri,
-                format_func=lambda s: f"#{s.replace('.IS', '')} ({cfg.HISSE_SEKTOR.get(s, 'BIST')})" + (" 💼 [PORTFÖYDE]" if s in positions else "")
-            )
-
-        # ─── İNTERAKTİF GRAFİK KONTROL VE İNDİKATÖR ARAÇ ÇUBUĞU ───
-        c_ctrl1, c_ctrl2, c_ctrl3, c_ctrl4 = st.columns([2.2, 2.8, 2.8, 2.2])
-        with c_ctrl1:
-            zaman_secimi = st.selectbox(
-                "📅 Görünüm Aralığı:",
-                ["1 Ay (22 Bar)", "3 Ay (65 Bar)", "6 Ay (130 Bar)", "1 Yıl (250 Bar)", "Tüm Geçmiş"],
-                index=2
-            )
-        with c_ctrl2:
-            st.markdown("<p style='font-size:0.82rem; font-weight:600; color:#94a3b8; margin-bottom:4px;'>📈 TREND İNDİKATÖRLERİ</p>", unsafe_allow_html=True)
-            ind_ma = st.checkbox("SMA (20, 50, 200)", value=True)
-            ind_bb = st.checkbox("Bollinger Bantları (20, 2)", value=True)
-        with c_ctrl3:
-            st.markdown("<p style='font-size:0.82rem; font-weight:600; color:#94a3b8; margin-bottom:4px;'>🎯 MALİYET & HEDEFLER</p>", unsafe_allow_html=True)
-            ind_maliyet = st.checkbox("Alış Maliyeti & Kâr Alanı", value=True)
-            ind_52w = st.checkbox("52H Zirve / Dip Seviyeleri", value=True)
-        with c_ctrl4:
-            st.markdown("<p style='font-size:0.82rem; font-weight:600; color:#94a3b8; margin-bottom:4px;'>📊 ALT OSİLATÖR</p>", unsafe_allow_html=True)
-            osc_secim = st.selectbox(
-                "Osilatör Seçimi:",
-                ["RSI (14) Momentum", "MACD (12, 26, 9)", "Kapalı"],
-                index=0,
-                label_visibility="collapsed"
-            )
-
-        df_mum = load_stock_history(secilen_hisse)
-        if df_mum is not None and not df_mum.empty and "close" in df_mum.columns:
-            # Tüm geçmiş üzerinden tam göstergeleri hesapla
-            df_ti = compute_technical_indicators(df_mum)
-
-            # Zaman aralığı dilimleme
-            if "1 Ay" in zaman_secimi:
-                df_sub = df_ti.tail(22).copy()
-            elif "3 Ay" in zaman_secimi:
-                df_sub = df_ti.tail(65).copy()
-            elif "6 Ay" in zaman_secimi:
-                df_sub = df_ti.tail(130).copy()
-            elif "1 Yıl" in zaman_secimi:
-                df_sub = df_ti.tail(250).copy()
-            else:
-                df_sub = df_ti.copy()
-
-            son_fiyat = float(df_sub["close"].iloc[-1])
-            alis_fiyati = positions[secilen_hisse].get("entry_price", son_fiyat) if secilen_hisse in positions else son_fiyat
-            fark_pct = ((son_fiyat - alis_fiyati) / alis_fiyati * 100) if alis_fiyati > 0 else 0.0
-            gunluk_degisim = ((son_fiyat - float(df_sub["close"].iloc[-2])) / float(df_sub["close"].iloc[-2]) * 100) if len(df_sub) >= 2 else 0.0
-
-            # ─── HİSSE HIZLI METRİK KARTLARI (6 KPI KARTI) ───
-            m_c1, m_c2, m_c3, m_c4, m_c5, m_c6 = st.columns(6)
-            with m_c1:
-                st.metric("Son Kapanış", f"₺{son_fiyat:.2f}", f"{gunluk_degisim:+.2f}% Günlük")
-            with m_c2:
-                if secilen_hisse in positions:
-                    st.metric("Alış Maliyeti", f"₺{alis_fiyati:.2f}", f"{fark_pct:+.2f}% Kâr/Zarar")
-                else:
-                    st.metric("Portföy Durumu", "İzleme Listesi", "Taşınmıyor")
-            with m_c3:
-                if secilen_hisse in positions:
-                    pos_weight = float(positions[secilen_hisse].get("weight") or (1.0 / max(1, target_k)))
-                    hisse_pnl_tl = (kasa_buyuklugu * pos_weight) * (fark_pct / 100.0)
-                    st.metric("Pozisyon Net Kâr", f"₺{hisse_pnl_tl:+,.2f}")
-                else:
-                    st.metric("Açık Pozisyon", "₺0", "Nakit")
-            with m_c4:
-                zirve_52 = float(df_mum["high"].tail(252).max()) if len(df_mum) >= 50 else float(df_sub["high"].max())
-                dip_52 = float(df_mum["low"].tail(252).min()) if len(df_mum) >= 50 else float(df_sub["low"].min())
-                zirve_fark = ((son_fiyat - zirve_52) / zirve_52 * 100) if zirve_52 > 0 else 0.0
-                st.metric("52H Zirve / Dip", f"₺{zirve_52:.2f} / ₺{dip_52:.2f}", f"{zirve_fark:+.1f}% Zirveye")
-            with m_c5:
-                ort_vol = float(df_sub["volume"].tail(20).mean()) if "volume" in df_sub.columns else 0.0
-                st.metric("20g Ort. Hacim", f"{ort_vol:,.0f} Lot")
-            with m_c6:
-                rsi_son = float(df_sub["rsi_14"].iloc[-1]) if "rsi_14" in df_sub.columns and not pd.isna(df_sub["rsi_14"].iloc[-1]) else 50.0
-                rsi_durum = "🔴 Aşırı Alım" if rsi_son >= 70 else ("🟢 Aşırı Satım" if rsi_son <= 30 else "🟡 Nötr")
-                st.metric("RSI (14) Osilatör", f"{rsi_son:.1f}", rsi_durum)
-
-            # ─── 2 VEYA 3 PANELLİ GELİŞMİŞ PLOTLY GRAFİĞİ ───
-            has_osc = (osc_secim != "Kapalı")
-            if has_osc:
-                fig = make_subplots(
-                    rows=3, cols=1,
-                    shared_xaxes=True,
-                    vertical_spacing=0.03,
-                    row_heights=[0.62, 0.18, 0.20],
-                    subplot_titles=(None, "İşlem Hacmi (Lot)", osc_secim)
-                )
-                chart_height = 680
-            else:
-                fig = make_subplots(
-                    rows=2, cols=1,
-                    shared_xaxes=True,
-                    vertical_spacing=0.04,
-                    row_heights=[0.75, 0.25],
-                    subplot_titles=(None, "İşlem Hacmi (Lot)")
-                )
-                chart_height = 560
-
-            # 1. Mum Grafiği (OHLC) - TradingView Emerald/Crimson
-            fig.add_trace(go.Candlestick(
-                x=df_sub.index,
-                open=df_sub['open'],
-                high=df_sub['high'],
-                low=df_sub['low'],
-                close=df_sub['close'],
-                name="Fiyat (OHLC)",
-                increasing_line_color="#00e676",
-                decreasing_line_color="#ff1744",
-                increasing_fillcolor="#00e676",
-                decreasing_fillcolor="#ff1744",
-                line_width=1.2
+        if "sma_20" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Scatter(
+                x=_xr_df_sub.index, y=_xr_df_sub["sma_20"],
+                line=dict(color="#00d4ff", width=1.8), name="SMA 20"
             ), row=1, col=1)
-
-            # 2. Bollinger Bantları (20, 2)
-            if ind_bb and "bb_upper" in df_sub.columns and "bb_lower" in df_sub.columns:
-                fig.add_trace(go.Scatter(
-                    x=df_sub.index, y=df_sub["bb_upper"],
-                    line=dict(color="rgba(144, 202, 249, 0.45)", width=1, dash="dot"),
-                    name="Bollinger Üst", hoverinfo="skip"
+        if "sma_50" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Scatter(
+                x=_xr_df_sub.index, y=_xr_df_sub["sma_50"],
+                line=dict(color="#ffa726", width=1.5, dash="dot"), name="SMA 50"
+            ), row=1, col=1)
+        for _bb_col, _bb_name, _bb_color, _bb_dash in (
+            ("bb_upper", "Bollinger Üst", "#a78bfa", "dash"),
+            ("bb_lower", "Bollinger Alt", "#a78bfa", "dash"),
+        ):
+            if _bb_col in _xr_df_sub.columns:
+                _xr_fig.add_trace(go.Scatter(
+                    x=_xr_df_sub.index, y=_xr_df_sub[_bb_col],
+                    line=dict(color=_bb_color, width=1.0, dash=_bb_dash),
+                    name=_bb_name, opacity=0.85
                 ), row=1, col=1)
-                fig.add_trace(go.Scatter(
-                    x=df_sub.index, y=df_sub["bb_lower"],
-                    line=dict(color="rgba(144, 202, 249, 0.45)", width=1, dash="dot"),
-                    fill='tonexty', fillcolor="rgba(59, 130, 246, 0.07)",
-                    name="Bollinger Bant Alanı", hoverinfo="skip"
-                ), row=1, col=1)
 
-            # 3. Hareketli Ortalamalar (SMA 20, SMA 50, SMA 200)
-            if ind_ma:
-                if "sma_20" in df_sub.columns:
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["sma_20"],
-                        line=dict(color="#00d4ff", width=1.8),
-                        name="SMA 20 (Kısa Vade)"
-                    ), row=1, col=1)
+        _xr_vol_clr = [
+            "rgba(0,230,118,.75)" if c >= o else "rgba(255,23,68,.75)"
+            for c, o in zip(_xr_df_sub["close"], _xr_df_sub["open"])
+        ]
+        _xr_fig.add_trace(go.Bar(
+            x=_xr_df_sub.index, y=_xr_df_sub["volume"],
+            marker_color=_xr_vol_clr, name="Hacim", showlegend=False
+        ), row=2, col=1)
 
-                if "sma_50" in df_sub.columns:
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["sma_50"],
-                        line=dict(color="#ffa726", width=1.8),
-                        name="SMA 50 (Orta Vade)"
-                    ), row=1, col=1)
+        if "rsi_14" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Scatter(
+                x=_xr_df_sub.index, y=_xr_df_sub["rsi_14"],
+                line=dict(color="#c084fc", width=1.9), name="RSI 14"
+            ), row=3, col=1)
+            _xr_fig.add_hline(y=70, line_dash="dash", line_color="#ff5252", line_width=0.9, row=3, col=1)
+            _xr_fig.add_hline(y=30, line_dash="dash", line_color="#69f0ae", line_width=0.9, row=3, col=1)
+            _xr_fig.update_yaxes(range=[15, 85], row=3, col=1)
 
-                if "sma_200" in df_sub.columns:
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["sma_200"],
-                        line=dict(color="#c084fc", width=2.0, dash="dash"),
-                        name="SMA 200 (Kurumsal Trend)"
-                    ), row=1, col=1)
-
-            # 4. Alış Maliyeti Seviye Çizgisi & Gölgeli Kâr Alanı
-            if ind_maliyet and secilen_hisse in positions:
-                fig.add_hline(
-                    y=alis_fiyati,
-                    line_dash="dash",
-                    line_color="#ffd600",
-                    line_width=2.5,
-                    annotation_text=f"📍 ALIŞ MALİYETİ: ₺{alis_fiyati:.2f} ({fark_pct:+.2f}%)",
-                    annotation_position="top right",
-                    annotation_font_color="#ffd600",
-                    annotation_font_size=12,
-                    row=1, col=1
-                )
-                zone_color = "rgba(0, 230, 118, 0.14)" if son_fiyat >= alis_fiyati else "rgba(255, 23, 68, 0.14)"
-                fig.add_hrect(
-                    y0=alis_fiyati, y1=son_fiyat,
-                    fillcolor=zone_color, line_width=0,
-                    row=1, col=1
-                )
-
-            # 5. 52 Haftalık Zirve / Dip Çizgileri
-            if ind_52w:
-                fig.add_hline(
-                    y=zirve_52, line_dash="dot", line_color="#34d399", line_width=1.2,
-                    annotation_text=f"52H Zirve: ₺{zirve_52:.2f}",
-                    annotation_position="top left", annotation_font_color="#34d399", annotation_font_size=10,
-                    row=1, col=1
-                )
-                fig.add_hline(
-                    y=dip_52, line_dash="dot", line_color="#f87171", line_width=1.2,
-                    annotation_text=f"52H Dip: ₺{dip_52:.2f}",
-                    annotation_position="bottom left", annotation_font_color="#f87171", annotation_font_size=10,
-                    row=1, col=1
-                )
-
-            # 6. Hacim Barları (Row 2)
-            vol_colors = ["rgba(0, 230, 118, 0.85)" if c >= o else "rgba(255, 23, 68, 0.85)" 
-                          for c, o in zip(df_sub['close'], df_sub['open'])]
-            fig.add_trace(go.Bar(
-                x=df_sub.index,
-                y=df_sub['volume'],
-                marker_color=vol_colors,
-                name="Hacim",
+        if "macd" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Scatter(
+                x=_xr_df_sub.index, y=_xr_df_sub["macd"],
+                line=dict(color="#38bdf8", width=1.6), name="MACD"
+            ), row=4, col=1)
+        if "macd_signal" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Scatter(
+                x=_xr_df_sub.index, y=_xr_df_sub["macd_signal"],
+                line=dict(color="#f59e0b", width=1.3), name="Sinyal"
+            ), row=4, col=1)
+        if "macd_hist" in _xr_df_sub.columns:
+            _xr_fig.add_trace(go.Bar(
+                x=_xr_df_sub.index, y=_xr_df_sub["macd_hist"],
+                marker_color="#64748b", name="MACD histogram", opacity=0.55,
                 showlegend=False
-            ), row=2, col=1)
+            ), row=4, col=1)
 
-            if "vol_sma_20" in df_sub.columns:
-                fig.add_trace(go.Scatter(
-                    x=df_sub.index,
-                    y=df_sub["vol_sma_20"],
-                    line=dict(color="#94a3b8", width=1.4, dash="dot"),
-                    name="Hacim Ort (20g)"
-                ), row=2, col=1)
-
-            # 7. Alt Osilatör Paneli (Row 3: RSI veya MACD)
-            if has_osc:
-                if osc_secim == "RSI (14) Momentum":
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["rsi_14"],
-                        line=dict(color="#c084fc", width=2),
-                        name="RSI (14)"
-                    ), row=3, col=1)
-                    fig.add_hline(y=70, line_dash="dash", line_color="#ff5252", line_width=1, annotation_text="Aşırı Alım (70)", annotation_position="top left", row=3, col=1)
-                    fig.add_hline(y=30, line_dash="dash", line_color="#69f0ae", line_width=1, annotation_text="Aşırı Satım (30)", annotation_position="bottom left", row=3, col=1)
-                    fig.add_hline(y=50, line_dash="dot", line_color="#64748b", line_width=1, row=3, col=1)
-                    fig.add_hrect(y0=30, y1=70, fillcolor="rgba(192, 132, 252, 0.04)", line_width=0, row=3, col=1)
-                    fig.update_yaxes(range=[15, 85], row=3, col=1)
-
-                elif osc_secim == "MACD (12, 26, 9)":
-                    hist_colors = ["#34d399" if h >= 0 else "#f87171" for h in df_sub["macd_hist"]]
-                    fig.add_trace(go.Bar(
-                        x=df_sub.index,
-                        y=df_sub["macd_hist"],
-                        marker_color=hist_colors,
-                        name="MACD Hist",
-                        showlegend=False
-                    ), row=3, col=1)
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["macd"],
-                        line=dict(color="#38bdf8", width=1.8),
-                        name="MACD"
-                    ), row=3, col=1)
-                    fig.add_trace(go.Scatter(
-                        x=df_sub.index,
-                        y=df_sub["macd_signal"],
-                        line=dict(color="#fb923c", width=1.8),
-                        name="Sinyal"
-                    ), row=3, col=1)
-                    fig.add_hline(y=0, line_dash="dash", line_color="#64748b", line_width=1, row=3, col=1)
-
-            # Layout ve Etkileşimli Butonlar
-            fig.update_layout(
-                template="plotly_dark",
-                paper_bgcolor="#0b0f19",
-                plot_bgcolor="#111827",
-                height=chart_height,
-                margin=dict(l=30, r=30, t=30, b=30),
-                xaxis_rangeslider_visible=False,
-                hovermode="x unified",
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=1.02,
-                    xanchor="right",
-                    x=1,
-                    bgcolor="rgba(17, 24, 39, 0.8)",
-                    bordercolor="rgba(255, 255, 255, 0.1)",
-                    borderwidth=1
-                )
+        _xr_fig.update_layout(
+            template="plotly_dark",
+            paper_bgcolor="#0b0f19", plot_bgcolor="#111827",
+            height=680,
+            margin=dict(l=25, r=25, t=20, b=25),
+            xaxis_rangeslider_visible=False,
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                bgcolor="rgba(17,24,39,.8)", bordercolor="rgba(255,255,255,.1)", borderwidth=1
             )
-
-            # Hafta sonu boşluklarını kaldır (Rangebreaks) & Crosshair Spikelines
-            fig.update_xaxes(
-                rangebreaks=[dict(bounds=["sat", "mon"])],
-                gridcolor="#1f293d",
-                showspikes=True,
-                spikemode="across",
-                spikesnap="cursor",
-                spikethickness=1,
-                spikecolor="#64748b"
-            )
-            fig.update_yaxes(gridcolor="#1f293d")
-            fig.update_yaxes(title="Fiyat (TL)", row=1, col=1)
-
-            st.plotly_chart(fig, width="stretch")
-
-            # Temel Göstergeler Kartı
-            if df_ranking is not None and not df_ranking.empty:
-                sub_rank = df_ranking[df_ranking["sembol"] == secilen_hisse]
-                if not sub_rank.empty:
-                    row_r = sub_rank.iloc[0]
-                    st.markdown("#### 📊 Model Faktör Değerleri (Point-in-Time)")
-                    has_growth = "reel_eps_growth" in row_r
-                    cols_f = st.columns(6 if has_growth else 5)
-                    with cols_f[0]:
-                        st.metric("Model Skoru", f"{float(row_r.get('ml_score') or 0.0):.4f}")
-                    idx = 1
-                    if has_growth:
-                        with cols_f[idx]:
-                            st.metric("Reel Kâr Büyümesi", f"%{float(row_r.get('reel_eps_growth') or 0.0)*100:+.1f}")
-                        idx += 1
-                    with cols_f[idx]:
-                        st.metric("Ters P/B (Değerleme)", f"{float(row_r.get('z_pb') or 0.0):.2f}")
-                    with cols_f[idx+1]:
-                        st.metric("Net Borç / EBITDA", f"{float(row_r.get('z_borc') or 0.0):.2f}")
-                    with cols_f[idx+2]:
-                        st.metric("12-1 Momentum", f"{float(row_r.get('z_mom') or 0.0):.2f}")
-                    with cols_f[idx+3]:
-                        st.metric("Özsermaye Kârlılığı (ROE)", f"{float(row_r.get('z_roe') or 0.0):.2f}")
-        else:
-            st.info(f"{secilen_hisse} için mum verisi bulunamadı.")
-
-        st.divider()
-        st.markdown("#### 📜 Rebalance ve İşlem Geçmişi Kütüğü")
-        if not df_logs.empty:
-            st.dataframe(df_logs.sort_index(ascending=False), width="stretch", hide_index=True)
+        )
+        _xr_fig.update_xaxes(
+            rangebreaks=[dict(bounds=["sat", "mon"])],
+            gridcolor="#1f293d", showspikes=True, spikemode="across", spikethickness=1
+        )
+        _xr_fig.update_yaxes(gridcolor="#1f293d")
+        st.plotly_chart(_xr_fig, width="stretch")
     else:
-        st.info("Portföyde henüz aktif pozisyon bulunmamaktadır. Sol menüdeki 'Rebalance & Bildirim Kontrolü Çalıştır' butonu ile ilk portföyü kurabilirsiniz.")
+        st.error(f"📊 Bu hisse ({ticker}) için yeterli fiyat grafiği verisi bulunamadı.")
 
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SAYFA 1: PORTFÖYÜM & POZİSYON YÖNETİMİ
+# ═══════════════════════════════════════════════════════════════════════════
+if sayfa == "💼 Portföyüm & Pozisyon Yönetimi":
+    st.subheader(f"💼 Model Portföy Görünümü: {model_badge}")
+    st.caption("Her shadow modelin bağımsız Top-10 seçimi ve hedef ağırlıkları.")
+
+    # Primary ana sayfasında iki frozen shadow portföyünü birlikte göster.
+    # Bu yalnızca committed/dry-run kayıtlarını okur; ensemble veya yeni inference üretmez.
+    if (
+        is_rc_model
+        and active_model == "primary"
+        and shadow_state
+        and shadow_state.get("primary")
+        and shadow_state.get("secondary")
+    ):
+        st.markdown("#### 🧭 İki Bağımsız Shadow Portföyü")
+        st.caption(
+            f"Sinyal tarihi: {shadow_state.get('session_date', 'N/A')} · "
+            "Primary ve Secondary ayrı adaylardır; birleşik portföy değildir."
+        )
+        _home_p_col, _home_s_col = st.columns(2)
+        for _home_col, _home_key, _home_title in (
+            (_home_p_col, "primary", "🚀 PRIMARY — RC-LGBMR-001"),
+            (_home_s_col, "secondary", "⭐ SECONDARY — RC-LAMBDAMART-001"),
+        ):
+            with _home_col:
+                _home_rows = shadow_state[_home_key].get("ordered_top10", [])
+                _home_table = pd.DataFrame(
+                    [
+                        {
+                            "Sıra": row.get("rank"),
+                            "Hisse": row.get("ticker"),
+                            "Ham Skor": row.get("raw_score"),
+                            "Hedef Ağırlık": "%10",
+                        }
+                        for row in _home_rows
+                    ]
+                )
+                st.markdown(f"**{_home_title}**")
+                if _home_table.empty:
+                    st.info("Bu model için committed portföy kaydı yok.")
+                else:
+                    st.dataframe(_home_table, use_container_width=True, hide_index=True)
+
+    if not df_selection.empty:
+        # --- RC MODEL İÇİN X-RAY GRAFİĞİ ENTEGRASYONU ---
+        if is_rc_model:
+            st.divider()
+            st.markdown("### 🔍 Primary Portföy Hisse Detaylı İnceleme (X-Ray)")
+            _rc_tickers = df_selection["sembol"].tolist()
+            if _rc_tickers:
+                # Active model bazında eşsiz key vererek model değişiminde stale state hatasını önlüyoruz
+                _sel_key = f"rc_xray_sel_{active_model}"
+                _selected_ticker = st.selectbox(
+                    "Grafik için hisse seçin:",
+                    _rc_tickers,
+                    key=_sel_key
+                )
+                if _selected_ticker:
+                    _row = df_selection[df_selection["sembol"] == _selected_ticker].iloc[0]
+                    _rank = _row.get("Sıra", "-")
+                    _score = float(_row.get("ml_score", 0.0))
+                    render_shared_price_chart(_selected_ticker, str(_rank), f"{_score:.4f}", model_badge)
+
+    else:
+        st.info("Portföy verisi bulunamadı. Lütfen motorun çalışmasını bekleyin.")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SAYFA 2: BIST 88 MODEL SIRALAMASI
 # ═══════════════════════════════════════════════════════════════════════════
 elif sayfa == "🏆 BIST 88 Model Sıralaması":
-    st.subheader("🏆 BIST 88 Kesitsel Model Sıralaması (LambdaMART)")
-    st.caption("Point-in-Time bilançolar ve kurumsal rasyolarla beslenen dondurulmuş sıralama motoru çıktısı.")
-
-    st.markdown(f"#### ✅ Filtrelenmiş K={target_k} Paper-Portfolio Adayları")
-    if df_selection is not None and not df_selection.empty:
-        selected_display = df_selection.copy()
-        selected_display["Portföy Adayı"] = "✅ Likidite + sektör filtresinden geçti"
-        selected_display["Sektör (V2)"] = selected_display["sektor_v2"].fillna("DİĞER")
-        selected_columns = ["rank", "sembol", "Sektör (V2)", "ml_score", "avg_tl_hacim_m", "data_age_days", "Portföy Adayı"]
-        st.dataframe(
-            selected_display[[column for column in selected_columns if column in selected_display.columns]],
-            width="stretch",
-            hide_index=True,
-        )
-        st.caption("Bu tablo, paper trader'ın kullandığı post-model filtreli seçimi gösterir; ham model sırası aşağıdadır.")
+    st.subheader(f"🏆 Tüm Evren Sıralaması: {model_badge}")
+    st.caption("Modelin ürettiği makine öğrenmesi skorları ve sıralaması.")
+    if not df_ranking.empty:
+        st.dataframe(df_ranking, use_container_width=True, hide_index=True)
     else:
-        st.warning("Filtreli seçim önbelleği henüz yok. Son başarılı, hizalı rebalance kontrolünden sonra oluşturulur.")
+        st.info("Sıralama verisi bulunamadı.")
 
-    if df_ranking is not None and not df_ranking.empty:
-        st.markdown("#### Ham Model Sıralaması — Filtre Öncesi")
-        col_s1, col_s2 = st.columns([2, 1])
-        with col_s1:
-            arama = st.text_input("🔍 Hisse Ara (örn: THYAO, LOGO, ASELS):", "").strip().upper()
-        with col_s2:
-            sadece_top10 = st.checkbox(f"Sadece Ham Model İlk {target_k}'u Göster", value=False)
-
-        df_disp = df_ranking.copy()
-        df_disp["Sıra"] = range(1, len(df_disp) + 1)
-        secilen_set = set(df_selection["sembol"].tolist()) if df_selection is not None and not df_selection.empty else set()
+# ═══════════════════════════════════════════════════════════════════════════
+# SAYFA: ÇİFT MODEL KARŞILAŞTIRMA
+# ═══════════════════════════════════════════════════════════════════════════
+elif sayfa == "⚖️ Çift Model Karşılaştırma":
+    st.subheader("⚖️ Primary / Secondary Karşılaştırması")
+    st.caption("Primary (RC-LGBMR-001) ve Secondary (RC-LAMBDAMART-001) Shadow Modellerin güncel seçimleri ve ayrışmaları.")
+    st.warning("⚠️ **EXP-ENS-001 Reddi & Ayrık Takip İlkesi:** Araştırma sürecinde eşit ağırlıklı ensemble modeli (EXP-ENS-001) başarısız olmuş ve reddedilmiştir. Primary ve Secondary iki bağımsız dondurulmuş shadow modeldir; aralarında sentetik birleşik portföy veya birleşik getiri/Sharpe üretilmez.")
+    
+    if shadow_state and shadow_state.get("primary") and shadow_state.get("secondary"):
+        st.success(f"Sinyal Tarihi: {shadow_state['session_date']} | Tür: {shadow_state['status']}")
         
-        def filtre_karar_metni(row):
-            sym = row["sembol"]
-            if sym in secilen_set:
-                return f"✅ Top-{target_k} Portföy Adayı"
-            if sym == "BIZIM.IS":
-                return "❌ Likidite Elendi (<20M TL)"
-            if row["Sıra"] <= target_k:
-                return "⚠️ Sektör Kısıtıyla Elendi"
-            return "—"
+        p_top10 = {x["ticker"] for x in shadow_state["primary"]["ordered_top10"]}
+        s_top10 = {x["ticker"] for x in shadow_state["secondary"]["ordered_top10"]}
         
-        df_disp["Nihai Karar"] = df_disp.apply(filtre_karar_metni, axis=1)
-        df_disp["Sektör (V2)"] = df_disp["sembol"].map(lambda s: cfg.HISSE_SEKTOR_V2.get(s, "DİĞER"))
+        ortak = p_top10 & s_top10
+        sadece_p = p_top10 - s_top10
+        sadece_s = s_top10 - p_top10
         
-        if "data_age_days" in df_disp.columns:
-            esik = getattr(cfg, "BILANCO_ESKILIK_ESIGI_GUN", 100)
-            df_disp["Bilanço Tazeliği"] = df_disp["data_age_days"].apply(
-                lambda d: f"⚠️ {int(d)}g (Eski)" if d > esik else f"✅ {int(d)}g"
-            )
-        
-        if arama:
-            df_disp = df_disp[df_disp["sembol"].str.contains(arama, na=False)]
-        if sadece_top10:
-            df_disp = df_disp[df_disp["Sıra"] <= target_k]
-
-        cols_show = ["Sıra", "sembol", "Sektör (V2)", "ml_score", "Nihai Karar", "Bilanço Tazeliği", "reel_eps_growth", "z_pb", "z_borc", "z_mom", "z_roe", "z_fcf"]
-        avail = [c for c in cols_show if c in df_disp.columns]
-
-        st.dataframe(df_disp[avail], width="stretch", hide_index=True)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown(f"### 🤝 Ortak ({len(ortak)})")
+            for t in sorted(ortak): st.markdown(f"- **{t}**")
+        with col2:
+            st.markdown(f"### 🚀 Sadece Primary ({len(sadece_p)})")
+            for t in sorted(sadece_p): st.markdown(f"- {t}")
+        with col3:
+            st.markdown(f"### ⭐ Sadece Secondary ({len(sadece_s)})")
+            for t in sorted(sadece_s): st.markdown(f"- {t}")
+            
     else:
-        st.info("Sıralama önbelleği hazır değil. Sol menüdeki 'Rebalance & Bildirim Kontrolü Çalıştır' butonuyla önbelleği oluşturabilirsiniz.")
-
+        st.info("Karşılaştırma için yeterli veri yok.")
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SAYFA 3: ÇOK KATMANLI DRİFT VE RİSK MONİTÖRÜ
@@ -1489,169 +1372,434 @@ elif sayfa == "🛡️ Çok Katmanlı Drift Monitör" or sayfa == "🛡️ 3 Kat
 # SAYFA 4: KÜMÜLATİF GETİRİ VE PERFORMANS
 # ═══════════════════════════════════════════════════════════════════════════
 elif sayfa == "📈 Kümülatif Getiri & Performans":
-    st.subheader("📈 Kümülatif Getiri ve Karşılaştırmalı Performans")
-    st.caption("Dondurulmuş modelin kilit kutu (out-of-sample) resmi performansı ve cari paper trading kümülatif getiri takibi.")
+    # ─── MODEL BAZLI PERFORMANS VE KANIT PANELİ ─────────────────────────────
+    if is_rc_model:
+        # Aktif RC modelini belirle
+        rc_candidate_id = "RC-LGBMR-001"
+        rc_candidate_title = "RC-LGBMR-001 (Primary Shadow Model)"
+        if "RC-LAMBDAMART-001" in secilen_model:
+            rc_candidate_id = "RC-LAMBDAMART-001"
+            rc_candidate_title = "RC-LAMBDAMART-001 (Secondary Shadow Model)"
 
-    tab_kilit, tab_paper = st.tabs([
-        "🏛️ Kilit Kutu Doğrulanmış Resmi Performans (2025Q2 - 2026Q2)",
-        "🟢 Cari Paper Trading Takibi (2026-09 ve Sonrası)"
-    ])
+        ev = load_rc_research_evidence(rc_candidate_id)
+        fwd = load_rc_forward_status(rc_candidate_id)
 
-    with tab_kilit:
-        st.markdown("#### 🏛️ 15 Aylık Kilit Kutu (Out-of-Sample) Kesinleşmiş Doğrulama Raporu")
-        st.caption("Model parametreleri dondurulmuş (depth=2, leaves=3, lr=0.03), 2018-2025 verisiyle eğitilmiş ve ilk kez kilit kutuda test edilmiştir.")
+        st.subheader(f"📈 Model Performans & Kanıt Paneli — {rc_candidate_title}")
+        st.caption(f"Aday Kimliği: `{rc_candidate_id}` | Mimari: `{ev['architecture']}` | Hedef Yordamı: `{ev['target_procedure']}` (Ufuk: {ev['horizon_procedure']} Seans)")
 
-        # 5 Büyük KPI Kartı
-        kc1, kc2, kc3, kc4, kc5 = st.columns(5)
-        with kc1:
-            st.metric("Model K=10 Getiri", "+%137.3", "+%75.9 BIST 100 Üstü Alfa")
-        with kc2:
-            st.metric("BIST 100 Endeksi", "+%61.4", "Piyasa Kıstası")
-        with kc3:
-            st.metric("Resmi Sharpe Oranı", "3.41", "Eşik: 1.26 (+2.15 Prim)")
-        with kc4:
-            st.metric("Maksimum Drawdown", "%0.0", "5 Çeyrek Sıfır DD")
-        with kc5:
-            st.metric("Monte Carlo p-Değeri", "p = 0.000", "100 Tohum Placebo")
-
-        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-
-        # 2 Panelli Kilit Kutu Grafiği
-        fig_kk = make_subplots(
-            rows=2, cols=1,
-            shared_xaxes=True,
-            vertical_spacing=0.06,
-            row_heights=[0.70, 0.30],
-            subplot_titles=("Kümülatif Sermaye Büyümesi (Başlangıç = 100 TL)", "Dönemsel Net Alfa (Model - BIST 100 %)")
-        )
-
-        ceyrekler = ["2025Q1 (Baz)", "2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
-        k10_cum = [100.0, 124.67, 127.39, 147.12, 182.88, 237.30]
-        k15_cum = [100.0, 124.67, 127.39, 147.12, 182.88, 195.90]
-        xu100_cum = [100.0, 125.21, 123.39, 152.26, 156.34, 161.40]
-        placebo_cum = [100.0, 129.33, 123.88, 143.25, 158.39, 153.10]
-
-        # 1. K=10 Çizgisi
-        fig_kk.add_trace(go.Scatter(
-            x=ceyrekler, y=k10_cum,
-            mode="lines+markers",
-            name="Model K=10 (Nihai Portföy)",
-            line=dict(color="#00e676", width=3.5),
-            marker=dict(size=9, color="#00e676")
-        ), row=1, col=1)
-
-        # 2. K=15 Çizgisi
-        fig_kk.add_trace(go.Scatter(
-            x=ceyrekler, y=k15_cum,
-            mode="lines+markers",
-            name="Model K=15 (Genişletilmiş)",
-            line=dict(color="#38bdf8", width=2.2, dash="dash"),
-            marker=dict(size=6, color="#38bdf8")
-        ), row=1, col=1)
-
-        # 3. BIST 100 Çizgisi
-        fig_kk.add_trace(go.Scatter(
-            x=ceyrekler, y=xu100_cum,
-            mode="lines+markers",
-            name="BIST 100 (XU100 Kıstas)",
-            line=dict(color="#f59e0b", width=2.5, dash="dot"),
-            marker=dict(size=6, color="#f59e0b")
-        ), row=1, col=1)
-
-        # 4. Placebo Çizgisi
-        fig_kk.add_trace(go.Scatter(
-            x=ceyrekler, y=placebo_cum,
-            mode="lines",
-            name="100 Tohum Placebo Ort.",
-            line=dict(color="#64748b", width=1.5, dash="dot")
-        ), row=1, col=1)
-
-        # Çeyreklik Alfa Barları
-        alfa_ceyrekler = ["2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
-        alfalar = [-0.54, 3.63, -7.91, 21.63, 3.88]
-        alfa_colors = ["#10b981" if a >= 0 else "#ef4444" for a in alfalar]
-
-        fig_kk.add_trace(go.Bar(
-            x=alfa_ceyrekler, y=alfalar,
-            marker_color=alfa_colors,
-            name="Çeyreklik Alfa (%)",
-            text=[f"%{a:+.2f}" for a in alfalar],
-            textposition="outside",
-            showlegend=False
-        ), row=2, col=1)
-        fig_kk.add_hline(y=0, line_dash="solid", line_color="#64748b", line_width=1, row=2, col=1)
-
-        fig_kk.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#0b0f19",
-            plot_bgcolor="#111827",
-            height=600,
-            margin=dict(l=30, r=30, t=30, b=30),
-            hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
-        fig_kk.update_xaxes(gridcolor="#1f293d")
-        fig_kk.update_yaxes(gridcolor="#1f293d")
-        fig_kk.update_yaxes(title="Portföy Değeri (TL)", row=1, col=1)
-        fig_kk.update_yaxes(title="Alfa (%)", row=2, col=1)
-
-        st.plotly_chart(fig_kk, width="stretch")
-
-        # Kilit Kutu Detaylı Tablo
-        st.markdown("##### 📋 Çeyreklik Ayrışma Tablosu")
-        df_kk_table = pd.DataFrame([
-            {"Çeyrek": "2025Q2", "Model K=10 (%)": "+%24.67", "BIST 100 (%)": "+%25.21", "Çeyreklik Net Alfa": "-%0.54", "Placebo (%)": "+%29.33", "Sonuç": "Piyasaya Paralel"},
-            {"Çeyrek": "2025Q3", "Model K=10 (%)": "+%2.18", "BIST 100 (%)": "-%1.45", "Çeyreklik Net Alfa": "+%3.63", "Placebo (%)": "-%4.21", "Sonuç": "Piyasa Düşerken Pozitif"},
-            {"Çeyrek": "2025Q4", "Model K=10 (%)": "+%15.49", "BIST 100 (%)": "+%23.40", "Çeyreklik Net Alfa": "-%7.91", "Placebo (%)": "+%15.63", "Sonuç": "Ralliye Katıldı"},
-            {"Çeyrek": "2026Q1", "Model K=10 (%)": "+%24.31", "BIST 100 (%)": "+%2.68", "Çeyreklik Net Alfa": "+%21.63", "Placebo (%)": "+%10.57", "Sonuç": "🔥 Büyük Pozitif Ayrışma"},
-            {"Çeyrek": "2026Q2", "Model K=10 (%)": "+%7.12", "BIST 100 (%)": "+%3.24", "Çeyreklik Net Alfa": "+%3.88", "Placebo (%)": "-%3.65", "Sonuç": "🔥 Pozitif Alfa"}
+        tab_res, tab_fwd, tab_comp = st.tabs([
+            "📊 Araştırma / OOS Backtest Kanıtı",
+            "🟢 Clean-Forward Shadow Takibi",
+            "⚖️ Primary / Secondary Karşılaştırması"
         ])
-        st.dataframe(df_kk_table, width="stretch", hide_index=True)
 
-    with tab_paper:
-        st.markdown("#### 🟢 Cari Paper Trading Kümülatif Getiri İzleme")
-        st.caption("İnkübasyon döneminde gerçekleşen 14 günlük periyot getirileri ve kıyaslama eğrisi.")
+        # ─────────────────────────────────────────────────────────────────
+        # 1. ARAŞTIRMA / OOS BACKTEST KANITI (Dondurulmuş Araştırma Sonuçları)
+        # ─────────────────────────────────────────────────────────────────
+        with tab_res:
+            st.markdown("#### 📊 Araştırma / OOS Backtest Sonuçları")
+            st.warning("⚠️ **Metodolojik Sınır:** Bu değerler dondurulmuş araştırma fazı (OOS Backtest / EXP-PORT-001 / EXP-ROBUST-001) kanıtıdır. Canlı veya clean-forward gerçekleşmiş performans DEĞİLDİR.")
+            st.caption(f"📁 **Resmi Kaynak:** `research/results/EXP-PORT-001_summary.json` & `EXP-ROBUST-001_summary.json` | Model Hash: `{ev['model_sha256'][:16]}...`")
 
-        if not df_logs.empty and len(df_logs) >= 1:
-            fig_cum = go.Figure()
-            tarihler = df_logs["tarih"].tolist()
-            m_rets = [float(str(r).replace("%", "")) for r in df_logs["model_getiri_yuzde"]]
-            x_rets = [float(str(r).replace("%", "")) for r in df_logs["bist100_getiri_yuzde"]]
-            m_cum = np.cumprod(1.0 + np.array(m_rets) / 100.0) - 1.0
-            x_cum = np.cumprod(1.0 + np.array(x_rets) / 100.0) - 1.0
+            # 5 KPI Kartı
+            r1, r2, r3, r4, r5 = st.columns(5)
+            with r1:
+                st.metric("Ortalama Net Getiri", f"+%{ev['mean_net_return']*100:.2f}" if ev['mean_net_return'] is not None else "N/A", "50 bps Maliyet Dahil")
+            with r2:
+                st.metric("Yıllık Bileşik Getiri (CAGR)", f"+%{ev['mean_cagr']*100:.2f}" if ev['mean_cagr'] is not None else "N/A", f"K={ev['k']} Eşit Ağırlık")
+            with r3:
+                st.metric("Resmi Sharpe Oranı", f"{ev['mean_sharpe']:.2f}" if ev['mean_sharpe'] is not None else "N/A", "Out-of-Sample Sharpe")
+            with r4:
+                st.metric("Maksimum Drawdown", f"%{ev['worst_daily_maxdd']*100:.2f}" if ev['worst_daily_maxdd'] is not None else "N/A", "En Kötü Günlük MaxDD")
+            with r5:
+                st.metric("En Kötü Günlük Kayıp", f"%{ev['worst_day']*100:.2f}" if ev['worst_day'] is not None else "N/A", "Worst Day Stres")
 
-            fig_cum.add_trace(go.Scatter(
-                x=tarihler,
-                y=m_cum * 100,
+            st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+            # Portföy ve Sağlamlık Detayları
+            c_left, c_right = st.columns([1, 1])
+            with c_left:
+                st.markdown("##### ⚙️ Portföy & Yürütme Parametreleri (EXP-PORT-001)")
+                df_port_details = pd.DataFrame([
+                    {"Parametre": "Portföy Büyüklüğü (K)", "Değer": f"K = {ev['k']} (Eşit Ağırlıklı)"},
+                    {"Parametre": "İşlem Maliyeti (Cost Reserve)", "Değer": "50 bps (0.0050) tek yönlü"},
+                    {"Parametre": "Uygulama Gecikmesi (Delay)", "Değer": "0 seans (Kapanışta sinyal, ertesi Açılışta işlem)"},
+                    {"Parametre": "Ortalama Devir Hızı (Turnover)", "Değer": f"{ev['mean_turnover']:.4f}" if ev['mean_turnover'] is not None else "N/A"},
+                    {"Parametre": "Emir Gerçekleşme Oranı (Fill Rate)", "Değer": f"%{ev['mean_fill_rate']*100:.1f}" if ev['mean_fill_rate'] is not None else "N/A"},
+                    {"Parametre": "Eğitim & Test Aralığı", "Değer": f"{ev['training_start']} → {ev['training_cutoff']}"}
+                ])
+                st.dataframe(df_port_details, hide_index=True, width="stretch")
+
+            with c_right:
+                st.markdown("##### 🛡️ Sağlamlık & Karar Özeti (EXP-ROBUST-001 & EXP-FINAL-001)")
+                df_rob_details = pd.DataFrame([
+                    {"Boyut": "Sağlamlık Sınıfı", "Sonuç": f"{ev['robust_classification']}"},
+                    {"Boyut": "Geçilen Sağlamlık Boyutları", "Sonuç": f"{ev['dimensions_passed']} / 9 Boyut PASS" if ev['dimensions_passed'] is not None else "N/A"},
+                    {"Boyut": "Bootstrap IC > 0 Olasılığı", "Sonuç": f"%{ev['bootstrap_prob_ic_positive']*100:.2f}" if ev['bootstrap_prob_ic_positive'] is not None else "N/A"},
+                    {"Boyut": "Bootstrap Net Getiri > 0 Olasılığı", "Sonuç": f"%{ev['bootstrap_prob_net_positive']*100:.2f}" if ev['bootstrap_prob_net_positive'] is not None else "N/A"},
+                    {"Boyut": "Model Öznitelikleri (Features)", "Sonuç": f"{', '.join(ev['features'])}"},
+                    {"Boyut": "Phase J Finalist Kararı", "Sonuç": f"{ev['final_decision']}"}
+                ])
+                st.dataframe(df_rob_details, hide_index=True, width="stretch")
+
+            # Gerçek Araştırma OOS NAV Çizelgesi (EXP-PORT-001_daily_nav.csv)
+            df_nav = load_rc_research_nav(rc_candidate_id)
+            if not df_nav.empty and len(df_nav) > 1:
+                col_h, col_v = st.columns([3, 2])
+                with col_h:
+                    st.markdown("##### 📈 Dondurulmuş Araştırma OOS Kümülatif NAV Eğrisi (EXP-PORT-001)")
+                with col_v:
+                    view_mode = st.radio(
+                        "Görünüm Seçimi:",
+                        ["Kümülatif Bileşik NAV", "Fold Bazlı Ayrık NAV"],
+                        horizontal=True,
+                        key=f"nav_view_mode_{rc_candidate_id}"
+                    )
+                
+                if "Kümülatif" in view_mode:
+                    st.caption("Walk-forward OOS dönemlerindeki gerçekleşen günlük araştırma getirileri, fold resetleri hariç tutularak kronolojik olarak bileşiklenmiştir.")
+                    fig_r = build_rc_oos_figure(
+                        df_nav,
+                        rc_candidate_id,
+                        base_color="#00e676" if "LGBM" in rc_candidate_id else "#38bdf8",
+                        view_mode="CONTINUOUS_CHAIN"
+                    )
+                else:
+                    st.caption("Her OOS fold dönemi 1.0 (%0) seviyesinden bağımsız başlatılmış olup, fold aralarındaki tasfiye ve yeniden başlatma döngüleri izole gösterilmektedir.")
+                    fig_r = build_rc_oos_figure(
+                        df_nav,
+                        rc_candidate_id,
+                        view_mode="SEPARATE_FOLD_TRACES"
+                    )
+                st.plotly_chart(fig_r, width="stretch")
+            else:
+                st.info("Araştırma OOS zaman serisi bulunamadı.")
+
+        # ─────────────────────────────────────────────────────────────────
+        # 2. CLEAN-FORWARD SHADOW TAKİBİ (Gerçekleşmiş Forward Performans)
+        # ─────────────────────────────────────────────────────────────────
+        with tab_fwd:
+            st.markdown("#### 🟢 Clean-Forward Shadow Takibi")
+            st.caption(f"Resmi Kaynak: `research/forward_infrastructure/` | Manifest: `{fwd['manifest_ref']}`")
+
+            st.markdown(f"""
+            <div class="quant-card" style="border-left: 4px solid #10b981;">
+                <div style="font-weight: 600; font-size: 1.05rem; color: #10b981; margin-bottom: 6px;">
+                    🟢 Clean-Forward İzleme Aktif (Shadow Mode)
+                </div>
+                <div style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">
+                    <b>Aktivasyon Başlangıcı:</b> <code>{fwd['clean_forward_start']}</code><br>
+                    <b>Aktivasyon Modu:</b> <code>{fwd['activation_mode']}</code> (Denetim Durumu: <code>{fwd['audit_status']}</code>)<br>
+                    <b>Tamamlanan Resmi Forward Gözlem Sayısı:</b> <code>{fwd['completed_count']}</code>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if fwd["completed_count"] == 0:
+                st.info(
+                    "ℹ️ **Henüz tamamlanmış yeterli clean-forward dönem bulunmadığı için kümülatif gerçekleşmiş getiri eğrisi oluşturulmamıştır.**\n\n"
+                    "• Model dondurulmuş (frozen) olup clean-forward saati aktiftir.\n"
+                    "• Metodolojik kurallar gereği, geçmiş araştırma/backtest eğrileri veya dry-run verileri gerçekleşmiş getiri olarak **KESİNLİKLE** gösterilmez (0% sahte çizgi de üretilmez).\n"
+                    "• İlk resmi COMMITTED forward işlem periyodu tamamlandığında gerçekleşmiş kümülatif getiri eğrisi ve seans logları bu alanda otomatik olarak görüntülenecektir."
+                )
+            else:
+                st.success(f"Tamamlanan resmi forward gözlem sayısı: {fwd['completed_count']}")
+
+        # ─────────────────────────────────────────────────────────────────
+        # 3. PRIMARY / SECONDARY KARŞILAŞTIRMASI
+        # ─────────────────────────────────────────────────────────────────
+        with tab_comp:
+            st.markdown("#### ⚖️ Primary / Secondary Karşılaştırması")
+            st.warning("⚠️ **EXP-ENS-001 Reddi & Ayrık Takip İlkesi:** Araştırma sürecinde eşit ağırlıklı ensemble modeli (EXP-ENS-001) başarısız olmuş ve reddedilmiştir. Primary ve Secondary iki bağımsız dondurulmuş shadow modeldir; aralarında sentetik birleşik portföy veya birleşik getiri/Sharpe üretilmez.")
+
+            ev_p = load_rc_research_evidence("RC-LGBMR-001")
+            ev_s = load_rc_research_evidence("RC-LAMBDAMART-001")
+
+            df_comp_table = pd.DataFrame([
+                {"Özellik / Metrik": "Model Kimliği", "🏆 Primary Shadow": "RC-LGBMR-001", "🥈 Secondary Shadow": "RC-LAMBDAMART-001"},
+                {"Özellik / Metrik": "Mimari", "🏆 Primary Shadow": "LGBM Regression", "🥈 Secondary Shadow": "LambdaMART"},
+                {"Özellik / Metrik": "Hedef Yordamı (Target)", "🏆 Primary Shadow": f"{ev_p['target_procedure']} (H60)", "🥈 Secondary Shadow": f"{ev_s['target_procedure']} (H60)"},
+                {"Özellik / Metrik": "Ortalama Net Getiri (50 bps)", "🏆 Primary Shadow": f"+%{ev_p['mean_net_return']*100:.2f}" if ev_p['mean_net_return'] is not None else "N/A", "🥈 Secondary Shadow": f"+%{ev_s['mean_net_return']*100:.2f}" if ev_s['mean_net_return'] is not None else "N/A"},
+                {"Özellik / Metrik": "Yıllık Bileşik Getiri (CAGR)", "🏆 Primary Shadow": f"+%{ev_p['mean_cagr']*100:.2f}" if ev_p['mean_cagr'] is not None else "N/A", "🥈 Secondary Shadow": f"+%{ev_s['mean_cagr']*100:.2f}" if ev_s['mean_cagr'] is not None else "N/A"},
+                {"Özellik / Metrik": "Resmi Sharpe Oranı", "🏆 Primary Shadow": f"{ev_p['mean_sharpe']:.2f}" if ev_p['mean_sharpe'] is not None else "N/A", "🥈 Secondary Shadow": f"{ev_s['mean_sharpe']:.2f}" if ev_s['mean_sharpe'] is not None else "N/A"},
+                {"Özellik / Metrik": "Maksimum Drawdown (MaxDD)", "🏆 Primary Shadow": f"%{ev_p['worst_daily_maxdd']*100:.2f}" if ev_p['worst_daily_maxdd'] is not None else "N/A", "🥈 Secondary Shadow": f"%{ev_s['worst_daily_maxdd']*100:.2f}" if ev_s['worst_daily_maxdd'] is not None else "N/A"},
+                {"Özellik / Metrik": "En Kötü Günlük Kayıp", "🏆 Primary Shadow": f"%{ev_p['worst_day']*100:.2f}" if ev_p['worst_day'] is not None else "N/A", "🥈 Secondary Shadow": f"%{ev_s['worst_day']*100:.2f}" if ev_s['worst_day'] is not None else "N/A"},
+                {"Özellik / Metrik": "Devir Hızı (Turnover)", "🏆 Primary Shadow": f"{ev_p['mean_turnover']:.4f}" if ev_p['mean_turnover'] is not None else "N/A", "🥈 Secondary Shadow": f"{ev_s['mean_turnover']:.4f}" if ev_s['mean_turnover'] is not None else "N/A"},
+                {"Özellik / Metrik": "Sağlamlık Geçiş Skoru", "🏆 Primary Shadow": f"{ev_p['dimensions_passed']}/9 Boyut" if ev_p['dimensions_passed'] is not None else "N/A", "🥈 Secondary Shadow": f"{ev_s['dimensions_passed']}/9 Boyut" if ev_s['dimensions_passed'] is not None else "N/A"},
+                {"Özellik / Metrik": "Clean-Forward Durumu", "🏆 Primary Shadow": "İnkübasyon (0 Gözlem)", "🥈 Secondary Shadow": "İnkübasyon (0 Gözlem)"}
+            ])
+            st.dataframe(df_comp_table, hide_index=True, width="stretch")
+
+            # İki modelin araştırma OOS NAV eğrilerini yan yana karşılaştır
+            df_nav_p = load_rc_research_nav("RC-LGBMR-001")
+            df_nav_s = load_rc_research_nav("RC-LAMBDAMART-001")
+            if not df_nav_p.empty and not df_nav_s.empty:
+                col_ch, col_cv = st.columns([3, 2])
+                with col_ch:
+                    st.markdown("##### 📈 Dondurulmuş Araştırma OOS Kümülatif NAV Karşılaştırması (EXP-PORT-001)")
+                with col_cv:
+                    view_comp_mode = st.radio(
+                        "Kıyaslama Görünümü:",
+                        ["Kümülatif Bileşik NAV", "Fold Bazlı Ayrık NAV"],
+                        horizontal=True,
+                        key="nav_comp_view_mode"
+                    )
+                
+                fig_comp = go.Figure()
+                if "Kümülatif" in view_comp_mode:
+                    st.caption("Walk-forward OOS dönemlerindeki gerçekleşen günlük araştırma getirileri, fold resetleri hariç tutularak kronolojik olarak bileşiklenmiştir.")
+                    
+                    # Primary fold segments
+                    first_p = True
+                    for fold, fdf in df_nav_p.groupby("outer_fold", sort=False):
+                        fig_comp.add_trace(go.Scatter(
+                            x=fdf["date"],
+                            y=fdf["chained_nav_pct"],
+                            mode="lines",
+                            name="RC-LGBMR-001 (Primary OOS NAV)",
+                            legendgroup="primary",
+                            showlegend=first_p,
+                            line=dict(color="#00e676", width=2.5),
+                            hovertemplate="<b>%{x}</b><br>Primary Kümülatif: +%{y:.2f}%<extra></extra>"
+                        ))
+                        first_p = False
+                        
+                    # Secondary fold segments
+                    first_s = True
+                    for fold, fdf in df_nav_s.groupby("outer_fold", sort=False):
+                        fig_comp.add_trace(go.Scatter(
+                            x=fdf["date"],
+                            y=fdf["chained_nav_pct"],
+                            mode="lines",
+                            name="RC-LAMBDAMART-001 (Secondary OOS NAV)",
+                            legendgroup="secondary",
+                            showlegend=first_s,
+                            line=dict(color="#38bdf8", width=2.5, dash="dash"),
+                            hovertemplate="<b>%{x}</b><br>Secondary Kümülatif: +%{y:.2f}%<extra></extra>"
+                        ))
+                        first_s = False
+                else:
+                    st.caption("Her iki modelin her OOS fold dönemi için bağımsız (%0) seviyesinden hesaplanan getiri eğrileri izole olarak karşılaştırılır.")
+                    
+                    for fold, fdf_p in df_nav_p.groupby("outer_fold", sort=False):
+                        fig_comp.add_trace(go.Scatter(
+                            x=fdf_p["date"],
+                            y=fdf_p["fold_nav_pct"],
+                            mode="lines",
+                            name=f"Primary {fold}",
+                            line=dict(color="#00e676", width=2.2),
+                            legendgroup=f"fold_{fold}"
+                        ))
+                    for fold, fdf_s in df_nav_s.groupby("outer_fold", sort=False):
+                        fig_comp.add_trace(go.Scatter(
+                            x=fdf_s["date"],
+                            y=fdf_s["fold_nav_pct"],
+                            mode="lines",
+                            name=f"Secondary {fold}",
+                            line=dict(color="#38bdf8", width=2.2, dash="dash"),
+                            legendgroup=f"fold_{fold}"
+                        ))
+
+                fig_comp.update_layout(
+                    template="plotly_dark",
+                    paper_bgcolor="#0b0f19",
+                    plot_bgcolor="#111827",
+                    height=400,
+                    margin=dict(l=20, r=20, t=30, b=20),
+                    xaxis=dict(gridcolor="#1f293d", title="Tarih"),
+                    yaxis=dict(
+                        gridcolor="#1f293d",
+                        title="OOS Net Kümülatif Getiri (%)" if "Kümülatif" in view_comp_mode else "Fold İçi Net Getiri (%)"
+                    ),
+                    hovermode="x unified",
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                )
+                st.plotly_chart(fig_comp, width="stretch")
+
+    else:
+        # ─────────────────────────────────────────────────────────────────
+        # LEGACY PRODUCTION — V3
+        # ─────────────────────────────────────────────────────────────────
+        st.subheader("🏛️ LEGACY PRODUCTION — V3")
+        st.caption("Eski V3 Quant Model referans takip ekranı (Yeni dondurulmuş RC modellerinden tamamen bağımsızdır).")
+
+        tab_v3_kilit, tab_v3_paper = st.tabs([
+            "🏛️ Kilit Kutu Doğrulanmış Resmi Performans (2025Q2 - 2026Q2)",
+            "🟢 Cari Paper Trading Takibi (2026-09 ve Sonrası)"
+        ])
+
+        with tab_v3_kilit:
+            st.markdown("#### 🏛️ 15 Aylık Kilit Kutu (Out-of-Sample) Kesinleşmiş Doğrulama Raporu")
+            st.caption("Model parametreleri dondurulmuş (depth=2, leaves=3, lr=0.03), 2018-2025 verisiyle eğitilmiş ve ilk kez kilit kutuda test edilmiştir.")
+
+            # 5 Büyük KPI Kartı
+            kc1, kc2, kc3, kc4, kc5 = st.columns(5)
+            with kc1:
+                st.metric("Model K=10 Getiri", "+%137.3", "+%75.9 BIST 100 Üstü Alfa")
+            with kc2:
+                st.metric("BIST 100 Endeksi", "+%61.4", "Piyasa Kıstası")
+            with kc3:
+                st.metric("Resmi Sharpe Oranı", "3.41", "Eşik: 1.26 (+2.15 Prim)")
+            with kc4:
+                st.metric("Maksimum Drawdown", "%0.0", "5 Çeyrek Sıfır DD")
+            with kc5:
+                st.metric("Monte Carlo p-Değeri", "p = 0.000", "100 Tohum Placebo")
+
+            st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+            # 2 Panelli Kilit Kutu Grafiği
+            fig_kk = make_subplots(
+                rows=2, cols=1,
+                shared_xaxes=True,
+                vertical_spacing=0.06,
+                row_heights=[0.70, 0.30],
+                subplot_titles=("Kümülatif Sermaye Büyümesi (Başlangıç = 100 TL)", "Dönemsel Net Alfa (Model - BIST 100 %)")
+            )
+
+            ceyrekler = ["2025Q1 (Baz)", "2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
+            k10_cum = [100.0, 124.67, 127.39, 147.12, 182.88, 237.30]
+            k15_cum = [100.0, 124.67, 127.39, 147.12, 182.88, 195.90]
+            xu100_cum = [100.0, 125.21, 123.39, 152.26, 156.34, 161.40]
+            placebo_cum = [100.0, 129.33, 123.88, 143.25, 158.39, 153.10]
+
+            fig_kk.add_trace(go.Scatter(
+                x=ceyrekler, y=k10_cum,
                 mode="lines+markers",
-                name="V3 Quant Model",
-                line=dict(color="#00e676", width=3),
-                marker=dict(size=8, color="#00e676")
-            ))
-            fig_cum.add_trace(go.Scatter(
-                x=tarihler,
-                y=x_cum * 100,
+                name="Model K=10 (Nihai Portföy)",
+                line=dict(color="#00e676", width=3.5),
+                marker=dict(size=9, color="#00e676")
+            ), row=1, col=1)
+
+            fig_kk.add_trace(go.Scatter(
+                x=ceyrekler, y=k15_cum,
                 mode="lines+markers",
-                name="BIST 100 (XU100)",
-                line=dict(color="#f59e0b", width=2, dash="dot"),
+                name="Model K=15 (Genişletilmiş)",
+                line=dict(color="#38bdf8", width=2.2, dash="dash"),
+                marker=dict(size=6, color="#38bdf8")
+            ), row=1, col=1)
+
+            fig_kk.add_trace(go.Scatter(
+                x=ceyrekler, y=xu100_cum,
+                mode="lines+markers",
+                name="BIST 100 (XU100 Kıstas)",
+                line=dict(color="#f59e0b", width=2.5, dash="dot"),
                 marker=dict(size=6, color="#f59e0b")
-            ))
-            fig_cum.update_layout(
+            ), row=1, col=1)
+
+            fig_kk.add_trace(go.Scatter(
+                x=ceyrekler, y=placebo_cum,
+                mode="lines",
+                name="100 Tohum Placebo Ort.",
+                line=dict(color="#64748b", width=1.5, dash="dot")
+            ), row=1, col=1)
+
+            alfa_ceyrekler = ["2025Q2", "2025Q3", "2025Q4", "2026Q1", "2026Q2"]
+            alfalar = [-0.54, 3.63, -7.91, 21.63, 3.88]
+            alfa_colors = ["#10b981" if a >= 0 else "#ef4444" for a in alfalar]
+
+            fig_kk.add_trace(go.Bar(
+                x=alfa_ceyrekler, y=alfalar,
+                marker_color=alfa_colors,
+                name="Çeyreklik Alfa (%)",
+                text=[f"%{a:+.2f}" for a in alfalar],
+                textposition="outside",
+                showlegend=False
+            ), row=2, col=1)
+            fig_kk.add_hline(y=0, line_dash="solid", line_color="#64748b", line_width=1, row=2, col=1)
+
+            fig_kk.update_layout(
                 template="plotly_dark",
                 paper_bgcolor="#0b0f19",
                 plot_bgcolor="#111827",
-                height=420,
-                margin=dict(l=20, r=20, t=30, b=20),
-                xaxis=dict(gridcolor="#1f293d"),
-                yaxis=dict(gridcolor="#1f293d", title="Kümülatif Getiri (%)"),
+                height=600,
+                margin=dict(l=30, r=30, t=30, b=30),
+                hovermode="x unified",
                 legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
             )
-            st.plotly_chart(fig_cum, width="stretch")
+            fig_kk.update_xaxes(gridcolor="#1f293d")
+            fig_kk.update_yaxes(gridcolor="#1f293d")
+            fig_kk.update_yaxes(title="Portföy Değeri (TL)", row=1, col=1)
+            fig_kk.update_yaxes(title="Alfa (%)", row=2, col=1)
 
-            st.markdown("##### 📜 Paper Trading İşlem Geçmişi")
-            st.dataframe(df_logs.sort_index(ascending=False), width="stretch", hide_index=True)
-        else:
-            st.info("Kümülatif getiri grafiği için en az bir dönem log kaydı gerekmektedir.")
+            st.plotly_chart(fig_kk, width="stretch")
+
+            st.markdown("##### 📋 Çeyreklik Ayrışma Tablosu")
+            df_kk_table = pd.DataFrame([
+                {"Çeyrek": "2025Q2", "Model K=10 (%)": "+%24.67", "BIST 100 (%)": "+%25.21", "Çeyreklik Net Alfa": "-%0.54", "Placebo (%)": "+%29.33", "Sonuç": "Piyasaya Paralel"},
+                {"Çeyrek": "2025Q3", "Model K=10 (%)": "+%2.18", "BIST 100 (%)": "-%1.45", "Çeyreklik Net Alfa": "+%3.63", "Placebo (%)": "-%4.21", "Sonuç": "Piyasa Düşerken Pozitif"},
+                {"Çeyrek": "2025Q4", "Model K=10 (%)": "+%15.49", "BIST 100 (%)": "+%23.40", "Çeyreklik Net Alfa": "-%7.91", "Placebo (%)": "+%15.63", "Sonuç": "Ralliye Katıldı"},
+                {"Çeyrek": "2026Q1", "Model K=10 (%)": "+%24.31", "BIST 100 (%)": "+%2.68", "Çeyreklik Net Alfa": "+%21.63", "Placebo (%)": "+%10.57", "Sonuç": "🔥 Büyük Pozitif Ayrışma"},
+                {"Çeyrek": "2026Q2", "Model K=10 (%)": "+%7.12", "BIST 100 (%)": "+%3.24", "Çeyreklik Net Alfa": "+%3.88", "Placebo (%)": "-%3.65", "Sonuç": "🔥 Pozitif Alfa"}
+            ])
+            st.dataframe(df_kk_table, width="stretch", hide_index=True)
+
+        with tab_v3_paper:
+            st.markdown("#### 🟢 V3 Cari Paper Trading Kümülatif Getiri İzleme")
+            st.caption("V3 inkübasyon döneminde gerçekleşen periyot getirileri ve kıyaslama eğrisi.")
+
+            if not df_logs.empty and len(df_logs) >= 1:
+                # 1. Güvenilir unique transaction / event identity kontrolü
+                identity_cols = [c for c in df_logs.columns if c in ["tx_id", "event_id", "session_id", "id", "uuid"]]
+                has_reliable_identity = len(identity_cols) > 0
+
+                # Tarih frekans analizi
+                tarih_sayilari = df_logs["tarih"].value_counts()
+                ambiguous_dates = tarih_sayilari[tarih_sayilari > 1].index.tolist()
+
+                if ambiguous_dates:
+                    st.warning(
+                        f"⚠️ **Tarihsel Kayıt Uyarısı:** {', '.join(str(d) for d in ambiguous_dates)} tarihinde "
+                        f"birden fazla historical paper-trading kaydı bulunduğu için tekil performans noktası "
+                        f"güvenilir şekilde belirlenemedi. Metodolojik kural gereği keyfi ilk/son satır seçilmemiş, "
+                        f"tarihsel veri değiştirilmemiş ve bu tarih kümülatif getiri eğrisinden hariç tutulmuştur. "
+                        f"Tüm kayıtlar aşağıdaki ham log tablosunda eksiksiz olarak incelenebilir."
+                    )
+
+                # Yalnızca tekil ve güvenilir olan periyotları grafiğe dahil et (Keyfi first/last seçimi YOKTUR)
+                df_chart = df_logs[~df_logs["tarih"].isin(ambiguous_dates)].copy()
+
+                if not df_chart.empty and len(df_chart) >= 1:
+                    fig_cum = go.Figure()
+                    tarihler = df_chart["tarih"].tolist()
+                    m_rets = [float(str(r).replace("%", "")) for r in df_chart["model_getiri_yuzde"]]
+                    x_rets = [float(str(r).replace("%", "")) for r in df_chart["bist100_getiri_yuzde"]]
+                    m_cum = np.cumprod(1.0 + np.array(m_rets) / 100.0) - 1.0
+                    x_cum = np.cumprod(1.0 + np.array(x_rets) / 100.0) - 1.0
+
+                    fig_cum.add_trace(go.Scatter(
+                        x=tarihler,
+                        y=m_cum * 100,
+                        mode="lines+markers",
+                        name="V3 Quant Model (Güvenilir Tekil Noktalar)",
+                        line=dict(color="#00e676", width=3),
+                        marker=dict(size=8, color="#00e676")
+                    ))
+                    fig_cum.add_trace(go.Scatter(
+                        x=tarihler,
+                        y=x_cum * 100,
+                        mode="lines+markers",
+                        name="BIST 100 (XU100)",
+                        line=dict(color="#f59e0b", width=2, dash="dot"),
+                        marker=dict(size=6, color="#f59e0b")
+                    ))
+                    fig_cum.update_layout(
+                        template="plotly_dark",
+                        paper_bgcolor="#0b0f19",
+                        plot_bgcolor="#111827",
+                        height=420,
+                        margin=dict(l=20, r=20, t=30, b=20),
+                        xaxis=dict(gridcolor="#1f293d"),
+                        yaxis=dict(gridcolor="#1f293d", title="Kümülatif Getiri (%)"),
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                    )
+                    st.plotly_chart(fig_cum, width="stretch")
+                else:
+                    st.info("Kümülatif getiri grafiği için güvenilir tekil periyot kaydı bulunamadı.")
+
+                st.markdown("##### 📜 V3 Paper Trading İşlem Geçmişi (Ham Kayıt)")
+                st.dataframe(df_logs.sort_index(ascending=False), width="stretch", hide_index=True)
+            else:
+                st.info("Kümülatif getiri grafiği için en az bir dönem log kaydı gerekmektedir.")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -2029,15 +2177,21 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
     """, unsafe_allow_html=True)
 
     st.subheader("🔍 Kantitatif Hisse Röntgeni 2.0 — Bloomberg Terminal Paneli")
-    st.caption(
-        "V4 LambdaMART 7 faktör karnesi, PIT çeyreklik bilanço otopsisi, BIST 100 göreceli güç ve teknik görünüm. "
-        "**%100 Salt Okunur** — V4 otonom motoruna ve portföy dosyalarına hiçbir yazma yapılmaz."
-    )
+    if is_rc_model:
+        st.caption(
+            "PRIMARY/SECONDARY SHADOW modeli frozen cross-section sırası ve skorunu gösterir. "
+            "RC adayları yalnız mom_12_1, mom_63 ve vol_63 frozen feature şemasına bağlıdır; "
+            "**%100 Salt Okunur** — inference veya resmi kayıt üretmez."
+        )
+    else:
+        st.caption(
+            "Legacy V3 açıklayıcı teknik ve bilanço görünümü. "
+            "**%100 Salt Okunur** — üretim portföy dosyalarına hiçbir yazma yapılmaz."
+        )
 
     if df_ranking is None or df_ranking.empty:
         st.warning(
-            "⚠️ V4 Sıralama önbelleği henüz mevcut değil. Sol menüdeki "
-            "'V4 Rebalance Kontrolünü Çalıştır' butonu ile önbelleği oluşturun."
+            "⚠️ Shadow/Legacy sıralama verisi henüz mevcut değil. Önce doğrulanmış bir sıralama kaynağı oluşturun."
         )
     else:
         # ─── 1. HİSSE SEÇİCİ & CÜZDAN ENTEGRASYONU ──────────────────────────────────
@@ -2056,14 +2210,14 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _sira = _xr_sembol_listesi.index(s) + 1
                 _flags = []
                 if s in positions:
-                    _flags.append("💼 V4")
+                    _flags.append("💼 Portföy")
                 if s in _xr_wallet_positions:
                     _flags.append("👤 Cüzdan")
                 _flag_str = f" — [{', '.join(_flags)}]" if _flags else ""
                 return f"#{_sira:02d} • {_tiker} — {_sektor}{_flag_str}"
 
             _xr_secilen = st.selectbox(
-                "🔎 88 Hisse Evreninden Seçin (Arama Destekli):",
+                f"🔎 {_xr_df.shape[0]} Hisse Evreninden Seçin (Arama Destekli):",
                 _xr_sembol_listesi,
                 format_func=_xr_format_sembol
             )
@@ -2075,7 +2229,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
             <div style="text-align:center; padding: 10px 0;">
                 <div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:.09em;">Model Sırası</div>
                 <div style="font-size:2.8rem; font-weight:800; color:{_xr_rank_renk}; line-height:1.1;">
-                    #{_xr_rank}<span style="font-size:1.1rem; color:#475569;">/88</span>
+                    #{_xr_rank}<span style="font-size:1.1rem; color:#475569;">/{len(_xr_sembol_listesi)}</span>
                 </div>
                 <div style="font-size:0.78rem; color:{_xr_rank_renk}; font-weight:600;">{_xr_rank_label}</div>
             </div>
@@ -2108,7 +2262,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
             _xr_badges.append(
                 "<span style='background:rgba(52,211,153,.18);border:1px solid #34d399;"
                 "color:#34d399;padding:3px 10px;border-radius:6px;font-size:.80rem;font-weight:600;'>"
-                "💼 V4 Model Portföyünde</span>"
+                "💼 Portföyde</span>"
             )
         if _xr_cuzdan_var:
             _xr_badges.append(
@@ -2132,7 +2286,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                     <div class="xray-ticker">
                         {_xr_ticker}
                         <span style="font-size:1.15rem;color:#6366f1;font-weight:600;margin-left:10px;">
-                            • #{_xr_rank}/88
+                            • #{_xr_rank}/{len(_xr_sembol_listesi)}
                         </span>
                     </div>
                     <div class="xray-sector">
@@ -2143,7 +2297,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                     </div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:.75rem;color:#475569;text-transform:uppercase;letter-spacing:.07em;">V4 LambdaMART Skoru</div>
+                    <div style="font-size:.75rem;color:#475569;text-transform:uppercase;letter-spacing:.07em;">{model_badge} — Ham Skor</div>
                     <div style="font-size:2.3rem;font-weight:800;color:#e2e8f0;font-family:'JetBrains Mono',monospace;letter-spacing:-.02em;">{_xr_skor:+.4f}</div>
                     <div style="font-size:.73rem;color:#475569;">Yüksek skor = Daha üst sıra modeli</div>
                 </div>
@@ -2174,7 +2328,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _xr_lp = float(_xr_pos_data.get("last_price") or _xr_ep)
                 _xr_kz = ((_xr_lp / _xr_ep) - 1.0) * 100.0 if _xr_ep > 0 else 0.0
                 _xr_days = int(_xr_pos_data.get("days_held") or 0)
-                st.metric("V4 Portföy Getirisi", f"%{float(_xr_kz or 0.0):+.2f}", f"{_xr_days} gün tutuldu")
+                st.metric("Portföy Getirisi", f"%{float(_xr_kz or 0.0):+.2f}", f"{_xr_days} gün tutuldu")
             elif _xr_cuzdan_var:
                 _xr_c_lot = int(_xr_cuzdan_pos.get("lot", 0))
                 _xr_c_cost = float(_xr_cuzdan_pos.get("maliyet", 0.0))
@@ -2198,15 +2352,30 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
             
             # ── A. 7 FAKTÖR KARNESİ ────────────────────────────────────────────────
             st.markdown("#### 🧦 Faktör Karnesi (Kesitsel Evren Konumu)")
-            st.caption("Her çubuk hissenin 88 hisseli evrendeki göreceli konumunu gösterir (%0-%100 kesitsel skala).")
+            st.caption(f"Her çubuk hissenin {_xr_df.shape[0]} hisseli evrendeki göreceli konumunu gösterir (%0-%100 kesitsel skala).")
+
+            if is_rc_model:
+                st.info(
+                    "Bu RC röntgeni inference'ı yeniden çalıştırmaz. Frozen model girdileri: "
+                    "mom_12_1 · mom_63 · vol_63. Dry-run/official reader kaydında bu ham feature değerleri "
+                    "taşınmadığı için burada legacy faktörleri gösterilmez; aşağıdaki skor ve sıra committed "
+                    "cross-section kaydından okunur."
+                )
+
+            _has_z_reel = ("z_reel_eps" in _xr_row.index) and pd.notna(_xr_row.get("z_reel_eps"))
+            _reel_eps_key = "z_reel_eps" if _has_z_reel else "reel_eps_growth"
+            _reel_eps_label = "📊 Sektörel Reel Kâr Büyümesi" if _has_z_reel else "📊 Reel Kâr Büyümesi"
+            _reel_eps_sub = "Legacy öncü faktör — Sektörel Z-Skoru ([-1.5, +1.5] winsorized)" if _has_z_reel else "Legacy öncü faktör — Enflasyondan arındırılmış EPS"
+            _reel_eps_val_fmt = (lambda v: f"{v:+.2f}σ") if _has_z_reel else (lambda v: f"%{v*100:+.1f}")
+            _reel_eps_bar_fn = (lambda v: min(max(int((v + 1.5) / 3.0 * 100), 0), 100)) if _has_z_reel else (lambda v: min(max(int((v + 1.0) / 2.0 * 100), 0), 100))
 
             _xr_faktorler = [
                 {
-                    "key": "reel_eps_growth",
-                    "label": "📊 Reel Kâr Büyümesi",
-                    "sub": "V4 öncü faktör — Enflasyondan arındırılmış EPS",
-                    "val_fmt": lambda v: f"%{v*100:+.1f}",
-                    "bar_fn": lambda v: min(max(int((v + 1.0) / 2.0 * 100), 0), 100),
+                    "key": _reel_eps_key,
+                    "label": _reel_eps_label,
+                    "sub": _reel_eps_sub,
+                    "val_fmt": _reel_eps_val_fmt,
+                    "bar_fn": _reel_eps_bar_fn,
                     "ana": True, "tag": "🔑 ANA",
                 },
                 {
@@ -2251,6 +2420,11 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 },
             ]
 
+            # RC records intentionally do not expose legacy fundamental-factor
+            # columns. Never fabricate them (the old UI used a 0.0 placeholder).
+            if is_rc_model:
+                _xr_faktorler = []
+
             _xr_rows_html = []
             _xr_toplam_skor = 0.0
             _xr_faktor_sayisi = 0
@@ -2271,10 +2445,11 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _fana = _fak["ana"]
 
                 # Explainability sınıflandırması
-                if _fk == "reel_eps_growth":
-                    if _fv >= 0.05:
+                if _fk in ("z_reel_eps", "reel_eps_growth"):
+                    _thr = 0.20 if _fk == "z_reel_eps" else 0.05
+                    if _fv >= _thr:
                         _xr_positives.append((_fak["label"].split()[1], _fval_str))
-                    elif _fv <= -0.05:
+                    elif _fv <= -_thr:
                         _xr_negatives.append((_fak["label"].split()[1], _fval_str))
                 else:
                     if _fv >= 0.30:
@@ -2318,7 +2493,17 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _xr_toplam_skor += _fp
                 _xr_faktor_sayisi += 1
 
-            _xr_karne_skor = int(_xr_toplam_skor / _xr_faktor_sayisi) if _xr_faktor_sayisi > 0 else 0
+            if is_rc_model:
+                # RC records intentionally contain the committed model score/rank,
+                # not the legacy fundamental-factor columns.  Do not collapse every
+                # stock to the old 0/100 fallback; expose a deterministic
+                # cross-sectional card derived from the already committed rank.
+                _xr_n = max(len(_xr_df), 1)
+                _xr_rank_for_card = int(_xr_row.get("Sıra") or _xr_rank)
+                _xr_karne_skor = 100 if _xr_n <= 1 else int(round(100.0 * (_xr_n - _xr_rank_for_card) / (_xr_n - 1)))
+                _xr_karne_skor = max(0, min(100, _xr_karne_skor))
+            else:
+                _xr_karne_skor = int(_xr_toplam_skor / _xr_faktor_sayisi) if _xr_faktor_sayisi > 0 else 0
             _xr_karne_renk = "#34d399" if _xr_karne_skor >= 65 else ("#fbbf24" if _xr_karne_skor >= 42 else "#f87171")
             _xr_karne_label = "🔹 GÜÇLÜ" if _xr_karne_skor >= 65 else ("🟡 ORTA" if _xr_karne_skor >= 42 else "🔴 ZAYIF")
 
@@ -2484,14 +2669,14 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                         line=dict(color="#ffa726", width=1.5, dash="dot"), name="SMA 50"
                     ), row=1, col=1)
 
-                # V4 Alış Fiyatı Seviyesi
+                # Model portföyü alış fiyatı seviyesi
                 if _xr_portfoy_var:
                     _xr_ep2 = float(_xr_pos_data.get("entry_price", 0))
                     if _xr_ep2 > 0:
                         _xr_fig.add_hline(
                             y=_xr_ep2,
                             line_dash="dash", line_color="#ffd600", line_width=2.0,
-                            annotation_text=f"📍 V4 Alış: ₺{_xr_ep2:.2f}",
+                            annotation_text=f"📍 Alış: ₺{_xr_ep2:.2f}",
                             annotation_position="top right",
                             annotation_font_color="#ffd600", annotation_font_size=10,
                             row=1, col=1
@@ -2629,7 +2814,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _xr_p_dd_renk = "#f87171" if _xr_p_dd <= -20 else ("#f59e0b" if _xr_p_dd <= -10 else "#34d399")
                 _xr_portfoy_detay_html = (
                     '<hr class="xr-divider">'
-                    '<div style="font-size:.80rem;font-weight:600;color:#94a3b8;margin-bottom:8px;">💼 V4 Model Pozisyon Bilgisi</div>'
+                    '<div style="font-size:.80rem;font-weight:600;color:#94a3b8;margin-bottom:8px;">💼 Model Pozisyon Bilgisi</div>'
                     f'<div class="xr-risk-row"><span class="xr-risk-label">Model Giriş Fiyatı</span><span style="font-size:.82rem;font-weight:600;color:#e2e8f0;">₺{_xr_p_entry:,.2f}</span></div>'
                     f'<div class="xr-risk-row"><span class="xr-risk-label">Zirveden Çekilme</span><span style="font-size:.82rem;font-weight:700;color:{_xr_p_dd_renk};">%{_xr_p_dd:.1f}</span></div>'
                     f'<div class="xr-risk-row"><span class="xr-risk-label">Elde Tutulan Süre</span><span style="font-size:.82rem;font-weight:600;color:#e2e8f0;">{_xr_p_days} gün / 60 gün</span></div>'
@@ -2684,8 +2869,8 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
         # 6. ALT BÖLGE (FULL WIDTH): EVREN DAĞILIMI + SEKTOREL EMSAL + ÖZET RAPOR
         # ═══════════════════════════════════════════════════════════════════════════
         
-        # ── A. 88 HİSSE EVREN SKOR DAĞILIMI ────────────────────────────────────────
-        st.markdown("#### 🏙️ 88 Hisse Evreni — Skor Dağılım Perspektifi")
+        # ── A. EVREN SKOR DAĞILIMI ────────────────────────────────────────
+        st.markdown(f"#### 🏙️ {_xr_df.shape[0]} Hisse Evreni — Skor Dağılım Perspektifi")
         st.caption(f"Mor = {_xr_ticker} (seçili) · Yeşil = Top-15 Portföy Adayları · Sarı = Top-30 İzleme · Koyu = Evren Dışı")
 
         _xr_df_sorted = _xr_df.copy()
@@ -2704,7 +2889,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
             x=_xr_df_sorted["sembol"].str.replace(".IS", ""),
             y=_xr_df_sorted["ml_score"],
             marker_color=_xr_bar_clrs,
-            hovertemplate="<b>%{x}</b><br>V4 Skor: %{y:.4f}<extra></extra>"
+            hovertemplate="<b>%{x}</b><br>Shadow ham skor: %{y:.4f}<extra></extra>"
         ))
         _xr_fig2.add_hline(
             y=_xr_skor,
@@ -2718,7 +2903,7 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
             paper_bgcolor="#0b0f19", plot_bgcolor="#111827",
             height=280,
             margin=dict(l=20, r=20, t=20, b=40),
-            yaxis=dict(title="V4 LambdaMART Skoru", gridcolor="#1f293d"),
+            yaxis=dict(title="Shadow ham skor", gridcolor="#1f293d"),
             xaxis=dict(gridcolor="#1f293d", tickangle=-55, tickfont=dict(size=8.5))
         )
         st.plotly_chart(_xr_fig2, width="stretch")
@@ -2743,11 +2928,8 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
                 _xr_sektor_rows.append({
                     "Hisse": f"{_s_prefix}{_s_tiker}",
                     "Model Sırası": f"#{int(_srow.get('rank') or 0):02d}",
-                    "V4 Skoru": f"{float(_srow.get('ml_score') or 0.0):+.4f}",
-                    "ROE (Z-Skor)": f"{float(_srow.get('z_roe') or 0.0):+.2f}σ",
-                    "F/DD (Z-Skor)": f"{float(_srow.get('z_pb') or 0.0):+.2f}σ",
-                    "Reel Büyüme": f"%{float(_srow.get('reel_eps_growth') or 0.0)*100:+.1f}",
-                    "Bilanço Yaşı": f"{int(_srow.get('data_age_days') or 0)} gün",
+                    "Shadow Skoru": f"{float(_srow.get('ml_score') or 0.0):+.4f}",
+                    "Seçim": "Top-10" if bool(_srow.get("selected_top10")) else "Evren",
                     "Durum": _s_v4_flag
                 })
             
@@ -2758,11 +2940,12 @@ elif sayfa == "🔍 Hisse Röntgeni (X-Ray)":
 
         # ── C. TEK TIKLA ÖZET RÖNTGEN RAPORU KOPYALA ──────────────────────────────
         st.markdown("#### 📋 Tek Tıkla Özet Röntgen Raporu")
-        _xr_report_text = f"""🏛️ BIST V4 QUANT HİSSE RÖNTGENİ — {_xr_ticker}
+        _xr_report_text = f"""🏛️ BIST SHADOW HİSSE RÖNTGENİ — {_xr_ticker}
 ────────────────────────────────────────────────────
 • Tarih & Sektör: {datetime.now().strftime('%Y-%m-%d')} | {_xr_sektor}
-• Model Sırası: #{_xr_rank} / 88 (Desil #{_xr_decile})
-• V4 LambdaMART Skoru: {_xr_skor:+.4f} | Karne Skoru: {_xr_karne_skor}/100 ({_xr_karne_label})
+• Model: {model_badge}
+• Model Sırası: #{_xr_rank} / {len(_xr_sembol_listesi)}
+• Shadow Ham Skoru: {_xr_skor:+.4f}
 • BIST 100 Göreceli Güç: 1A Alfa: {_xr_a1_str} | 3A Alfa: {_xr_a3_str} | 60g Beta: {_xr_beta_str}
 • 52 Hafta Zirve Uzaklığı: {_xr_dist_str} (Zirve: {_xr_high_str})
 • Faz-0 Savunma Kalkanı: {_xr_genel_risk_str} (Taban: {_xr_taban_sayisi}/5 | Likidite: {_xr_hac_str})

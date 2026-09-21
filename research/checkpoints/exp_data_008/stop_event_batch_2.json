@@ -1,0 +1,30 @@
+{
+  "batch_number": 2,
+  "tickers": [
+    "AKBNK",
+    "ALARK",
+    "ALFAS",
+    "ALVES",
+    "ANSGR",
+    "ARCLK",
+    "ASELS",
+    "ASTOR",
+    "BIMAS",
+    "BINHO"
+  ],
+  "interrupted_ticker": "ALVES",
+  "started_at_utc": "2026-09-17T18:06:51.736659+00:00",
+  "stopped_at_utc": "2026-09-17T18:14:05.832797+00:00",
+  "logical_requests": 162,
+  "network_attempts": 135,
+  "cache_hits": 29,
+  "pilot_cache_seed_hits": 6,
+  "http_429": 11,
+  "retries": 9,
+  "source_errors": 0,
+  "parse_errors": 2,
+  "gate": "STOP",
+  "stop_reasons": [
+    "HTTP_429_BATCH_LIMIT"
+  ]
+}

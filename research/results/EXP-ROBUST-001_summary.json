@@ -1,0 +1,40 @@
+{
+  "experiment_id": "EXP-ROBUST-001",
+  "execution": "PASS",
+  "phase_i_gate": "PASS",
+  "classifications": [
+    {
+      "architecture": "LGBM_REGRESSION",
+      "classification": "ROBUST WITH CAVEATS",
+      "dimensions_passed": 8,
+      "bootstrap_prob_ic_positive": 0.837,
+      "bootstrap_prob_net_positive": 0.9995,
+      "alpha_pass": false,
+      "feature_pass": true,
+      "time_pass": true,
+      "sector_pass": true,
+      "stock_pass": true,
+      "cost_pass": true,
+      "delay_pass": true,
+      "liquidity_pass": true,
+      "seed_parameter_pass": true
+    },
+    {
+      "architecture": "LAMBDAMART",
+      "classification": "ROBUST WITH CAVEATS",
+      "dimensions_passed": 7,
+      "bootstrap_prob_ic_positive": 0.6875,
+      "bootstrap_prob_net_positive": 1.0,
+      "alpha_pass": false,
+      "feature_pass": true,
+      "time_pass": true,
+      "sector_pass": false,
+      "stock_pass": true,
+      "cost_pass": true,
+      "delay_pass": true,
+      "liquidity_pass": true,
+      "seed_parameter_pass": true
+    }
+  ],
+  "generated_at_utc": "2026-09-17T22:57:48.572480+00:00"
+}

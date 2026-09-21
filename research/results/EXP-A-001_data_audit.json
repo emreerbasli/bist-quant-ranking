@@ -1,0 +1,2778 @@
+{
+  "experiment_id": "EXP-A-001",
+  "generated_at_utc": "2026-09-16T23:20:53.595837+00:00",
+  "scope": "read-only research audit",
+  "prices": {
+    "benchmark_file": "XU100_IS.parquet",
+    "benchmark_days": 2171,
+    "summary": {
+      "PASS": 88
+    },
+    "aggregate": {
+      "nonpositive_close": 0,
+      "nonpositive_volume": 1787,
+      "missing_vs_benchmark": 36021,
+      "extreme_abs_return_gt_50pct": 5
+    },
+    "symbols": [
+      {
+        "symbol": "TUPRS.IS",
+        "file": "TUPRS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "MGROS.IS",
+        "file": "MGROS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SAHOL.IS",
+        "file": "SAHOL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TERA.IS",
+        "file": "TERA_IS.parquet",
+        "status": "PASS",
+        "bars": 932,
+        "first_date": "2022-12-26",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1245,
+        "overlap_with_benchmark": 926,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "FORTE.IS",
+        "file": "FORTE_IS.parquet",
+        "status": "PASS",
+        "bars": 620,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1556,
+        "overlap_with_benchmark": 615,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TUREX.IS",
+        "file": "TUREX_IS.parquet",
+        "status": "PASS",
+        "bars": 1360,
+        "first_date": "2021-04-08",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 5,
+        "missing_vs_benchmark": 817,
+        "overlap_with_benchmark": 1354,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "THYAO.IS",
+        "file": "THYAO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ASELS.IS",
+        "file": "ASELS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 36,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KCHOL.IS",
+        "file": "KCHOL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "BIMAS.IS",
+        "file": "BIMAS_IS.parquet",
+        "status": "PASS",
+        "bars": 2203,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 28,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "EREGL.IS",
+        "file": "EREGL_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ISCTR.IS",
+        "file": "ISCTR_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "AKBNK.IS",
+        "file": "AKBNK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "GARAN.IS",
+        "file": "GARAN_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "YKBNK.IS",
+        "file": "YKBNK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "VAKBN.IS",
+        "file": "VAKBN_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "HALKB.IS",
+        "file": "HALKB_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TSKB.IS",
+        "file": "TSKB_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SKBNK.IS",
+        "file": "SKBNK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SISE.IS",
+        "file": "SISE_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "FROTO.IS",
+        "file": "FROTO_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TOASO.IS",
+        "file": "TOASO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "DOAS.IS",
+        "file": "DOAS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "OTKAR.IS",
+        "file": "OTKAR_IS.parquet",
+        "status": "PASS",
+        "bars": 2198,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 4,
+        "overlap_with_benchmark": 2167,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TTRAK.IS",
+        "file": "TTRAK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "PGSUS.IS",
+        "file": "PGSUS_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TAVHL.IS",
+        "file": "TAVHL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "CLEBI.IS",
+        "file": "CLEBI_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TCELL.IS",
+        "file": "TCELL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TTKOM.IS",
+        "file": "TTKOM_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 24,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ENKAI.IS",
+        "file": "ENKAI_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ALARK.IS",
+        "file": "ALARK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "PETKM.IS",
+        "file": "PETKM_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SASA.IS",
+        "file": "SASA_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 162,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "HEKTS.IS",
+        "file": "HEKTS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 1
+      },
+      {
+        "symbol": "GUBRF.IS",
+        "file": "GUBRF_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ASTOR.IS",
+        "file": "ASTOR_IS.parquet",
+        "status": "PASS",
+        "bars": 914,
+        "first_date": "2023-01-18",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1263,
+        "overlap_with_benchmark": 908,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "EUPWR.IS",
+        "file": "EUPWR_IS.parquet",
+        "status": "PASS",
+        "bars": 853,
+        "first_date": "2023-04-20",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1324,
+        "overlap_with_benchmark": 847,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "GESAN.IS",
+        "file": "GESAN_IS.parquet",
+        "status": "PASS",
+        "bars": 1273,
+        "first_date": "2021-08-19",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 904,
+        "overlap_with_benchmark": 1267,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KONTR.IS",
+        "file": "KONTR_IS.parquet",
+        "status": "PASS",
+        "bars": 1481,
+        "first_date": "2020-10-19",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 6,
+        "missing_vs_benchmark": 698,
+        "overlap_with_benchmark": 1473,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "CWENE.IS",
+        "file": "CWENE_IS.parquet",
+        "status": "PASS",
+        "bars": 841,
+        "first_date": "2023-05-10",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1336,
+        "overlap_with_benchmark": 835,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ALFAS.IS",
+        "file": "ALFAS_IS.parquet",
+        "status": "PASS",
+        "bars": 959,
+        "first_date": "2022-11-16",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1218,
+        "overlap_with_benchmark": 953,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ARCLK.IS",
+        "file": "ARCLK_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "VESTL.IS",
+        "file": "VESTL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KRDMD.IS",
+        "file": "KRDMD_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "BRSAN.IS",
+        "file": "BRSAN_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KCAER.IS",
+        "file": "KCAER_IS.parquet",
+        "status": "PASS",
+        "bars": 1055,
+        "first_date": "2022-06-30",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 5,
+        "missing_vs_benchmark": 1122,
+        "overlap_with_benchmark": 1049,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "CIMSA.IS",
+        "file": "CIMSA_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "OYAKC.IS",
+        "file": "OYAKC_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 31,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "BSOKE.IS",
+        "file": "BSOKE_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 1
+      },
+      {
+        "symbol": "SOKM.IS",
+        "file": "SOKM_IS.parquet",
+        "status": "PASS",
+        "bars": 2101,
+        "first_date": "2018-05-18",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 22,
+        "missing_vs_benchmark": 98,
+        "overlap_with_benchmark": 2073,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "MAVI.IS",
+        "file": "MAVI_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "CCOLA.IS",
+        "file": "CCOLA_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 1
+      },
+      {
+        "symbol": "AEFES.IS",
+        "file": "AEFES_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ULKER.IS",
+        "file": "ULKER_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TABGD.IS",
+        "file": "TABGD_IS.parquet",
+        "status": "PASS",
+        "bars": 725,
+        "first_date": "2023-10-26",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1452,
+        "overlap_with_benchmark": 719,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "BIZIM.IS",
+        "file": "BIZIM_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "EKGYO.IS",
+        "file": "EKGYO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ISGYO.IS",
+        "file": "ISGYO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TRGYO.IS",
+        "file": "TRGYO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 24,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "AGHOL.IS",
+        "file": "AGHOL_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "DOHOL.IS",
+        "file": "DOHOL_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TKFEN.IS",
+        "file": "TKFEN_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KORDS.IS",
+        "file": "KORDS_IS.parquet",
+        "status": "PASS",
+        "bars": 2206,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 30,
+        "missing_vs_benchmark": 0,
+        "overlap_with_benchmark": 2171,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SELEC.IS",
+        "file": "SELEC_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ECILC.IS",
+        "file": "ECILC_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "TURSG.IS",
+        "file": "TURSG_IS.parquet",
+        "status": "PASS",
+        "bars": 2204,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 30,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ANSGR.IS",
+        "file": "ANSGR_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "MTRKS.IS",
+        "file": "MTRKS_IS.parquet",
+        "status": "PASS",
+        "bars": 1362,
+        "first_date": "2021-04-06",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 5,
+        "missing_vs_benchmark": 815,
+        "overlap_with_benchmark": 1356,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "LOGO.IS",
+        "file": "LOGO_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "AGROT.IS",
+        "file": "AGROT_IS.parquet",
+        "status": "PASS",
+        "bars": 706,
+        "first_date": "2023-11-23",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1471,
+        "overlap_with_benchmark": 700,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "BINHO.IS",
+        "file": "BINHO_IS.parquet",
+        "status": "PASS",
+        "bars": 622,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1554,
+        "overlap_with_benchmark": 617,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "REEDR.IS",
+        "file": "REEDR_IS.parquet",
+        "status": "PASS",
+        "bars": 620,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1556,
+        "overlap_with_benchmark": 615,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SDTTR.IS",
+        "file": "SDTTR_IS.parquet",
+        "status": "PASS",
+        "bars": 929,
+        "first_date": "2023-01-04",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 9,
+        "missing_vs_benchmark": 1252,
+        "overlap_with_benchmark": 919,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "MIATK.IS",
+        "file": "MIATK_IS.parquet",
+        "status": "PASS",
+        "bars": 1208,
+        "first_date": "2021-11-22",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 969,
+        "overlap_with_benchmark": 1202,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "KBORU.IS",
+        "file": "KBORU_IS.parquet",
+        "status": "PASS",
+        "bars": 622,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1554,
+        "overlap_with_benchmark": 617,
+        "extreme_abs_return_gt_50pct": 1
+      },
+      {
+        "symbol": "CVKMD.IS",
+        "file": "CVKMD_IS.parquet",
+        "status": "PASS",
+        "bars": 858,
+        "first_date": "2023-04-13",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1319,
+        "overlap_with_benchmark": 852,
+        "extreme_abs_return_gt_50pct": 1
+      },
+      {
+        "symbol": "GOKNR.IS",
+        "file": "GOKNR_IS.parquet",
+        "status": "PASS",
+        "bars": 882,
+        "first_date": "2023-03-09",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1295,
+        "overlap_with_benchmark": 876,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "SURGY.IS",
+        "file": "SURGY_IS.parquet",
+        "status": "PASS",
+        "bars": 621,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1555,
+        "overlap_with_benchmark": 616,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "MOGAN.IS",
+        "file": "MOGAN_IS.parquet",
+        "status": "PASS",
+        "bars": 597,
+        "first_date": "2024-05-02",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1579,
+        "overlap_with_benchmark": 592,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ALVES.IS",
+        "file": "ALVES_IS.parquet",
+        "status": "PASS",
+        "bars": 637,
+        "first_date": "2024-02-29",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1539,
+        "overlap_with_benchmark": 632,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "PASEU.IS",
+        "file": "PASEU_IS.parquet",
+        "status": "PASS",
+        "bars": 621,
+        "first_date": "2024-03-21",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1555,
+        "overlap_with_benchmark": 616,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "INVES.IS",
+        "file": "INVES_IS.parquet",
+        "status": "PASS",
+        "bars": 628,
+        "first_date": "2024-03-11",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 3,
+        "missing_vs_benchmark": 1548,
+        "overlap_with_benchmark": 623,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "PLTUR.IS",
+        "file": "PLTUR_IS.parquet",
+        "status": "PASS",
+        "bars": 939,
+        "first_date": "2022-12-14",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1238,
+        "overlap_with_benchmark": 933,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ONCSM.IS",
+        "file": "ONCSM_IS.parquet",
+        "status": "PASS",
+        "bars": 924,
+        "first_date": "2023-01-04",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 4,
+        "missing_vs_benchmark": 1253,
+        "overlap_with_benchmark": 918,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "CANTE.IS",
+        "file": "CANTE_IS.parquet",
+        "status": "PASS",
+        "bars": 1345,
+        "first_date": "2021-04-30",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 6,
+        "missing_vs_benchmark": 832,
+        "overlap_with_benchmark": 1339,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "ODAS.IS",
+        "file": "ODAS_IS.parquet",
+        "status": "PASS",
+        "bars": 2200,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 25,
+        "missing_vs_benchmark": 2,
+        "overlap_with_benchmark": 2169,
+        "extreme_abs_return_gt_50pct": 0
+      },
+      {
+        "symbol": "GENTS.IS",
+        "file": "GENTS_IS.parquet",
+        "status": "PASS",
+        "bars": 2201,
+        "first_date": "2018-01-01",
+        "last_date": "2026-09-15",
+        "missing_columns": [],
+        "duplicate_dates": 0,
+        "nonpositive_close": 0,
+        "nonpositive_volume": 26,
+        "missing_vs_benchmark": 1,
+        "overlap_with_benchmark": 2170,
+        "extreme_abs_return_gt_50pct": 0
+      }
+    ]
+  },
+  "fundamentals": {
+    "summary": {
+      "WARN": 88
+    },
+    "fixed_schedule_dates": 2646,
+    "symbols": [
+      {
+        "symbol": "TUPRS.IS",
+        "file": "TUPRS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "MGROS.IS",
+        "file": "MGROS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SAHOL.IS",
+        "file": "SAHOL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TERA.IS",
+        "file": "TERA_IS.parquet",
+        "status": "WARN",
+        "records": 22,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 22,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "FORTE.IS",
+        "file": "FORTE_IS.parquet",
+        "status": "WARN",
+        "records": 20,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 20,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TUREX.IS",
+        "file": "TUREX_IS.parquet",
+        "status": "WARN",
+        "records": 27,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 27,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "THYAO.IS",
+        "file": "THYAO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ASELS.IS",
+        "file": "ASELS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KCHOL.IS",
+        "file": "KCHOL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "BIMAS.IS",
+        "file": "BIMAS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "EREGL.IS",
+        "file": "EREGL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ISCTR.IS",
+        "file": "ISCTR_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "AKBNK.IS",
+        "file": "AKBNK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "GARAN.IS",
+        "file": "GARAN_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "YKBNK.IS",
+        "file": "YKBNK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "VAKBN.IS",
+        "file": "VAKBN_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "HALKB.IS",
+        "file": "HALKB_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "TSKB.IS",
+        "file": "TSKB_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "SKBNK.IS",
+        "file": "SKBNK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "SISE.IS",
+        "file": "SISE_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "FROTO.IS",
+        "file": "FROTO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TOASO.IS",
+        "file": "TOASO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "DOAS.IS",
+        "file": "DOAS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "OTKAR.IS",
+        "file": "OTKAR_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TTRAK.IS",
+        "file": "TTRAK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "PGSUS.IS",
+        "file": "PGSUS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TAVHL.IS",
+        "file": "TAVHL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CLEBI.IS",
+        "file": "CLEBI_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TCELL.IS",
+        "file": "TCELL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TTKOM.IS",
+        "file": "TTKOM_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ENKAI.IS",
+        "file": "ENKAI_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ALARK.IS",
+        "file": "ALARK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "PETKM.IS",
+        "file": "PETKM_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SASA.IS",
+        "file": "SASA_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "HEKTS.IS",
+        "file": "HEKTS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "GUBRF.IS",
+        "file": "GUBRF_IS.parquet",
+        "status": "WARN",
+        "records": 33,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 33,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ASTOR.IS",
+        "file": "ASTOR_IS.parquet",
+        "status": "WARN",
+        "records": 22,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 22,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "EUPWR.IS",
+        "file": "EUPWR_IS.parquet",
+        "status": "WARN",
+        "records": 20,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 20,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "GESAN.IS",
+        "file": "GESAN_IS.parquet",
+        "status": "WARN",
+        "records": 28,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 28,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KONTR.IS",
+        "file": "KONTR_IS.parquet",
+        "status": "WARN",
+        "records": 29,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 29,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CWENE.IS",
+        "file": "CWENE_IS.parquet",
+        "status": "WARN",
+        "records": 20,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 20,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ALFAS.IS",
+        "file": "ALFAS_IS.parquet",
+        "status": "WARN",
+        "records": 23,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 23,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ARCLK.IS",
+        "file": "ARCLK_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "VESTL.IS",
+        "file": "VESTL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KRDMD.IS",
+        "file": "KRDMD_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "BRSAN.IS",
+        "file": "BRSAN_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KCAER.IS",
+        "file": "KCAER_IS.parquet",
+        "status": "WARN",
+        "records": 24,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 24,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CIMSA.IS",
+        "file": "CIMSA_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "OYAKC.IS",
+        "file": "OYAKC_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "BSOKE.IS",
+        "file": "BSOKE_IS.parquet",
+        "status": "WARN",
+        "records": 33,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 33,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SOKM.IS",
+        "file": "SOKM_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "MAVI.IS",
+        "file": "MAVI_IS.parquet",
+        "status": "WARN",
+        "records": 33,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 33,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CCOLA.IS",
+        "file": "CCOLA_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "AEFES.IS",
+        "file": "AEFES_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ULKER.IS",
+        "file": "ULKER_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TABGD.IS",
+        "file": "TABGD_IS.parquet",
+        "status": "WARN",
+        "records": 19,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 19,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "BIZIM.IS",
+        "file": "BIZIM_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "EKGYO.IS",
+        "file": "EKGYO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ISGYO.IS",
+        "file": "ISGYO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TRGYO.IS",
+        "file": "TRGYO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "AGHOL.IS",
+        "file": "AGHOL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "DOHOL.IS",
+        "file": "DOHOL_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TKFEN.IS",
+        "file": "TKFEN_IS.parquet",
+        "status": "WARN",
+        "records": 33,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 33,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KORDS.IS",
+        "file": "KORDS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SELEC.IS",
+        "file": "SELEC_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ECILC.IS",
+        "file": "ECILC_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "TURSG.IS",
+        "file": "TURSG_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "ANSGR.IS",
+        "file": "ANSGR_IS.parquet",
+        "status": "WARN",
+        "records": 33,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 33,
+        "provenance": [
+          "isyatirim_bank_pit"
+        ]
+      },
+      {
+        "symbol": "MTRKS.IS",
+        "file": "MTRKS_IS.parquet",
+        "status": "WARN",
+        "records": 28,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 28,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "LOGO.IS",
+        "file": "LOGO_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "AGROT.IS",
+        "file": "AGROT_IS.parquet",
+        "status": "WARN",
+        "records": 19,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 19,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "BINHO.IS",
+        "file": "BINHO_IS.parquet",
+        "status": "WARN",
+        "records": 17,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2022-08-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 17,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "REEDR.IS",
+        "file": "REEDR_IS.parquet",
+        "status": "WARN",
+        "records": 19,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 19,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SDTTR.IS",
+        "file": "SDTTR_IS.parquet",
+        "status": "WARN",
+        "records": 22,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 22,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "MIATK.IS",
+        "file": "MIATK_IS.parquet",
+        "status": "WARN",
+        "records": 27,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 27,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "KBORU.IS",
+        "file": "KBORU_IS.parquet",
+        "status": "WARN",
+        "records": 19,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 19,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CVKMD.IS",
+        "file": "CVKMD_IS.parquet",
+        "status": "WARN",
+        "records": 20,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 20,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "GOKNR.IS",
+        "file": "GOKNR_IS.parquet",
+        "status": "WARN",
+        "records": 21,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-05-15",
+        "fixed_schedule_dates": 21,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "SURGY.IS",
+        "file": "SURGY_IS.parquet",
+        "status": "WARN",
+        "records": 17,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2022-08-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 17,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "MOGAN.IS",
+        "file": "MOGAN_IS.parquet",
+        "status": "WARN",
+        "records": 18,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 18,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ALVES.IS",
+        "file": "ALVES_IS.parquet",
+        "status": "WARN",
+        "records": 17,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 17,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "PASEU.IS",
+        "file": "PASEU_IS.parquet",
+        "status": "WARN",
+        "records": 20,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2021-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 20,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "INVES.IS",
+        "file": "INVES_IS.parquet",
+        "status": "WARN",
+        "records": 24,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 24,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "PLTUR.IS",
+        "file": "PLTUR_IS.parquet",
+        "status": "WARN",
+        "records": 21,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 21,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ONCSM.IS",
+        "file": "ONCSM_IS.parquet",
+        "status": "WARN",
+        "records": 21,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2020-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 21,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "CANTE.IS",
+        "file": "CANTE_IS.parquet",
+        "status": "WARN",
+        "records": 27,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2019-03-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 27,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "ODAS.IS",
+        "file": "ODAS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      },
+      {
+        "symbol": "GENTS.IS",
+        "file": "GENTS_IS.parquet",
+        "status": "WARN",
+        "records": 34,
+        "missing_columns": [],
+        "null_validity_dates": 0,
+        "duplicate_quarters": 0,
+        "duplicate_validity_dates": 0,
+        "first_validity": "2018-05-15",
+        "last_validity": "2026-08-15",
+        "fixed_schedule_dates": 34,
+        "provenance": [
+          "isyatirim_pit"
+        ]
+      }
+    ],
+    "verdict": "BLOCKER: validity dates are proxy schedule dates, not stored KAP announcement timestamps."
+  },
+  "constraints": {
+    "historical_universe": {
+      "status": "BLOCKER",
+      "finding": "Only a current hard-coded universe is present; no dated membership, IPO eligibility, or delisting archive was found."
+    },
+    "corporate_actions": {
+      "status": "INVESTIGATE",
+      "finding": "Adjusted-price provenance and split/dividend event records are not stored beside historical bars; extreme-return flags need reconciliation."
+    },
+    "macro": {
+      "status": "BLOCKER",
+      "finding": "The loader contains a hard-coded CPI table and falls back to 2.0% for absent months; no release timestamp/source metadata is stored.",
+      "fallback_present": true
+    },
+    "pit_builder": {
+      "status": "BLOCKER",
+      "finding": "Fundamental validity dates are fixed period-end-plus-lag proxies, not actual filings.",
+      "fixed_schedule_present": true
+    }
+  },
+  "overall_disposition": "BLOCKED_FOR_FUNDAMENTAL_OR_MACRO_MODEL_SELECTION"
+}

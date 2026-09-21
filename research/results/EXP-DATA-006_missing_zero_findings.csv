@@ -1,0 +1,35 @@
+file,line,code,risk
+features\fundamental_pit.py,246,z_pb.fillna(0.0)  * (-1.0) +,MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\fundamental_pit.py,247,z_roe.fillna(0.0) *  1.0   +,MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\fundamental_pit.py,248,z_mom.fillna(0.0) *  1.0,MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,468,"pd_dd_val = float(row.get(""pd_dd"", 0.0)) if not pd.isna(row.get(""pd_dd"")) else sektor_pddd_medyanlari.get(sektor, 2.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,469,"roe_val   = float(row.get(""roe"", 0.0)) if not pd.isna(row.get(""roe"", np.nan)) else VARSAYILAN_SEKTOR_ROE.get(sektor, 0.14)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,470,"roa_val   = float(row.get(""roa"", 0.0)) if not pd.isna(row.get(""roa"", np.nan)) else VARSAYILAN_SEKTOR_ROA.get(sektor, 0.06)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,489,"df[""eps_surpriz_yonu""]= df[""eps_surpriz_yonu""].fillna(0).astype(int)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,490,"df[""net_kar_buyume""]  = df[""net_kar_buyume""].fillna(0.0).clip(-1.0, 5.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,497,"df[""roe""] = df[""roe""].fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,498,"df[""roa""] = df[""roa""].fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,516,"""fk_sektor_orani"":    float(row.get(""fk_sektor_orani"", 0.0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,521,"""h1_deger_skoru"":     float(row.get(""h1_deger_skoru"", 0.0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,525,"""eps_surpriz_yonu"":   int(row.get(""eps_surpriz_yonu"", 0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,526,"""net_kar_buyume"":     float(row.get(""net_kar_buyume"", 0.0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,527,"""net_kar_buyume_yoy"": float(row.get(""net_kar_buyume_yoy"", 0.0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+features\temel_analiz.py,528,"""net_kar_buyume_qoq"": float(row.get(""net_kar_buyume_qoq"", 0.0)),",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,110,"net_b = curr.get(""net_borc"", 0.0) or 0.0",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,136,"df[""z_fcf""]  = hesapla_sektor_zscore(df, ""fcf_v"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,137,"df[""z_roe""]  = hesapla_sektor_zscore(df, ""roe"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,138,"df[""z_mom""]  = hesapla_sektor_zscore(df, ""mom"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,139,"df[""z_borc""] = hesapla_sektor_zscore(df, ""borc_ebitda"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,140,"df[""z_pb""]   = -hesapla_sektor_zscore(df, ""pb"", min_grup=4).fillna(0.0)  # Ters PB",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v3_ranking\ranking_pipeline.py,295,"mevcut  = sektor_sayac.get(sektor, 0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,114,"net_kar_c = curr.get(""net_kar"") or 0.0",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,115,"net_kar_y = yoy.get(""net_kar"") or 0.0",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,116,"aktif_c = curr.get(""toplam_aktif"") or 0.0",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,191,"net_b = curr.get(""net_borc"", 0.0) or 0.0",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,222,"df[""z_fcf""]  = hesapla_sektor_zscore(df, ""fcf_v"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,223,"df[""z_roe""]  = hesapla_sektor_zscore(df, ""roe"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,224,"df[""z_mom""]  = hesapla_sektor_zscore(df, ""mom"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,225,"df[""z_borc""] = hesapla_sektor_zscore(df, ""borc_ebitda"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,226,"df[""z_pb""]   = -hesapla_sektor_zscore(df, ""pb"", min_grup=4).fillna(0.0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,229,"df[""z_reel_eps""] = hesapla_sektor_zscore(df, ""reel_eps_raw"", min_grup=4).fillna(0.0).clip(-1.5, 1.5)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO
+models\v4_ranking\ranking_pipeline_v4.py,363,"mevcut = sektor_sayac.get(sektor, 0)",MISSING_CONVERTED_TO_NEUTRAL_OR_ZERO

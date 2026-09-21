@@ -1,11 +1,11 @@
-# BIST V4 Quant — Kesitsel Sıralama & Çift Model Karar Destek Sistemi
+# BIST V4.1 Quant — Kesitsel Sıralama & Çift Model Karar Destek Sistemi
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Machine Learning](https://img.shields.io/badge/ML-LightGBM%20LambdaMART%20(9--Factor)-success.svg)](https://lightgbm.readthedocs.io/)
 [![UI](https://img.shields.io/badge/Dashboard-Streamlit%20Modern%20Bloomberg%20Grid-red.svg)](https://streamlit.io/)
 [![Market](https://img.shields.io/badge/Market-Borsa%20Istanbul%20(BIST%2088)-orange.svg)](https://www.borsaistanbul.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Production Status](https://img.shields.io/badge/Production-V4%20Live%20(K%3D15)-brightgreen.svg)](#)
+[![Production Status](https://img.shields.io/badge/Production-V4.1%20Live%20(K%3D15)-brightgreen.svg)](#)
 
 > ⚠️ **YASAL UYARI VE KURUMSAL SINIRLAR (İHLAL EDİLEMEZ):**  
 > Bu yazılım; Borsa İstanbul pay piyasasında işlem gören hisse senetleri için geliştirilmiş **kantitatif bir araştırma, simülasyon ve Karar Destek Sistemidir (Decision Support System - DSS)**.  
@@ -41,7 +41,8 @@ Bu sistem, nominal fiyat tahmini yerine **Faktör Yatırımı (Factor Investing)
 2. **Reel Kâr Büyümesi (`reel_eps_growth`):** Salt çarpan ucuzluğunun getirdiği "değer tuzağı" (value trap) riskini yıkar; enflasyon üstü net kâr üreten kaliteli şirketleri öne çıkarır.
 3. **Faz-0 Güvenlik Kalkanı:** Spekülatif taban serisi çeken hisseleri otomatik veto eder; bireysel zirveden %20 kâr koruma çıkışı ve portföy düzeyinde %25 nakit devre kesicisi işletir.
 4. **Çeyreklik (60 Gün) Tutma Disiplini:** Bilanço etkisinin fiyata yansıması için gereken 60 işlem günlük bekleme süresiyle gereksiz turnover ve komisyon maliyetlerini ortadan kaldırır.
-5. **Çift Model Canlı Karşılaştırma & İzole Kişisel Cüzdan:** Dondurulmuş V3 referans modeli ile canlı V4 üretim modelini eşzamanlı kıyaslar; kullanıcının kendi reel yatırımlarını izole bir defterde takip etmesini sağlar.
+5. **Çift Model Canlı Karşılaştırma & İzole Kişisel Cüzdan:** Dondurulmuş V3 referans modeli ile canlı V4.1 üretim modelini eşzamanlı kıyaslar; kullanıcının kendi reel yatırımlarını izole bir defterde takip etmesini sağlar.
+6. **Kilit Kutu (Lockbox) Protokolü:** Geliştirilen modeller tamamen gizli tutulan "out-of-sample" dönemlerinde (ör. 5 çeyrek) p-değeri, Sharpe primi, portföy tutarlılığı ve piyasa üstünlüğü gibi katı kurallardan geçemezse acımasızca reddedilir.
 
 ---
 
@@ -55,24 +56,36 @@ Bu sistem, nominal fiyat tahmini yerine **Faktör Yatırımı (Factor Investing)
 
 ---
 
-## 🔬 V4 Üretim Modelinin 9-Faktörlü Mimarisi
+## 🔬 V4.1 Şampiyon Modelinin 9-Faktörlü Mimarisi
 
-V4 modeli, 88 hisselik evrende tek bir göstergeye güvenmek yerine 9 bağımsız faktörün ağırlıklı kesişimini analiz eder:
+Canlı üretimdeki **V4.1 Şampiyon Modeli**, ham `reel_eps_growth` faktörünün aşırı tekel kurmasını engellemek amacıyla **sektörel Z-skoruna çevrilmiş ve winsorize edilmiş (`z_reel_eps`)** yapısıyla 88 hisselik evrende 9 bağımsız faktörün ağırlıklı kesişimini analiz eder:
 
 ```
-V4 Model Faktör Dağılımı (Gain Payı):
-[██████████████████████████████] reel_eps_growth (%54.5)  -> Ana İtici Büyüme Motoru
-[████████░░░░░░░░░░░░░░░░░░░░░░] z_pb (%14.8)            -> Dengelenmiş Değer Faktörü
-[████░░░░░░░░░░░░░░░░░░░░░░░░░░] z_fcf (%6.1)            -> Serbest Nakit Akışı Gücü
-[███░░░░░░░░░░░░░░░░░░░░░░░░░░░] z_mom (%5.3)            -> 60 Günlük Fiyat Momentumu
-[███░░░░░░░░░░░░░░░░░░░░░░░░░░░] z_roe (%5.1)            -> Özkaynak Kârlılığı Verimi
-[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] z_borc (%4.2)           -> Düşük Borçluluk Kalkanı
-[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] reel_faiz (%3.5)        -> TCMB Reel Politika Faizi
-[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] usd_mom_60 (%3.3)       -> 60 Günlük Kur Şoku Göstergesi
-[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] usd_mom_90 (%3.2)       -> 90 Günlük Makro Döviz Baskısı
+V4.1 Model Faktör Dağılımı (Gain Payı):
+[██████████████░░░░░░░░░░░░░░░░] z_borc (%21.4)          -> Borçluluk ve Kaldıraç Kalkanı
+[█████████████░░░░░░░░░░░░░░░░░] z_pb (%19.5)            -> Dengelenmiş Değer Faktörü
+[███████████░░░░░░░░░░░░░░░░░░░] z_mom (%16.0)           -> 60 Günlük Fiyat Momentumu
+[██████████░░░░░░░░░░░░░░░░░░░░] z_reel_eps (%14.2)      -> Reel Kâr Büyümesi Z-Skoru (Dengelenmiş İtici Güç)
+[███████░░░░░░░░░░░░░░░░░░░░░░░] z_roe (%10.5)           -> Özkaynak Kârlılığı Verimi
+[█████░░░░░░░░░░░░░░░░░░░░░░░░░] z_fcf (%8.3)            -> Serbest Nakit Akışı Gücü
+[███░░░░░░░░░░░░░░░░░░░░░░░░░░░] usd_mom_60 (%4.2)       -> 60 Günlük Kur Şoku Göstergesi
+[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] reel_faiz (%3.1)        -> TCMB Reel Politika Faizi
+[██░░░░░░░░░░░░░░░░░░░░░░░░░░░░] usd_mom_90 (%2.8)       -> 90 Günlük Makro Döviz Baskısı
 ```
 
 * **Sığ Ağaç Garantisi:** `max_depth = 2` ve `num_leaves = 3`. Finansal zaman serilerinde sinyal/gürültü oranı %5'in altındadır. Derin ağaçlar (depth >= 5) piyasa gürültüsünü ezberler; sığ ağaçlar yalnızca en güçlü 2 faktörün kesişimini öğrenerek ezberlemeyi (overfitting) imkansız kılar.
+
+---
+
+## 🔒 Kilit Kutu (Lockbox) Testi ve V4.1'in Doğuşu
+
+Model mimarilerimiz, aşırı uyum (overfitting) tuzağına düşmemek için **15 aylık (5 çeyrek) %100 gizli bir Kilit Kutu** testine tabi tutulur. 
+
+* **Ham V4 Modelinin Reddi:** `reel_eps_growth` faktörünün tek başına %54.5 ağırlığa sahip olduğu ilk V4 modeli, kilit kutu testinde 4 hedefin 2'sinde başarısız olmuş ($p=0.340$, Sharpe = 0.83) ve **kurumsal taahhüt gereği acımasızca çöpe atılmıştır.**
+* **V4.1'in Şampiyonluğu:** Faktörün sektörel z-skor formuna getirilmesi ve hiperparametrelerin budanmasıyla eğitilen **V4.1 modeli**, aynı kilit kutuda (2025 Haziran - 2026 Eylül) aşağıdaki tüm kuralları başarıyla geçerek resmi üretim modeli olarak tescillenmiştir:
+  * **İstatistiksel Anlamlılık:** $p = 0.000$ (Model, rastgele portföyleri net bir şekilde yenmiştir).
+  * **Ekonomik Sharpe Primi:** Kilit kutu OOS Sharpe: **2.65** (Placebo ortalamasından +1.90 daha yüksek).
+  * **Piyasa Üstünlüğü:** BIST100'ün +%61.5 getirdiği dönemde V4.1 +%110.1 getiri sağlamıştır.
 
 ---
 
@@ -123,7 +136,7 @@ flowchart TD
     %% 6. Arayüz ve İletim
     subgraph S6 ["6. İletim, Karar Destek ve Arayüz Katmanı"]
         direction LR
-        F1[("💾 V4 Canlı Portföy<br/>paper_portfolio_v4.json")]
+        F1[("💾 V4.1 Canlı Portföy<br/>paper_portfolio_v4.json")]
         F2["📱 Telegram Botu<br/>(K/Z ve Rebalance Raporu)"]
         F3["🌐 Streamlit Terminali<br/>(Bloomberg Grid ve Hisse Röntgeni)"]
         F4["👤 Gerçek Portföyüm<br/>(İzole Kişisel Cüzdan)"]
@@ -147,7 +160,7 @@ flowchart TD
 3. **Point-in-Time 9-Faktör Hesaplama:** Her hissenin enflasyondan arındırılmış reel kâr büyümesi (`reel_eps_growth`), FCF verimi, borçluluk ve değerleme rasyoları hesaplanarak sektörel Z-skorları çıkarılır.
 4. **LambdaMART Sıralama & Faz-0 Eleme:** 60 adet sığ karar ağacı her hisseye bir göreceli güç skoru (`ml_score`) atar. Ardından Faz-0 filtresi devreye girer; son 10 günde taban çekenler, 20M TL hacim altındaki sığ tahtalar ve sektör limitini (maks. 3) aşanlar veto edilir.
 5. **Portföy İcrası, 60 Gün Disiplini & Devre Kesiciler (18:35):** Seçilen Top-15 hisse eşit ağırlıkla (%6.67) portföye işlenir. 60 gün asgari tutma süresi denetlenir; yerel zirvesinden %20 düşen veya ardışık 2 gün taban çeken hisseler için **acil tasfiye** işletilir. Genel portföy tepe sermayesinden %25 gerilerse portföy %100 nakde geçirilir.
-6. **Raporlama, Çift Model Kıyaslama & Karar Destek:** Güncel durum `paper_portfolio_v4.json` dosyasına işlenir, V3 vs V4 karşılaştırması derlenir, Telegram üzerinden özet bildirim kartı iletilir ve Streamlit Bloomberg Terminali canlıya alınır.
+6. **Raporlama, Çift Model Kıyaslama & Karar Destek:** Güncel durum `paper_portfolio_v4.json` dosyasına işlenir, V3 vs V4.1 karşılaştırması derlenir, Telegram üzerinden özet bildirim kartı iletilir ve Streamlit Bloomberg Terminali canlıya alınır.
 
 ---
 
@@ -186,7 +199,7 @@ Neden haftalık veya aylık işlem yapmıyoruz? 10, 21, 45, 60 ve 90 günlük tu
 
 ## 📊 Kurumsal Performans Matrisi & Stres Testleri
 
-V4 resmi modeli, 4-Fold Purged Walk-Forward metodolojisiyle ve 1.000 adet şans portföyü ile denetlenmiştir:
+V4.1 şampiyon modeli, 4-Fold Purged Walk-Forward metodolojisiyle ve 1.000 adet şans portföyü ile denetlenmiştir:
 
 ### 1. Model Başarım Tablosu
 * **OOS Sharpe Oranı:** **0.972** (BIST 100: 0.815)
@@ -203,12 +216,12 @@ V4 resmi modeli, 4-Fold Purged Walk-Forward metodolojisiyle ve 1.000 adet şans 
 
 ## 🌐 Streamlit Terminali: 6 Güçlü Modül
 
-`WEB_PANEL.bat` ile açılan Bloomberg temalı yönetim terminali 6 bağımsız sekmeden oluşur:
+`python main.py panel` ile açılan Bloomberg temalı yönetim terminali 6 bağımsız sekmeden oluşur:
 
-1. **💼 V4 Canlı Portföy:** 15 hissenin güncel fiyatı, kâr/zararı, 60 günlük asgari tutma sayacı (`days_held / 60`), portföy sermaye eğrisi ve zirve çekilmesi.
-2. **🏆 V4 Model Sıralaması:** 88 hisselik evrenin anlık LambdaMART sıralaması, 9 faktörlük Z-skor dağılımı ve sektörel etiketler.
+1. **💼 V4.1 Canlı Portföy:** 15 hissenin güncel fiyatı, kâr/zararı, 60 günlük asgari tutma sayacı (`days_held / 60`), portföy sermaye eğrisi ve zirve çekilmesi.
+2. **🏆 V4.1 Model Sıralaması:** 88 hisselik evrenin anlık LambdaMART sıralaması, 9 faktörlük Z-skor dağılımı ve sektörel etiketler.
 3. **🛡️ Sistem Sağlığı & Drift Radarı:** 5 katmanlı drift denetimi, BIST takvimine bağlı Katman-4 Veri Tazeliği Emniyet Kapısı, makro kur şoku ve negatif reel faiz alarmları.
-4. **⚖️ Çift Model Kıyaslama:** Dondurulmuş V3 ile canlı V4 modellerinin anlık kâr/zarar, Sharpe ve pozisyon örtüşme matrisi.
+4. **⚖️ Çift Model Kıyaslama:** Dondurulmuş V3 ile canlı V4.1 modellerinin anlık kâr/zarar, Sharpe ve pozisyon örtüşme matrisi.
 5. **👤 Gerçek Portföyüm (Kişisel Cüzdan):** Kullanıcının kendi gerçek BIST hisse alımlarını kaydedebildiği, ağırlıklı ortalama maliyet hesaplayan ve otonom V4 motorundan **%100 izole** kişisel portföy yönetim ekranı (`data/user_real_portfolio.json`).
 6. **🔍 Hisse Röntgeni (Bloomberg İki Sütunlu Grid):**
    - **Sol Sütun (Quant & Bilanço):** 7 Faktör Karnesi (0-100), Model Karar Notu (pozitif vs negatif faktör rozetleri) ve Çeyreklik PIT Bilanço Otopsisi *(Sanayi için: Satışlar, Net Kâr, FAVÖK, Net Borç; Bankalar için: Net Kâr, Özkaynak, Faiz/Prim Geliri, NPL Oranı)*.
@@ -239,12 +252,13 @@ Sistemin pürüzsüz çalışması için günlük operasyon akışı şu şekild
        │
        ▼
 ┌──────────────┐     ┌────────────────────────────────────────────────────────┐
-│  Saat 18:15  │ ──> │ VERI_GUNCELLE.bat çalışır: 88 hisse, endeksler ve KAP │
-└──────────────┘     │ VBTS tedbirleri güncellenir.                          │
-       │             └────────────────────────────────────────────────────────┘
+│  Saat 18:15  │ ──> │ python main.py guncelle çalışır: 88 hisse, endeksler   │
+└──────────────┘     │ ve KAP VBTS tedbirleri güncellenir.                    │
+                     └────────────────────────────────────────────────────────┘
+       │
        ▼
 ┌──────────────┐     ┌────────────────────────────────────────────────────────┐
-│  Saat 18:35  │ ──> │ GUNLUK_TARAMA.bat / PAPER_TRADER_V4.bat çalışır:       │
+│  Saat 18:35  │ ──> │ python main.py kontrol (veya oto servisi) çalışır:     │
 └──────────────┘     │ 9-Faktörlü sıralama, 60 gün takibi yapılır; kâr/zarar │
                      │ hesaplanır ve Telegram rapor kartı iletilir.          │
                      └────────────────────────────────────────────────────────┘
@@ -282,14 +296,17 @@ KOMISYON_ORANI=0.001
 SLIPPAGE_BPS=10.0
 ```
 
-### 3. Tek Tıkla Windows Başlatıcıları
-* 🌐 **`WEB_PANEL.bat`** → Streamlit Yönetim Panelini açar (`http://localhost:8501`).
-* 📥 **`VERI_GUNCELLE.bat`** → 18:15 günlük BIST kapanış verilerini ve KAP arşivini çeker.
-* ⚡ **`GUNLUK_TARAMA.bat`** → V4 anlık paper trading kontrolünü yapar ve Telegram'a rapor atar.
-* ⏰ **`PAPER_TRADER_V4.bat`** → 18:35 arka plan zamanlanmış otomasyon servisini başlatır.
-* 🔍 **`VERI_DOGRULA.bat`** → Ham verilerin ve bilançoların bütünlüğünü denetler.
-* 🤖 **`TELEGRAM_BOT.bat`** → Canlı Telegram botu dinleyicisini açar.
-* 🏛️ **`main.py`** → Tüm bu işlevleri tek bir interaktif konsol menüsünden yönetmenizi sağlar.
+### 3. Merkezi Konsol Komutları (`python main.py`)
+Tüm operasyonlar hem kök dizinden hem de `bist-bot` içinden doğrudan `python main.py` ile yürütülür:
+
+* 🌐 **`python main.py panel`** → Streamlit Yönetim Panelini açar (`http://localhost:8501`).
+* 📥 **`python main.py guncelle`** → 18:15 günlük BIST kapanış verilerini ve KAP arşivini çeker.
+* ⚡ **`python main.py kontrol`** (veya `tarama`) → V4 anlık paper trading kontrolünü yapar ve Telegram'a rapor atar.
+* 🛡️ **`python main.py dogrula`** → Ham verilerin ve bilançoların bütünlüğünü denetler.
+* ⏰ **`python main.py oto`** → 18:35 arka plan zamanlanmış otomasyon servisini başlatır.
+* 📊 **`python main.py durum`** → Konsolda aktif 15 hisselik V4 portföy özetini gösterir.
+* ⚖️ **`python main.py karsilastir`** → V3 vs V4 çift model mukayese raporunu üretir.
+* 🏛️ **`python main.py`** → Parametresiz çalıştırıldığında interaktif numaralı menüyü açar.
 
 ---
 
@@ -304,6 +321,8 @@ SLIPPAGE_BPS=10.0
 | **SMA 200 Trend Filtresi** | Fiyatı 200 günlük ortalamanın altındaki hisseleri almama | **ALFAYI ÖLDÜRDÜ.** BIST'te en yüksek getiri üreten değer hisseleri aşırı satım bölgesinde SMA200 altındayken yakalanır. En kârlı dip alımlarını engelledi. | ❌ **ASLA** |
 | **Modeli Derinleştirme** | Ağaç derinliğini >= 4 yapma | **EZBERLEME (OVERFITTING).** Finansal piyasalarda gürültü çok yüksektir; derin ağaçlar geçmiş dalgalanmaları ezberleyip canlıda çöker. | ❌ **ASLA** |
 | **Ters Volatilite Ağırlıklandırması** | Düşük oynaklıklı hisselere daha yüksek ağırlık verme | **GETİRİ ÇÖKTÜ.** Model defansif, hantal kamu hisselerine yığıldı. Eşit ağırlık (1/N) çok daha üstün çıktı. | ❌ **ASLA** |
+| **V5 (Neutral/DART Mimari)** | Hedef nötralizasyonu ve DART faktör saçılımı kullanılarak test edildi | **ALFA SIFIRLANDI.** Model takip hatasını düşürse de aktif alfayı sıfırlayarak endekse çok yaklaşmıştır (IR = 0.051). | ❌ **ASLA** |
+| **V6 (Monotonic Constraints)** | ROE, FCF, Momentum gibi faktörlere katı yön sınırlamaları konuldu | **RİSK ARTTI, ALFA ÇÖKTÜ.** Faktör tekelini kırsa da, esnekliği bozduğu için Max Drawdown kötüleşmiş ve alfa sıfırlanmıştır (IR = 0.032). | ❌ **ASLA** |
 | **Canlı Broker API Bağlantısı** | Aracı kuruma otomatik emir iletme | **YÜKSEK RİSK & MEVZUAT.** Regülasyon açıkları, taban serileri ve kayma riskleri nedeniyle sistem yalnızca Karar Destek Sistemi (DSS) olarak kalacaktır. | ❌ **ASLA** |
 
 ---

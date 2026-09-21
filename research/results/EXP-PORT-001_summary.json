@@ -1,0 +1,39 @@
+{
+  "experiment_id": "EXP-PORT-001",
+  "phase_g_mapping": "SUBSTANTIVELY_SATISFIED_BY_EXP_MODEL_001_LOCKED_NESTED_OUTER_EVIDENCE",
+  "execution": "PASS",
+  "phase_h_gate": "PASS",
+  "classifications": [
+    {
+      "architecture": "LGBM_REGRESSION",
+      "classification": "VIABLE",
+      "cost_monotonic": true,
+      "k": 10,
+      "mean_net_return": 0.7266608986002102,
+      "mean_cagr": 1.2578946983614667,
+      "mean_sharpe": 2.1406749339887345,
+      "worst_daily_maxdd": -0.27184613536277114,
+      "worst_day": -0.0894157974215688,
+      "mean_turnover": 1.2374149901594547,
+      "mean_fill_rate": 1.0,
+      "mean_cash": 0.0031676054210855466,
+      "mean_holdings": 10.0
+    },
+    {
+      "architecture": "LAMBDAMART",
+      "classification": "VIABLE",
+      "cost_monotonic": true,
+      "k": 10,
+      "mean_net_return": 0.6864277492794972,
+      "mean_cagr": 1.2983296610257749,
+      "mean_sharpe": 2.6291682737978457,
+      "worst_daily_maxdd": -0.30367719010744687,
+      "worst_day": -0.09136156923324823,
+      "mean_turnover": 1.2116555046005852,
+      "mean_fill_rate": 1.0,
+      "mean_cash": 0.0033302914213390465,
+      "mean_holdings": 10.0
+    }
+  ],
+  "generated_at_utc": "2026-09-17T22:46:47.692125+00:00"
+}

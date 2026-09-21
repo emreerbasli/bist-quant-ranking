@@ -1,0 +1,8 @@
+{
+  "code_sha256": "4972e13c38932c07d489f48a206e9b874d2ad2d007922d5d6c732b5daf53ad0f",
+  "contract_sha256": "2554f084dcab6a19e271df670dd463cab858f8958d908560c194f4eec5e2d539",
+  "base_view": "EXP-DATA-004 immutable base",
+  "overlay_symbols": [
+    "KONTR.IS"
+  ]
+}

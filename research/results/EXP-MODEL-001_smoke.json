@@ -1,0 +1,31 @@
+{
+  "features_exact": true,
+  "models": {
+    "FACTOR_COMPOSITE": {
+      "fit": true,
+      "prediction_length": 252,
+      "finite": true,
+      "deterministic_rerun": true
+    },
+    "RIDGE": {
+      "fit": true,
+      "prediction_length": 252,
+      "finite": true,
+      "deterministic_rerun": true
+    },
+    "LGBM_REGRESSION": {
+      "fit": true,
+      "prediction_length": 252,
+      "finite": true,
+      "deterministic_rerun": true
+    },
+    "LAMBDAMART": {
+      "fit": true,
+      "prediction_length": 252,
+      "finite": true,
+      "deterministic_rerun": true
+    }
+  },
+  "lambda_group_sum": true,
+  "pass": true
+}

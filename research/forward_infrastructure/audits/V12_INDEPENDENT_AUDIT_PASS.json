@@ -1,0 +1,10 @@
+{
+  "artifact_type": "INDEPENDENT_FORWARD_INFRASTRUCTURE_AUDIT",
+  "audit_status": "AUDIT_PASSED",
+  "audit_verdict": "AUDIT PASS WITH NON-MATERIAL CAVEATS",
+  "approved_forward_manifest_hash": "95074644bc4879cea898dedde2905c96599955994a7863f9601fd9992fed1da3",
+  "approved_forward_manifest_reference": "FORWARD_INFRASTRUCTURE_MANIFEST_V12.json",
+  "material_issues": [],
+  "recorded_at": "2026-09-19T04:15:21.6170630+03:00",
+  "source": "AUTHORIZED_INDEPENDENT_AUDIT_RESULT"
+}

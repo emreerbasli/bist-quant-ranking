@@ -1,0 +1,14 @@
+{
+  "experiment": "EXP-DATA-008R",
+  "resume_attempts": 1,
+  "cooldown_seconds": 60,
+  "completed_observations": 178,
+  "fully_recovered": 160,
+  "partial_metadata": 0,
+  "unrecoverable": 14,
+  "not_processed_after_rate_limit_stop": 2468,
+  "repeat_429_stop": true,
+  "fundamental_pit_vintage_gate": "PARTIAL",
+  "public_kap_bulk_source": "BLOCKED_BY_RATE_LIMIT",
+  "production_data_written": false
+}

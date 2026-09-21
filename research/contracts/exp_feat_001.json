@@ -1,0 +1,85 @@
+{
+  "experiment_id": "EXP-FEAT-001",
+  "title": "PRICE-ONLY ECONOMIC FEATURE DISCOVERY",
+  "status": "LOCKED_BEFORE_RESULTS",
+  "hypothesis": "Economically motivated price momentum, risk and liquidity representations may provide incremental ranking information over the existing three-feature ridge control under nested temporal validation.",
+  "data_scope": {
+    "price": "EXP-DATA-005 research price view; PRICE DATA = PASS FOR RESEARCH",
+    "end_date": "2025-05-30",
+    "macro_including_usdtry": "EXCLUDED",
+    "fundamental_including_recovered_exact": "EXCLUDED",
+    "valuation": "EXCLUDED",
+    "legacy_v3_v4_features": "EXCLUDED"
+  },
+  "baseline": {
+    "features": ["mom_12_1", "mom_63", "vol_63"],
+    "model": "ridge ranking control",
+    "alpha": 1.0,
+    "preprocessing": "training-only median imputation and z-score scaling",
+    "seed": 0
+  },
+  "candidate_count": 25,
+  "candidate_representation": "signal-date eligible cross-sectional percentile rank; raw values retained for quality audit",
+  "winsorization": "NONE; bounded ranks are used and learned preprocessing remains training-only",
+  "missing_policy": "missing remains NaN and is imputed from training medians only; never replace missing economic data with zero",
+  "candidates": [
+    {"name":"mom_20","family":"MOMENTUM","formula":"close[t]/close[t-20]-1","lookback":20,"minimum_history":21},
+    {"name":"mom_40","family":"MOMENTUM","formula":"close[t]/close[t-40]-1","lookback":40,"minimum_history":41},
+    {"name":"mom_63_rank","family":"MOMENTUM","formula":"close[t]/close[t-63]-1","lookback":63,"minimum_history":64},
+    {"name":"mom_126","family":"MOMENTUM","formula":"close[t]/close[t-126]-1","lookback":126,"minimum_history":127},
+    {"name":"mom_252","family":"MOMENTUM","formula":"close[t]/close[t-252]-1","lookback":252,"minimum_history":253},
+    {"name":"mom_126_skip20","family":"MOMENTUM","formula":"close[t-20]/close[t-146]-1","lookback":146,"minimum_history":147},
+    {"name":"mom_252_skip20","family":"MOMENTUM","formula":"close[t-20]/close[t-272]-1","lookback":272,"minimum_history":273},
+    {"name":"positive_return_ratio_63","family":"MOMENTUM_CONSISTENCY","formula":"mean(1[daily_return>0]) over last 63 returns","lookback":63,"minimum_history":64},
+    {"name":"sign_consistency_4x20","family":"MOMENTUM_CONSISTENCY","formula":"mean(1[non-overlapping 20-session return>0]) over last four blocks","lookback":80,"minimum_history":81},
+    {"name":"ret_5","family":"REVERSAL","formula":"close[t]/close[t-5]-1","lookback":5,"minimum_history":6},
+    {"name":"ret_10","family":"REVERSAL","formula":"close[t]/close[t-10]-1","lookback":10,"minimum_history":11},
+    {"name":"ret_20","family":"REVERSAL","formula":"close[t]/close[t-20]-1","lookback":20,"minimum_history":21},
+    {"name":"vol_20","family":"RISK","formula":"std(last 20 daily returns)","lookback":20,"minimum_history":21},
+    {"name":"vol_63_rank","family":"RISK","formula":"std(last 63 daily returns)","lookback":63,"minimum_history":64},
+    {"name":"vol_126","family":"RISK","formula":"std(last 126 daily returns)","lookback":126,"minimum_history":127},
+    {"name":"downside_vol_63","family":"RISK","formula":"sqrt(mean(min(return,0)^2)) over last 63 returns","lookback":63,"minimum_history":64},
+    {"name":"downside_vol_126","family":"RISK","formula":"sqrt(mean(min(return,0)^2)) over last 126 returns","lookback":126,"minimum_history":127},
+    {"name":"max_drawdown_63","family":"RISK","formula":"minimum(close/cumulative_max(close)-1) over last 64 closes","lookback":63,"minimum_history":64},
+    {"name":"log_adv20","family":"LIQUIDITY","formula":"log1p(median(raw_close*volume) over last 20 valid positive-volume observations)","lookback":20,"minimum_history":15},
+    {"name":"log_adv63","family":"LIQUIDITY","formula":"log1p(median(raw_close*volume) over last 63 valid positive-volume observations)","lookback":63,"minimum_history":45},
+    {"name":"log_amihud20","family":"LIQUIDITY","formula":"log1p(1e9*mean(abs(economic_return)/(raw_close*volume))) over last 20 valid observations","lookback":20,"minimum_history":15},
+    {"name":"log_amihud63","family":"LIQUIDITY","formula":"log1p(1e9*mean(abs(economic_return)/(raw_close*volume))) over last 63 valid observations","lookback":63,"minimum_history":45},
+    {"name":"zero_return_ratio20","family":"LIQUIDITY","formula":"mean(1[abs(economic_return)<=1e-12]) over last 20 valid returns","lookback":20,"minimum_history":15},
+    {"name":"zero_return_ratio63","family":"LIQUIDITY","formula":"mean(1[abs(economic_return)<=1e-12]) over last 63 valid returns","lookback":63,"minimum_history":45},
+    {"name":"volume_cv63","family":"LIQUIDITY","formula":"std(volume)/mean(volume) over last 63 valid positive-volume observations","lookback":63,"minimum_history":45}
+  ],
+  "incremental_test": {
+    "comparison": "baseline versus baseline plus one candidate",
+    "target_horizon_control": "within each outer fold, freeze the baseline's inner-selected target family and horizon for every candidate incremental comparison",
+    "inner_selection_thresholds": {
+      "median_delta_mean_rank_ic_min": 0.01,
+      "positive_delta_inner_fold_ratio_min": 0.5,
+      "median_delta_ndcg_min": 0.0,
+      "candidate_coverage_min": 0.80,
+      "coverage_loss_max": 0.05
+    },
+    "outer_role": "veto/generalization only; outer cannot add a feature"
+  },
+  "final_classification": {
+    "VIABLE": "inner-selected in >=3/4 outer procedures AND outer mean delta Rank IC>0 AND median outer delta Rank IC>=0 AND positive outer delta-fold ratio>=0.5 AND mean delta NDCG>=0",
+    "WEAK_RESEARCH_ONLY": "inner-selected in exactly 2/4 procedures OR inner-selected >=3/4 but outer vetoes",
+    "REJECTED": "otherwise"
+  },
+  "phase_gate": {
+    "PASS": ">=3 VIABLE features across >=2 economic families and combined selected procedure outer mean delta Rank IC>0",
+    "PARTIAL": ">=1 VIABLE feature OR >=2 WEAK_RESEARCH_ONLY features with combined outer mean delta Rank IC>0",
+    "FAIL": "otherwise"
+  },
+  "target_horizon_policy": {
+    "target_families": ["RAW","SECTOR_RELATIVE","BETA_RESIDUAL","VOL_SCALED"],
+    "horizons_sessions": [20,40,60],
+    "selection": "INNER_ONLY",
+    "outer_feedback": false,
+    "combined_selected_set_may_reselect_target_horizon_in_inner": true
+  },
+  "portfolio_control": {"top_k":10,"weighting":"equal_weight","holding_sessions":60,"rebalance_sessions":60,"primary_cost_bps":50,"costs_bps":[0,30,50,100]},
+  "family_ablation": "only for the per-outer inner-selected combined feature set; remove one economic family at a time; no subset search",
+  "forbidden_inputs": ["fundamental","market_cap","capital","policy_rate","cpi","real_rate","usdtry","macro","reel_faiz","usd_mom_60","usd_mom_90"],
+  "production_writes_allowed": false
+}

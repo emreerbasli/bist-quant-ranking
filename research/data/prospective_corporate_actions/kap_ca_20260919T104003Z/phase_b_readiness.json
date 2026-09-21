@@ -1,0 +1,17 @@
+{
+  "schema_supported": true,
+  "missing_event_fail_closed": true,
+  "rows": [
+    {
+      "ticker": "BIMAS.IS",
+      "date": "2026-09-16",
+      "status": "RECONCILED",
+      "official_gross_amount": 2.5,
+      "provider_dividend": 2.5,
+      "pit_status": "RETROSPECTIVE_ONLY"
+    }
+  ],
+  "authoritative_reconciliation": true,
+  "pit_enforced": true,
+  "phase_b_source_readiness": true
+}

@@ -1,0 +1,85 @@
+{
+  "generated_at_utc": "2026-09-19T11:49:00.227598+00:00",
+  "protected_files": [
+    {
+      "path": "models/v3_ranking/winning_lgbm_ranker.joblib",
+      "exists": true,
+      "sha256": "3e0322cef3204d921000d0045b6e73cede75b4de25bccec17d84d8beb3adc97e",
+      "unchanged": true
+    },
+    {
+      "path": "models/v4_ranking/winning_lgbm_ranker_v4.joblib",
+      "exists": true,
+      "sha256": "b926e6af0c218d132a38a186911e307db1cad8133aaef57c9eb5c3f496bb398b",
+      "unchanged": true
+    },
+    {
+      "path": "models/v3_ranking/paper_portfolio.json",
+      "exists": true,
+      "sha256": "ac448c2e5fa8bc50577577bfa6d6667604cca7dc846ec98b153cfe4d952941d6",
+      "unchanged": true
+    },
+    {
+      "path": "models/v4_ranking/paper_portfolio_v4.json",
+      "exists": true,
+      "sha256": "be9eb7c77442bf24405015e1a5df4bf2884f6f67c884d5e24d7ecce7093b7d24",
+      "unchanged": true
+    },
+    {
+      "path": "models/v3_ranking/paper_trading_log.csv",
+      "exists": true,
+      "sha256": "3aa384c71e5d23fddda00bcf91128de4a378f0ef0a6e31c1aa5977dbddb8f70f",
+      "unchanged": true
+    },
+    {
+      "path": "models/v4_ranking/paper_trading_log_v4.csv",
+      "exists": true,
+      "sha256": "3f67e072e9c86ca1e77da1ffc96aa37fed7f4c2887e3fe666d3772e60a1607f6",
+      "unchanged": true
+    },
+    {
+      "path": "models/v3_ranking/ranking_pipeline.py",
+      "exists": true,
+      "sha256": "a72852089896e1cc323898b58d603ba5ab6baa00444d0a45ef4526b901bc87ef",
+      "unchanged": true
+    },
+    {
+      "path": "models/v4_ranking/ranking_pipeline_v4.py",
+      "exists": true,
+      "sha256": "7cfbea9293e0193d81f589dad08e6411c73060d45bf455e528a48a7c65724a27",
+      "unchanged": true
+    },
+    {
+      "path": "models/v3_ranking/paper_trader.py",
+      "exists": true,
+      "sha256": "028558e6cbf94e871a9cce276ac94e2db9d89fa5ab786b60cb1ef49e3d16ee41",
+      "unchanged": true
+    },
+    {
+      "path": "models/v4_ranking/paper_trader_v4.py",
+      "exists": true,
+      "sha256": "6affeb44eb7683fe3b848c9254d5e57ef99fd2f830913ae321c86338cbcbe451",
+      "unchanged": true
+    },
+    {
+      "path": "run_paper_trader.py",
+      "exists": true,
+      "sha256": "4badadf56e7b4a8fe0f1e7a04f26256a172a4d3128c7b2cf9388d3f30efb832c",
+      "unchanged": true
+    },
+    {
+      "path": "run_paper_trader_v4.py",
+      "exists": true,
+      "sha256": "0d109af75884db277d9ae497a7b02681c218a41ca2e48085406850e90ca57d24",
+      "unchanged": true
+    },
+    {
+      "path": "bot/telegram_bot.py",
+      "exists": true,
+      "sha256": "c9944d64690f30ace74463f24e9b7981a0f04dbc7257d07edd4bd991f99607b1",
+      "unchanged": true
+    }
+  ],
+  "changed_count": 0,
+  "status": "PASS"
+}

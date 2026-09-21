@@ -1,0 +1,19 @@
+{
+  "experiment_id":"EXP-PORT-001",
+  "title":"PORTFOLIO, COST & CAPACITY CONTROL",
+  "status":"LOCKED_BEFORE_RESULTS",
+  "phase_mapping":{"phase_g":"SUBSTANTIVELY_SATISFIED_BY_EXP_MODEL_001_LOCKED_NESTED_OUTER_EVIDENCE","duplicate_phase_g_experiment":"FORBIDDEN","phase_h":"AUTHORIZED"},
+  "hypothesis":"The predictive information from the two frozen viable tree architectures remains economically usable under realistic turnover, cost, execution and liquidity constraints.",
+  "frozen_finalists":{"LGBM_REGRESSION":{"exp_model_contract_sha256":"4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d","model_code_sha256":"c7bbd3dd71ff3edb65417f89051d3668c12539310b437f34f11fb18ec9e75ee8"},"LAMBDAMART":{"exp_model_contract_sha256":"4f6b1a38345ad958d4e7869cc221e9f0e7caab9e0e7df3b75cac71ee06e9576d","model_code_sha256":"c7bbd3dd71ff3edb65417f89051d3668c12539310b437f34f11fb18ec9e75ee8"}},
+  "features":["mom_12_1","mom_63","vol_63"],
+  "target_horizon":{"families":["RAW","SECTOR_RELATIVE","BETA_RESIDUAL","VOL_SCALED"],"horizons":[20,40,60],"source":"EXP-MODEL-001 architecture-specific INNER_ONLY selections","outer_feedback":false},
+  "portfolio":{"primary_k":10,"k_sensitivity":[5,10,15,20],"k_policy":"SENSITIVITY_ONLY_NO_OUTER_SELECTION","weighting":"equal_weight","rebalance_sessions":60,"holding_sessions":60,"cash_policy":"unfilled entry or constrained buy remains cash; unfilled exit remains held; target invested value reserves 2x one-way cost from pretrade equity, the maximum two-sided turnover cost, so the simulation never borrows for transaction costs"},
+  "execution":{"signal":"after_close","base_delay_sessions":0,"delay_sensitivity_sessions":[0,1,2],"price":"next applicable eligible research_open after signal plus delay","invalid_fill":"no fill","retry":"none; next scheduled rebalance only","terminal_liquidation":"last valuation date: charge cost on all marked holdings at the final valid close; no free terminal liquidation"},
+  "turnover":{"definition":"two_sided_notional=sum(abs(target_value-pretrade_value))/pretrade_equity; includes retained-name reweights, entries, exits and cash","cost_base":"traded nominal","half_l1_reported":false},
+  "costs":{"one_way_bps":[0,30,50,100],"primary_bps":50,"terminal_liquidation_included":true},
+  "liquidity":{"adv":"median(raw_close*volume) over previous 20 eligible, resolved, positive-volume sessions; missing ADV is not valid","base_max_order_adv_pct":0.10,"participation_sensitivity_pct":[0.05,0.10,0.20],"unresolved_volume":"ineligible for fill and excluded from liquidity evidence","sasa_policy":"existing generic volume policy retained"},
+  "capacity":{"base_capital_try":1000000,"scenarios_try":[1000000,10000000,50000000],"thresholds_pct_adv":[0.05,0.10,0.20],"interpretation":"conditional illustrative scenarios, not a single capacity claim"},
+  "classification":{"VIABLE":"50bps primary has nonnegative mean fold net return, cost monotonicity, fill rate >=0.95, no fold daily MaxDD below -0.60, and base-capacity p95 order/ADV <=10%","FRAGILE":"not VIABLE but has nonnegative gross mean fold net return","REJECTED":"otherwise"},
+  "forbidden":["new_features","new_model_families","hyperparameter_tuning","fundamental","macro","usdtry","weight_optimizer","alpha_retraining"],
+  "production_writes_allowed":false
+}
