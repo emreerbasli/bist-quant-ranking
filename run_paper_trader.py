@@ -333,7 +333,7 @@ def calistir_hibrid_motor_sirali(force: bool = False, send_telegram: bool = True
     readiness_scripts = [
         "prospective_acquisition_phase_ab.py",
         # "prospective_kap_corporate_actions.py", # Requires --ticker and --year arguments, causing automation to fail
-        "prospective_canonical_extension.py"
+        # "prospective_canonical_extension.py"    # Requires --price-acquisition etc., causing automation to fail
     ]
     
     readiness_ok = True
