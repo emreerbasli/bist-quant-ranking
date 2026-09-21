@@ -24,6 +24,8 @@ En son tamamlanan **EXP-MODEL-001** (101 adet regresyon testi) kontrollü mimari
 1. 🥇 **RC-LGBMR-001 (LightGBM Regression):** Sinyal üreten Birincil Yürütücü Model.
 2. 🥈 **RC-LAMBDAMART-001 (LambdaMART):** İkili kıyasla çalışan İkincil Denetleyici Model.
 
+Ayrıca eski jenerasyon **V3 Modeli**, sistemin performansını ve yarattığı alfayı test etmek için üretim ortamında **Dondurulmuş Referans Modeli** (Frozen Reference) olarak korunmakta ve yeni RC (Release Candidate) modelleriyle "Çift Model Kıyaslama" protokolüyle canlı ortamda eşzamanlı dövüştürülmektedir.
+
 ---
 
 ## 🏗️ Sistem Mimarisi: "Shadow System" (Gölge Yürütme)
@@ -55,6 +57,7 @@ graph TD
         D1 --> E2["Katman 4: Veri Tazelik Kapısı<br/>(Veri >= 2 Gün Bayatsa Kilitlen)"]
         E1 --> F1["💼 Final 15 Hisselik Otonom Portföy<br/>(Eşit Ağırlık Dağılımı)"]
         E2 --> F1
+        F2["❄️ V3 Referans Modeli<br/>(Benchmark İçin Dondurulmuş)"] -. Kıyaslama .-> F1
     end
 
     %% 4. İletişim Arayüzü
