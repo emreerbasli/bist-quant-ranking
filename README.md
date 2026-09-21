@@ -36,8 +36,8 @@ Shadow System (Gölge Sistem), modellerin doğrudan işlem yapmasını engeller.
 graph TD
     %% 1. Veri Katmanı
     subgraph S1 ["1. Veri Boru Hattı (Data Pipeline)"]
-        A1["BIST Kapanış Fiyatları (Yahoo Finance)"] --> A3["Point-in-Time (PIT) Düzeltmeleri"]
-        A2["KAP Haberleri & VBTS Kuralları (Web Scraper)"] --> A3
+        A1["BIST Kapanış Fiyatları (Oturum Sonu)"] --> A3["Point-in-Time (PIT) Düzeltmeleri"]
+        A2["KAP Haberleri & VBTS Kuralları"] --> A3
     end
 
     %% 2. Araştırma ve Olay Katmanı
@@ -76,6 +76,7 @@ BIST Quant, karmaşık finansal verileri 3 ana fiyat dinamiği (`mom_12_1`, `mom
 
 * **RC-LGBMR-001 (Primary):** `max_depth: 4`, `num_leaves: 15` hiperparametreleri ile donatılmış, aşırı uyum (overfitting) tehlikesini sıfıra indiren sığ (shallow) regresyon mimarisi.
 * **RC-LAMBDAMART-001 (Secondary):** Hisseleri tek tek değerlendirmek yerine; "A hissesi mi, B hissesi mi?" diyerek evrendeki (cross-section) hisseleri birbiriyle doğrudan dövüştüren ve en iyilerini tepeye iten (`NDCG` maksimizasyonu) ikili kıyas (pairwise) modeli.
+* **V3 Referans Modeli (Benchmark):** Sistemi geçmiş dönemlerde başarıyla taşıyan eski nesil üretim modelidir. Yeni RC modellerinin piyasaya ve eski sisteme gerçekten istatistiksel alfa (ek getiri) katıp katmadığını canlı olarak test edebilmek için "dondurulmuş" (frozen) bir şekilde çalıştırılmaya devam edilir. Kullanıcı terminalinde V3 ile RC serisinin günlük kâr/zarar ve Sharpe oranları eşzamanlı çarpıştırılır.
 * **Sıfır Geleceğe Bakma Hatası (Zero Lookahead Bias):** Tüm eğitim ve geri test işlemleri, katı "Purged Walk-Forward" metodolojisine dayanır. Modeller, gelecekteki verileri asla göremez.
 
 ---
@@ -87,8 +88,7 @@ Otonom bir modelin kontrolden çıkmasını engellemek için sistemin çekirdeğ
 1. **Katman 4 Tazelik Kapısı (Kill-Switch):** Sistemin kullandığı son veri $\ge 2$ gün bayatsa, sistem otomatik kilitlenir. Eski veriyle kesinlikle rebalance (yeniden dengeleme) yapılmaz.
 2. **Faz-0 (PASEU Doktrini) Ardışık Taban Vetosu:** Hisse algoritma tarafından #1 sıraya konsa bile, eğer son 10 işlem gününde ciddi çöküş yaşadıysa veya 5 kez taban yaptıysa **sistem o hisseyi doğrudan veto eder.**
 3. **%25 Portföy Devre Kesicisi (Max Drawdown Şalteri):** Eğer otonom portföy tüm zamanların en yüksek seviyesinden %25 aşağı düşerse, sistem tamamen nakde geçerek (Risk-Off modu) sermayeyi korumaya alır.
-4. **60-Günlük Tutma Disiplini (Çeyreklik Olgunlaşma):** Kurumsal fon mantığına uygun olarak, aşırı al/sat (turnover) maliyetlerini önlemek için portföye alınan bir hisse asgari 60 işlem günü (yaklaşık 1 çeyrek) tutulur. Bu kural sadece acil %20 bireysel stop-loss durumunda kırılır.
-5. **Lockbox (Kilit Kutu) Testi:** Yeni bir fikrin sisteme girmesi için 15 aylık, %100 gizli tutulan "Out-of-Sample" dönemini başarıyla geçmesi; P-değeri, Sharpe oranı ve BIST100 getirisini kesin olarak aşması şarttır. (Bkz: `FIRST_WORK_PACKAGE_REPORT.md`)
+4. **Lockbox (Kilit Kutu) Testi:** Yeni bir fikrin sisteme girmesi için 15 aylık, %100 gizli tutulan "Out-of-Sample" dönemini başarıyla geçmesi; P-değeri, Sharpe oranı ve BIST100 getirisini kesin olarak aşması şarttır. (Bkz: `FIRST_WORK_PACKAGE_REPORT.md`)
 
 ---
 
@@ -123,12 +123,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Veri Kaynakları & Mimari Bağımlılıklar
-- **Fiyat ve Hacim:** `yfinance` üzerinden günlük oturum sonu BIST verileri (split/temettü düzeltilmiş Point-in-Time).
-- **Temel ve VBTS Haberleri:** `BeautifulSoup` ve `requests` ile KAP/BIST duyurularının dinamik taranması.
-- **Yapay Zeka Core:** `lightgbm` (Karar Ağaçları ve LambdaMART ranker yapısı), `scikit-learn` (Feature engineering).
-
-### 3. Merkezi Konsol Komutları (`python main.py`)
+### 2. Merkezi Konsol Komutları (`python main.py`)
 Tüm sistem operasyonları, kök dizinden çalıştırılan tek bir merkezi CLI dosyası (`main.py`) üzerinden yönetilir:
 
 * 🌐 **`python main.py panel`** → Streamlit Karar Destek Arayüzünü ayağa kaldırır (`http://localhost:8501`).
@@ -137,8 +132,6 @@ Tüm sistem operasyonları, kök dizinden çalıştırılan tek bir merkezi CLI 
 * 🛡️ **`python main.py dogrula`** → Veri bütünlüğü ve bulaşma (data leakage) denetimini yapar.
 * ⏰ **`python main.py oto`** → Arka plan zamanlanmış (Schedule) otomasyon servisini başlatır.
 * 🏛️ **`python main.py`** → Argüman verilmediğinde kullanıcı dostu interaktif konsol menüsünü çalıştırır.
-
-*(Alternatif olarak Windows kullanıcıları kök dizindeki `WEB_PANEL.bat`, `VERI_GUNCELLE.bat`, `GUNLUK_TARAMA.bat` gibi tek tıkla çalıştırılabilen hazır kısayolları da kullanabilirler.)*
 
 ---
 
