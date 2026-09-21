@@ -39,14 +39,14 @@ def run_notification(mock_mesaj_gonder=None):
 
     status = state.get("status")
     session_date = state.get("session_date")
-    event_id = state.get("event_id")
+    event_id = state.get("event_id") or state.get("source")
 
-    if status != "OFFICIAL_CLEAN_FORWARD":
-        logger.info(f"State is {status}. Only OFFICIAL_CLEAN_FORWARD triggers telegram. Silent exit.")
+    if status not in ["OFFICIAL_CLEAN_FORWARD", "VALIDATED_DRY_RUN"]:
+        logger.info(f"State is {status}. Only OFFICIAL_CLEAN_FORWARD or VALIDATED_DRY_RUN triggers telegram. Silent exit.")
         return "BLOCKED"
 
     if not event_id:
-        logger.error("Missing event_id in official state.")
+        logger.error("Missing event_id or source in state.")
         return "ERROR"
 
     delivery_state = load_delivery_state()
@@ -61,7 +61,10 @@ def run_notification(mock_mesaj_gonder=None):
     save_delivery_state(delivery_state)
 
     # Build the message
-    msg = f"🚀 <b>YENİ OFFICIAL CLEAN-FORWARD SİNYALİ</b>\n"
+    if status == "OFFICIAL_CLEAN_FORWARD":
+        msg = f"🚀 <b>YENİ OFFICIAL CLEAN-FORWARD SİNYALİ</b>\n"
+    else:
+        msg = f"🚀 <b>YENİ DRY RUN SİNYALİ (ADAY MODELLER)</b>\n"
     msg += f"🗓️ Tarih: {session_date}\n\n"
     
     primary = state.get("primary", {})

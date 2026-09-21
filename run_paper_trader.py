@@ -421,14 +421,14 @@ def calistir_hibrid_motor_sirali(force: bool = False, send_telegram: bool = True
         try:
             from shadow_reader import get_shadow_system_state
             final_state = get_shadow_system_state(ROOT_DIR)
-            if final_state and final_state.get("status") == "OFFICIAL_CLEAN_FORWARD" and final_state.get("session_date") == actual_date_str:
-                logger.info("✅ Genuinely new COMMITTED official event verified. Triggering Telegram...")
+            if final_state and final_state.get("status") in ["OFFICIAL_CLEAN_FORWARD", "VALIDATED_DRY_RUN"] and final_state.get("session_date") == actual_date_str:
+                logger.info("✅ Valid Phase H state verified (Official or Dry Run). Triggering Telegram...")
                 import subprocess
                 cmd = [python_exe, "shadow_telegram.py"]
                 subprocess.run(cmd, cwd=str(ROOT_DIR / "bot"), check=True)
                 logger.info("✅ Telegram check completed.")
             else:
-                logger.warning(f"⚠️ No new valid COMMITTED event found for {actual_date_str}. Telegram blocked.")
+                logger.warning(f"⚠️ No new valid event found for {actual_date_str}. Telegram blocked.")
         except Exception as e:
             logger.error(f"❌ Telegram trigger failed: {e}")
 
